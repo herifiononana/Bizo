@@ -1,5 +1,6 @@
 import { mockProducts } from "@/data/mock-product";
 import AddProductForm from "@/features/product/add-product-form";
+import ProductListItem from "@/features/product/product-list-item";
 import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
 import {
@@ -48,12 +49,13 @@ const ProductsScreen: React.FC = () => {
           <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.productCard}>
-            <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.productDetails}>
-              Quantité : {item.quantity} | Prix : {item.purchasePrice} Ar
-            </Text>
-          </View>
+          // <View style={styles.productCard}>
+          //   <Text style={styles.productName}>{item.name}</Text>
+          //   <Text style={styles.productDetails}>
+          //     Quantité : {item.quantity} | Prix : {item.purchasePrice} Ar
+          //   </Text>
+          // </View>
+          <ProductListItem {...{ item }} />
         )}
       />
 

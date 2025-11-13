@@ -1,6 +1,7 @@
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
+import { getFinance } from "@/services/finance";
 import React from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
@@ -11,6 +12,7 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ finance }) => {
+  const data = getFinance();
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
@@ -29,31 +31,25 @@ const Dashboard: React.FC<DashboardProps> = ({ finance }) => {
         <View style={styles.statsGrid}>
           <View style={[styles.statCard, styles.cardBlue]}>
             <Text style={styles.statLabel}>Produits</Text>
-            <Text style={styles.statValue}>{finance?.totalProducts ?? 0}</Text>
+            <Text style={styles.statValue}>{data.totalProducts}</Text>
             <Text style={styles.statHint}>articles en stock</Text>
           </View>
 
           <View style={[styles.statCard, styles.cardGreen]}>
             <Text style={styles.statLabel}>Valeur du stock</Text>
-            <Text style={styles.statValue}>
-              {finance?.totalStockValue?.toLocaleString() ?? "0"} Ar
-            </Text>
+            <Text style={styles.statValue}>{data.totalStockValue} Ar</Text>
             <Text style={styles.statHint}>valeur totale</Text>
           </View>
 
           <View style={[styles.statCard, styles.cardYellow]}>
             <Text style={styles.statLabel}>Ventes totales</Text>
-            <Text style={styles.statValue}>
-              {finance?.totalSalesValue?.toLocaleString() ?? "0"} Ar
-            </Text>
+            <Text style={styles.statValue}>{data.totalSalesValue} Ar</Text>
             <Text style={styles.statHint}>cumul des ventes</Text>
           </View>
 
           <View style={[styles.statCard, styles.cardEmerald]}>
             <Text style={styles.statLabel}>Bénéfice total</Text>
-            <Text style={styles.statValue}>
-              +{finance?.totalProfit?.toLocaleString() ?? "0"} Ar
-            </Text>
+            <Text style={styles.statValue}>+{data.totalProfit} Ar</Text>
             <Text style={styles.statHint}>revenu net</Text>
           </View>
         </View>
@@ -64,27 +60,21 @@ const Dashboard: React.FC<DashboardProps> = ({ finance }) => {
           <View style={styles.summaryRow}>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Produits</Text>
-              <Text style={styles.summaryValue}>
-                {finance?.totalProducts ?? 0}
-              </Text>
+              <Text style={styles.summaryValue}>{data.totalProducts}</Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Stock</Text>
-              <Text style={styles.summaryValue}>
-                {finance?.totalStockValue?.toLocaleString() ?? 0} Ar
-              </Text>
+              <Text style={styles.summaryValue}>{data.totalStockValue} Ar</Text>
             </View>
           </View>
           <View style={styles.summaryRow}>
             <View style={styles.summaryItem}>
               <Text style={styles.summaryLabel}>Ventes</Text>
-              <Text style={styles.summaryValue}>
-                {finance?.totalSalesValue?.toLocaleString() ?? 0} Ar
-              </Text>
+              <Text style={styles.summaryValue}>{data.totalSalesValue} Ar</Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={[styles.summaryValue, { color: "#16A34A" }]}>
-                +{finance?.totalProfit?.toLocaleString() ?? 0} Ar
+                +{data.totalProfit} Ar
               </Text>
               <Text style={styles.summaryLabel}>Bénéfice</Text>
             </View>
