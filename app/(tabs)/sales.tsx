@@ -1,10 +1,10 @@
 import { mockProducts } from "@/data/mock-product";
 import { mockSales } from "@/data/mock-sales";
+import CreateSaleForm from "@/features/sales/create-sale-form";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import React, { useState } from "react";
 import {
-  Alert,
   FlatList,
   Modal,
   StyleSheet,
@@ -26,50 +26,6 @@ const Sales = () => {
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [newSale, setNewSale] = useState({
-    productId: "",
-    quantity: "",
-    salePrice: "",
-  });
-
-  // Ajouter une vente
-  const handleAddSale = () => {
-    if (!newSale.productId || !newSale.quantity || !newSale.salePrice) {
-      Alert.alert("Erreur", "Veuillez remplir tous les champs");
-      return;
-    }
-
-    const product = products.find((p) => p.id === newSale.productId);
-    if (!product) {
-      Alert.alert("Erreur", "Produit introuvable");
-      return;
-    }
-
-    const quantitySold = Number(newSale.quantity);
-    if (quantitySold > product.quantity) {
-      Alert.alert("Erreur", "Quantité vendue supérieure au stock disponible");
-      return;
-    }
-
-    const saleItem: Sale = {
-      id: Date.now().toString(),
-      productId: product.id,
-      quantity: quantitySold,
-      salePrice: Number(newSale.salePrice),
-      totalAmount: Number(newSale.salePrice) * quantitySold,
-      saleDate: new Date().toISOString(),
-    };
-
-    // Mise à jour du stock
-    const updatedProducts = products.map((p) =>
-      p.id === product.id ? { ...p, quantity: p.quantity - quantitySold } : p
-    );
-
-    setProducts(updatedProducts);
-    setSales([...sales, saleItem]);
-    setNewSale({ productId: "", quantity: "", salePrice: "" });
-    setModalVisible(false);
-  };
 
   // Filtrage ventes
   const filteredSales = sales.filter((sale) => {
@@ -190,63 +146,24 @@ const Sales = () => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalTitle}>🛒 Nouvelle vente</Text>
+          <CreateSaleForm
+            products={products}
+            onAddSale={(sale) => {
+              setSales([...sales, sale]);
 
-            <Text style={styles.label}>Sélection du produit :</Text>
-            {products.map((product) => (
-              <TouchableOpacity
-                key={product.id}
-                style={[
-                  styles.productSelect,
-                  newSale.productId === product.id && styles.selectedProduct,
-                ]}
-                onPress={() =>
-                  setNewSale({ ...newSale, productId: product.id })
-                }
-              >
-                <Text>
-                  {product.name} — Stock : {product.quantity}
-                </Text>
-              </TouchableOpacity>
-            ))}
+              // Mise à jour du stock
+              setProducts((prev) =>
+                prev.map((p) =>
+                  p.id === sale.productId
+                    ? { ...p, quantity: p.quantity - sale.quantity }
+                    : p
+                )
+              );
 
-            <TextInput
-              placeholder="Quantité vendue"
-              style={styles.input}
-              keyboardType="numeric"
-              value={newSale.quantity}
-              onChangeText={(text) =>
-                setNewSale({ ...newSale, quantity: text })
-              }
-            />
-
-            <TextInput
-              placeholder="Prix de vente (Ar)"
-              style={styles.input}
-              keyboardType="numeric"
-              value={newSale.salePrice}
-              onChangeText={(text) =>
-                setNewSale({ ...newSale, salePrice: text })
-              }
-            />
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={handleAddSale}
-              >
-                <Text style={styles.saveButtonText}>💾 Enregistrer</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.cancelButtonText}>✖ Annuler</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+              setModalVisible(false);
+            }}
+            onCancel={() => setModalVisible(false)}
+          />
         </View>
       </Modal>
     </View>

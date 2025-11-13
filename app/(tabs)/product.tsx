@@ -72,10 +72,12 @@ const ProductsScreen: React.FC = () => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <AddProductForm
-          onAddProduct={handleAddProduct}
-          onCancel={() => setModalVisible(false)}
-        />
+        <View style={styles.modalOverlay}>
+          <AddProductForm
+            onAddProduct={handleAddProduct}
+            onCancel={() => setModalVisible(false)}
+          />
+        </View>
       </Modal>
     </View>
   );
@@ -139,6 +141,12 @@ const styles = StyleSheet.create({
   },
 
   // -------- Modal --------
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    justifyContent: "center",
+    padding: 20,
+  },
   modalActions: {
     flexDirection: "row",
     justifyContent: "space-between",
