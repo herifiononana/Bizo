@@ -1,8 +1,8 @@
 import { mockProducts } from "@/data/mock-product";
+import AddProductForm from "@/features/product/add-product-form";
 import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
 import {
-  Alert,
   FlatList,
   Modal,
   StyleSheet,
@@ -17,35 +17,14 @@ const ProductsScreen: React.FC = () => {
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    quantity: "",
-    purchasePrice: "",
-  });
-
   // Filtrer les produits par recherche
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
   // Ajouter un produit
-  const handleAddProduct = () => {
-    if (!newProduct.name || !newProduct.quantity || !newProduct.purchasePrice) {
-      Alert.alert("Erreur", "Veuillez remplir tous les champs");
-      return;
-    }
-
-    const newItem: Product = {
-      id: String(Date.now()),
-      name: newProduct.name,
-      quantity: Number(newProduct.quantity),
-      purchasePrice: Number(newProduct.purchasePrice),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    setProducts([...products, newItem]);
-    setNewProduct({ name: "", quantity: "", purchasePrice: "" });
+  const handleAddProduct = (newProduct: Product) => {
+    setProducts([...products, newProduct]);
     setModalVisible(false);
   };
 
@@ -93,53 +72,10 @@ const ProductsScreen: React.FC = () => {
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Nouveau produit</Text>
-
-            <TextInput
-              placeholder="Nom du produit"
-              style={styles.input}
-              value={newProduct.name}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, name: text })
-              }
-            />
-            <TextInput
-              placeholder="Quantité"
-              style={styles.input}
-              keyboardType="numeric"
-              value={newProduct.quantity}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, quantity: text })
-              }
-            />
-            <TextInput
-              placeholder="Prix d'achat"
-              style={styles.input}
-              keyboardType="numeric"
-              value={newProduct.purchasePrice}
-              onChangeText={(text) =>
-                setNewProduct({ ...newProduct, purchasePrice: text })
-              }
-            />
-
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={handleAddProduct}
-              >
-                <Text style={styles.saveButtonText}>Enregistrer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.cancelButtonText}>Annuler</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+        <AddProductForm
+          onAddProduct={handleAddProduct}
+          onCancel={() => setModalVisible(false)}
+        />
       </Modal>
     </View>
   );
@@ -201,30 +137,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "600",
   },
+
   // -------- Modal --------
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
-    paddingHorizontal: 16,
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-  },
   modalActions: {
     flexDirection: "row",
     justifyContent: "space-between",
