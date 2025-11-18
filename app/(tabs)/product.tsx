@@ -1,3 +1,4 @@
+import { PRODUCTS_STORAGE_KEY } from "@/constants/key-storage";
 import { mockProducts } from "@/data/mock-product";
 import AddProductForm from "@/features/product/add-product-form";
 import ProductListItem from "@/features/product/product-list-item";
@@ -28,7 +29,7 @@ const ProductsScreen: React.FC = () => {
   const handleAddProduct = async (newProduct: Product) => {
     const updatedProducts = [...products, newProduct];
     setProducts(updatedProducts);
-    await saveData("products", updatedProducts); // persistance offline
+    await saveData(PRODUCTS_STORAGE_KEY, updatedProducts); // persistance offline
     setModalVisible(false);
   };
 
@@ -39,7 +40,7 @@ const ProductsScreen: React.FC = () => {
       if (storedProducts) setProducts(storedProducts);
       else {
         setProducts(mockProducts);
-        await saveData("products", mockProducts);
+        await saveData(PRODUCTS_STORAGE_KEY, mockProducts);
       }
     };
     loadProducts();

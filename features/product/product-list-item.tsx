@@ -1,12 +1,10 @@
+import { PRODUCTS_STORAGE_KEY } from "@/constants/key-storage";
 import { mockProducts } from "@/data/mock-product";
 import { Product } from "@/interface/product/product";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import EditProductForm from "./edit-product-form";
-
-// todo : move to constant file
-const STORAGE_KEY = "products";
 
 function ProductListItem({
   item,
@@ -20,12 +18,15 @@ function ProductListItem({
 
   const loadProducts = async () => {
     try {
-      const storedProducts = await AsyncStorage.getItem(STORAGE_KEY);
+      const storedProducts = await AsyncStorage.getItem(PRODUCTS_STORAGE_KEY);
       if (storedProducts) {
         setProducts(JSON.parse(storedProducts));
       } else {
         setProducts(mockProducts);
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(mockProducts));
+        await AsyncStorage.setItem(
+          PRODUCTS_STORAGE_KEY,
+          JSON.stringify(mockProducts)
+        );
       }
     } catch (error) {
       console.error("Erreur chargement produits", error);
@@ -41,7 +42,10 @@ function ProductListItem({
     refetch(updatedProducts);
 
     try {
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
+      await AsyncStorage.setItem(
+        PRODUCTS_STORAGE_KEY,
+        JSON.stringify(updatedProducts)
+      );
     } catch (error) {
       console.error("Erreur sauvegarde produit", error);
     }
