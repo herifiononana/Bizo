@@ -2,7 +2,8 @@ import { mockProducts } from "@/data/mock-product";
 import AddProductForm from "@/features/product/add-product-form";
 import ProductListItem from "@/features/product/product-list-item";
 import { Product } from "@/interface/product/product";
-import React, { useState } from "react";
+import { getData, saveData } from "@/storage";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Modal,
@@ -14,9 +15,9 @@ import {
 } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
-  const [search, setSearch] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   // Filtrer les produits par recherche
   const filteredProducts = products.filter((p) =>
@@ -24,10 +25,25 @@ const ProductsScreen: React.FC = () => {
   );
 
   // Ajouter un produit
-  const handleAddProduct = (newProduct: Product) => {
-    setProducts([...products, newProduct]);
+  const handleAddProduct = async (newProduct: Product) => {
+    const updatedProducts = [...products, newProduct];
+    setProducts(updatedProducts);
+    await saveData("products", updatedProducts); // persistance offline
     setModalVisible(false);
   };
+
+  // Charger les produits depuis AsyncStorage
+  useEffect(() => {
+    const loadProducts = async () => {
+      const storedProducts = await getData("products");
+      if (storedProducts) setProducts(storedProducts);
+      else {
+        setProducts(mockProducts);
+        await saveData("products", mockProducts);
+      }
+    };
+    loadProducts();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -48,15 +64,7 @@ const ProductsScreen: React.FC = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
         }
-        renderItem={({ item }) => (
-          // <View style={styles.productCard}>
-          //   <Text style={styles.productName}>{item.name}</Text>
-          //   <Text style={styles.productDetails}>
-          //     Quantité : {item.quantity} | Prix : {item.purchasePrice} Ar
-          //   </Text>
-          // </View>
-          <ProductListItem {...{ item }} />
-        )}
+        renderItem={({ item }) => <ProductListItem {...{ item }} />}
       />
 
       {/* Bouton ajout produit */}

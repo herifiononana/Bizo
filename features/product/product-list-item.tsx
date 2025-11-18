@@ -1,18 +1,53 @@
 import { mockProducts } from "@/data/mock-product";
 import { Product } from "@/interface/product/product";
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import EditProductForm from "./edit-product-form";
+
+// todo : move to constant file
+const STORAGE_KEY = "products";
 
 function ProductListItem({ item }: { item: Product }) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>(mockProducts);
 
-  // Modifier le produit
-  const handleEditProduct = (newProduct: Product) => {
-    setProducts([...products, newProduct]);
-    setModalVisible(false);
+  const loadProducts = async () => {
+    try {
+      const storedProducts = await AsyncStorage.getItem(STORAGE_KEY);
+      if (storedProducts) {
+        setProducts(JSON.parse(storedProducts));
+      } else {
+        setProducts(mockProducts);
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(mockProducts));
+      }
+    } catch (error) {
+      console.error("Erreur chargement produits", error);
+    }
   };
+
+  // Modifier un produit
+  const handleEditProduct = async (updatedProduct: Product) => {
+    const updatedProducts = products.map((p) =>
+      p.id === updatedProduct.id ? updatedProduct : p
+    );
+    setProducts(updatedProducts);
+
+    try {
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
+    } catch (error) {
+      console.error("Erreur sauvegarde produit", error);
+    }
+
+    setModalVisible(false);
+
+    loadProducts();
+  };
+
+  // Charger les produits depuis AsyncStorage
+  useEffect(() => {
+    loadProducts();
+  }, []);
 
   return (
     <div>
