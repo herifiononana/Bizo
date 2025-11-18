@@ -1,7 +1,7 @@
 import { PRODUCTS_KEY } from "@/constants/key-storage";
 import { mockProducts } from "@/data/mock-product";
 import { Product } from "@/interface/product/product";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getData, saveData } from "@/storage";
 import React, { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import EditProductForm from "./edit-product-form";
@@ -18,12 +18,12 @@ function ProductListItem({
 
   const loadProducts = async () => {
     try {
-      const storedProducts = await AsyncStorage.getItem(PRODUCTS_KEY);
+      const storedProducts = await getData(PRODUCTS_KEY);
       if (storedProducts) {
-        setProducts(JSON.parse(storedProducts));
+        setProducts(storedProducts);
       } else {
         setProducts(mockProducts);
-        await AsyncStorage.setItem(PRODUCTS_KEY, JSON.stringify(mockProducts));
+        await saveData(PRODUCTS_KEY, mockProducts);
       }
     } catch (error) {
       console.error("Erreur chargement produits", error);
@@ -39,7 +39,7 @@ function ProductListItem({
     refetch(updatedProducts);
 
     try {
-      await AsyncStorage.setItem(PRODUCTS_KEY, JSON.stringify(updatedProducts));
+      await saveData(PRODUCTS_KEY, updatedProducts);
     } catch (error) {
       console.error("Erreur sauvegarde produit", error);
     }
@@ -55,7 +55,7 @@ function ProductListItem({
   }, []);
 
   return (
-    <div>
+    <>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={styles.productCard}>
           <Text style={styles.productName}>{item.name}</Text>
@@ -78,7 +78,7 @@ function ProductListItem({
           />
         </View>
       </Modal>
-    </div>
+    </>
   );
 }
 

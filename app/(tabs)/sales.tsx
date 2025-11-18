@@ -1,6 +1,4 @@
 import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
-import { mockProducts } from "@/data/mock-product";
-import { mockSales } from "@/data/mock-sales";
 import CreateSaleForm from "@/features/sales/create-sale-form";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
@@ -17,10 +15,10 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const Sales = () => {
+const SalesScreen = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
@@ -30,7 +28,7 @@ const Sales = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   // Filtrage ventes
-  const filteredSales = sales
+  const filteredSales = Array.isArray(sales)
     ? sales.filter((sale) => {
         const product = products.find((p) => p.id === sale.productId);
         const nameMatch = product?.name
@@ -90,14 +88,14 @@ const Sales = () => {
           setProducts(storedProducts);
         } else {
           setProducts([]);
-          await saveData(PRODUCTS_KEY, JSON.stringify(mockProducts));
+          await saveData(PRODUCTS_KEY, []);
         }
 
         if (storedSales) {
           setSales(storedSales);
         } else {
-          setSales(mockSales);
-          await saveData(SALES_KEY, JSON.stringify(mockSales));
+          setSales([]);
+          await saveData(SALES_KEY, []);
         }
       } catch (e) {
         console.log("Erreur de chargement :", e);
@@ -212,7 +210,7 @@ const Sales = () => {
   );
 };
 
-export default Sales;
+export default SalesScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8FAFC", padding: 16 },
