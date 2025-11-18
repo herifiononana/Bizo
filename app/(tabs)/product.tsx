@@ -64,7 +64,9 @@ const ProductsScreen: React.FC = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
         }
-        renderItem={({ item }) => <ProductListItem {...{ item }} />}
+        renderItem={({ item }) => (
+          <ProductListItem {...{ item, refetch: setProducts }} />
+        )}
       />
 
       {/* Bouton ajout produit */}

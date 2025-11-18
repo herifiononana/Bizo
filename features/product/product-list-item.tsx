@@ -8,7 +8,13 @@ import EditProductForm from "./edit-product-form";
 // todo : move to constant file
 const STORAGE_KEY = "products";
 
-function ProductListItem({ item }: { item: Product }) {
+function ProductListItem({
+  item,
+  refetch,
+}: {
+  item: Product;
+  refetch: (products: Product[]) => void;
+}) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>(mockProducts);
 
@@ -32,6 +38,7 @@ function ProductListItem({ item }: { item: Product }) {
       p.id === updatedProduct.id ? updatedProduct : p
     );
     setProducts(updatedProducts);
+    refetch(updatedProducts);
 
     try {
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updatedProducts));
