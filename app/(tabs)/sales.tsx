@@ -200,7 +200,7 @@ const SalesScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <CreateSaleForm
-            products={products}
+            syncProducts={products}
             onAddSale={handleAddSale}
             onCancel={() => setModalVisible(false)}
           />
