@@ -1,8 +1,6 @@
-import { PRODUCTS_KEY } from "@/constants/key-storage";
-import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
-import { getData, saveData } from "@/storage";
-import React, { useEffect, useState } from "react";
+import { useProductsStore } from "@/stores/product.store";
+import React, { useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -29,22 +27,18 @@ const saleSchema = z.object({
 });
 
 interface CreateSaleProps {
-  syncProducts: Product[];
   onAddSale: (sale: Sale) => void;
   onCancel: () => void;
 }
 
-const CreateSaleForm: React.FC<CreateSaleProps> = ({
-  syncProducts,
-  onAddSale,
-  onCancel,
-}) => {
+const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
   const [formData, setFormData] = useState({
     productId: "",
     quantity: "",
     salePrice: "",
   });
-  const [products, setProducts] = useState<Product[]>(syncProducts);
+  const { products } = useProductsStore((state) => state);
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [search, setSearch] = useState<string>("");
 
@@ -54,6 +48,8 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({
   };
 
   const handleSubmit = () => {
+    if (!products) return;
+
     const result = saleSchema.safeParse(formData);
 
     if (!result.success) {
@@ -65,7 +61,8 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({
       return;
     }
 
-    const product = syncProducts.find((p) => p.id === formData.productId);
+    const product = products.find((p) => p.id === formData.productId);
+
     if (!product) {
       setErrors({ productId: "Produit introuvable" });
       return;
@@ -90,23 +87,14 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({
   };
 
   // Produits filtrés pour l’autocomplete
-  const filteredProducts = syncProducts.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = products
+    ? products.filter((p) =>
+        p.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
-  const selectedProduct = syncProducts.find((p) => p.id === formData.productId);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      const storedProducts = await getData(PRODUCTS_KEY);
-      if (storedProducts) setProducts(storedProducts);
-      else {
-        setProducts(syncProducts);
-        await saveData(PRODUCTS_KEY, syncProducts);
-      }
-    };
-    loadProducts();
-  }, [syncProducts]);
+  const selectedProduct =
+    products && products.find((p) => p.id === formData.productId);
 
   return (
     <KeyboardAvoidingView

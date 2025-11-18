@@ -1,8 +1,8 @@
 import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
 import CreateSaleForm from "@/features/sales/create-sale-form";
-import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import { getData, saveData } from "@/storage";
+import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -16,7 +16,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, setProducts } = useProductsStore((state) => state);
   const [sales, setSales] = useState<Sale[]>([]);
   const [search, setSearch] = useState<string>("");
 
@@ -28,21 +28,22 @@ const SalesScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   // Filtrage ventes
-  const filteredSales = Array.isArray(sales)
-    ? sales.filter((sale) => {
-        const product = products.find((p) => p.id === sale.productId);
-        const nameMatch = product?.name
-          .toLowerCase()
-          .includes(search.toLowerCase());
-        let dateMatch = true;
+  const filteredSales =
+    Array.isArray(sales) && products
+      ? sales.filter((sale) => {
+          const product = products.find((p) => p.id === sale.productId);
+          const nameMatch = product?.name
+            .toLowerCase()
+            .includes(search.toLowerCase());
+          let dateMatch = true;
 
-        const saleDate = new Date(sale.saleDate);
-        if (filterStartDate) dateMatch = saleDate >= filterStartDate;
-        if (filterEndDate) dateMatch = dateMatch && saleDate <= filterEndDate;
+          const saleDate = new Date(sale.saleDate);
+          if (filterStartDate) dateMatch = saleDate >= filterStartDate;
+          if (filterEndDate) dateMatch = dateMatch && saleDate <= filterEndDate;
 
-        return nameMatch && dateMatch;
-      })
-    : [];
+          return nameMatch && dateMatch;
+        })
+      : [];
 
   // Handlers Date Picker
   const handleConfirmStart = (date: Date) => {
@@ -55,6 +56,8 @@ const SalesScreen = () => {
   };
 
   const handleAddSale = async (sale: Sale) => {
+    if (!products) return;
+
     // 1. Mettre à jour les ventes
     const updatedSales = [...sales, sale];
     setSales(updatedSales);
@@ -163,6 +166,7 @@ const SalesScreen = () => {
           <Text style={styles.emptyText}>Aucune vente trouvée.</Text>
         }
         renderItem={({ item }) => {
+          if (!products) return <></>;
           const product = products.find((p) => p.id === item.productId);
           return (
             <View style={styles.saleCard}>
@@ -200,7 +204,6 @@ const SalesScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <CreateSaleForm
-            syncProducts={products}
             onAddSale={handleAddSale}
             onCancel={() => setModalVisible(false)}
           />

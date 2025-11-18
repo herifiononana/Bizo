@@ -1,9 +1,9 @@
 import { PRODUCTS_KEY } from "@/constants/key-storage";
-import { mockProducts } from "@/data/mock-product";
 import AddProductForm from "@/features/product/add-product-form";
 import ProductListItem from "@/features/product/product-list-item";
 import { Product } from "@/interface/product/product";
 import { getData, saveData } from "@/storage";
+import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -16,7 +16,8 @@ import {
 } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  // const [products, setProducts] = useState<Product[]>([]);
+  const { products, setProducts } = useProductsStore((state) => state);
   const [search, setSearch] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -29,7 +30,7 @@ const ProductsScreen: React.FC = () => {
 
   // Ajouter un produit
   const handleAddProduct = async (newProduct: Product) => {
-    const updatedProducts = [...products, newProduct];
+    const updatedProducts = products ? [...products, newProduct] : [newProduct];
     setProducts(updatedProducts);
     await saveData(PRODUCTS_KEY, updatedProducts); // persistance offline
     setModalVisible(false);
@@ -41,11 +42,12 @@ const ProductsScreen: React.FC = () => {
       const storedProducts = await getData(PRODUCTS_KEY);
       if (storedProducts) setProducts(storedProducts);
       else {
-        setProducts(mockProducts);
-        await saveData(PRODUCTS_KEY, mockProducts);
+        setProducts([]);
+        await saveData(PRODUCTS_KEY, []);
       }
     };
     loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
