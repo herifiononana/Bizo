@@ -107,7 +107,7 @@ const SalesScreen = () => {
     };
 
     loadData();
-  }, []);
+  }, [setProducts, setSales]);
 
   return (
     <View style={styles.container}>
