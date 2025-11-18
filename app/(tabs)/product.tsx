@@ -1,4 +1,4 @@
-import { PRODUCTS_STORAGE_KEY } from "@/constants/key-storage";
+import { PRODUCTS_KEY } from "@/constants/key-storage";
 import { mockProducts } from "@/data/mock-product";
 import AddProductForm from "@/features/product/add-product-form";
 import ProductListItem from "@/features/product/product-list-item";
@@ -21,26 +21,28 @@ const ProductsScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   // Filtrer les produits par recherche
-  const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProducts = products
+    ? products.filter((p) =>
+        p.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   // Ajouter un produit
   const handleAddProduct = async (newProduct: Product) => {
     const updatedProducts = [...products, newProduct];
     setProducts(updatedProducts);
-    await saveData(PRODUCTS_STORAGE_KEY, updatedProducts); // persistance offline
+    await saveData(PRODUCTS_KEY, updatedProducts); // persistance offline
     setModalVisible(false);
   };
 
   // Charger les produits depuis AsyncStorage
   useEffect(() => {
     const loadProducts = async () => {
-      const storedProducts = await getData("products");
+      const storedProducts = await getData(PRODUCTS_KEY);
       if (storedProducts) setProducts(storedProducts);
       else {
         setProducts(mockProducts);
-        await saveData(PRODUCTS_STORAGE_KEY, mockProducts);
+        await saveData(PRODUCTS_KEY, mockProducts);
       }
     };
     loadProducts();

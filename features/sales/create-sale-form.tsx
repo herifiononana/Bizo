@@ -43,7 +43,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({
     salePrice: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
 
   const handleSelectProduct = (id: string) => {
     setFormData({ ...formData, productId: id });

@@ -1,9 +1,11 @@
+import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
 import { mockProducts } from "@/data/mock-product";
 import { mockSales } from "@/data/mock-sales";
 import CreateSaleForm from "@/features/sales/create-sale-form";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
-import React, { useState } from "react";
+import { getData, saveData } from "@/storage";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Modal,
@@ -16,8 +18,8 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const Sales = () => {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
-  const [sales, setSales] = useState<Sale[]>(mockSales);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [sales, setSales] = useState<Sale[]>([]);
   const [search, setSearch] = useState("");
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
@@ -28,19 +30,21 @@ const Sales = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   // Filtrage ventes
-  const filteredSales = sales.filter((sale) => {
-    const product = products.find((p) => p.id === sale.productId);
-    const nameMatch = product?.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    let dateMatch = true;
+  const filteredSales = sales
+    ? sales.filter((sale) => {
+        const product = products.find((p) => p.id === sale.productId);
+        const nameMatch = product?.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        let dateMatch = true;
 
-    const saleDate = new Date(sale.saleDate);
-    if (filterStartDate) dateMatch = saleDate >= filterStartDate;
-    if (filterEndDate) dateMatch = dateMatch && saleDate <= filterEndDate;
+        const saleDate = new Date(sale.saleDate);
+        if (filterStartDate) dateMatch = saleDate >= filterStartDate;
+        if (filterEndDate) dateMatch = dateMatch && saleDate <= filterEndDate;
 
-    return nameMatch && dateMatch;
-  });
+        return nameMatch && dateMatch;
+      })
+    : [];
 
   // Handlers Date Picker
   const handleConfirmStart = (date: Date) => {
@@ -51,6 +55,57 @@ const Sales = () => {
     setEndPickerVisible(false);
     setFilterEndDate(date);
   };
+
+  const handleAddSale = async (sale: Sale) => {
+    // 1. Mettre à jour les ventes
+    const updatedSales = [...sales, sale];
+    setSales(updatedSales);
+
+    // 2. Mettre à jour le stock
+    const updatedProducts = products.map((p) =>
+      p.id === sale.productId
+        ? { ...p, quantity: p.quantity - sale.quantity }
+        : p
+    );
+    setProducts(updatedProducts);
+
+    // 3. Sauvegarder dans AsyncStorage
+    try {
+      await saveData(SALES_KEY, updatedSales);
+      await saveData(PRODUCTS_KEY, updatedProducts);
+    } catch (e) {
+      console.log("Erreur de sauvegarde :", e);
+    }
+
+    setModalVisible(false);
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const storedProducts = await getData(PRODUCTS_KEY);
+        const storedSales = await getData(SALES_KEY);
+
+        if (storedProducts) {
+          setProducts(storedProducts);
+        } else {
+          setProducts([]);
+          await saveData(PRODUCTS_KEY, JSON.stringify(mockProducts));
+        }
+
+        if (storedSales) {
+          setSales(storedSales);
+        } else {
+          setSales(mockSales);
+          await saveData(SALES_KEY, JSON.stringify(mockSales));
+        }
+      } catch (e) {
+        console.log("Erreur de chargement :", e);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -148,20 +203,7 @@ const Sales = () => {
         <View style={styles.modalOverlay}>
           <CreateSaleForm
             products={products}
-            onAddSale={(sale) => {
-              setSales([...sales, sale]);
-
-              // Mise à jour du stock
-              setProducts((prev) =>
-                prev.map((p) =>
-                  p.id === sale.productId
-                    ? { ...p, quantity: p.quantity - sale.quantity }
-                    : p
-                )
-              );
-
-              setModalVisible(false);
-            }}
+            onAddSale={handleAddSale}
             onCancel={() => setModalVisible(false)}
           />
         </View>
