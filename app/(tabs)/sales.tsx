@@ -3,6 +3,7 @@ import CreateSaleForm from "@/features/sales/create-sale-form";
 import { Sale } from "@/interface/sale/sale";
 import { getData, saveData } from "@/storage";
 import { useProductsStore } from "@/stores/product.store";
+import { useSalesStore } from "@/stores/sales.store";
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -17,7 +18,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
   const { products, setProducts } = useProductsStore((state) => state);
-  const [sales, setSales] = useState<Sale[]>([]);
+  const { sales, setSales } = useSalesStore((state) => state);
   const [search, setSearch] = useState<string>("");
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
@@ -56,7 +57,7 @@ const SalesScreen = () => {
   };
 
   const handleAddSale = async (sale: Sale) => {
-    if (!products) return;
+    if (!products || !sales) return;
 
     // 1. Mettre à jour les ventes
     const updatedSales = [...sales, sale];
