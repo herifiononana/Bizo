@@ -23,24 +23,51 @@ const SalesScreen = () => {
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
-  const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
+  const [filterStartDate, setFilterStartDate] = useState<Date | null>(
+    new Date()
+  );
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   // Filtrage ventes
   const filteredSales =
-    Array.isArray(sales) && products
+    Array.isArray(sales) && Array.isArray(products)
       ? sales.filter((sale) => {
           const product = products.find((p) => p.id === sale.productId);
-          const nameMatch = product?.name
-            .toLowerCase()
-            .includes(search.toLowerCase());
+
+          // Sécuriser nameMatch
+          const nameMatch =
+            product?.name?.toLowerCase().includes(search.toLowerCase()) ??
+            false;
+
+          // Convertir les dates en YYYY-MM-DD pour ignorer l'heure
+          const saleDate = new Date(sale.saleDate);
+          const saleDay = new Date(
+            saleDate.getFullYear(),
+            saleDate.getMonth(),
+            saleDate.getDate()
+          );
+
           let dateMatch = true;
 
-          const saleDate = new Date(sale.saleDate);
-          if (filterStartDate) dateMatch = saleDate >= filterStartDate;
-          if (filterEndDate) dateMatch = dateMatch && saleDate <= filterEndDate;
+          if (filterStartDate) {
+            const startDay = new Date(
+              filterStartDate.getFullYear(),
+              filterStartDate.getMonth(),
+              filterStartDate.getDate()
+            );
+            dateMatch = saleDay >= startDay;
+          }
+
+          if (filterEndDate) {
+            const endDay = new Date(
+              filterEndDate.getFullYear(),
+              filterEndDate.getMonth(),
+              filterEndDate.getDate()
+            );
+            dateMatch = dateMatch && saleDay <= endDay;
+          }
 
           return nameMatch && dateMatch;
         })
