@@ -21,6 +21,10 @@ const productSchema = z.object({
   purchasePrice: z
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide"),
+  salePrice: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
+    .optional(),
 });
 
 interface AddProductFormProps {
@@ -36,6 +40,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     name: "",
     quantity: "",
     purchasePrice: "",
+    salePrice: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -68,7 +73,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
 
     onAddProduct(newProduct);
     Alert.alert("✅ Succès", "Produit ajouté avec succès !");
-    setFormData({ name: "", quantity: "", purchasePrice: "" });
+    setFormData({ name: "", quantity: "", purchasePrice: "", salePrice: "" });
   };
 
   return (
@@ -115,6 +120,21 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           />
           {errors.purchasePrice && (
             <Text style={styles.errorText}>{errors.purchasePrice}</Text>
+          )}
+        </View>
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Prix de vente (Ar)</Text>
+          <TextInput
+            style={[styles.input, errors.salePrice && styles.errorInput]}
+            placeholder="Ex : 2500"
+            placeholderTextColor="#9CA3AF"
+            keyboardType="numeric"
+            value={formData.salePrice}
+            onChangeText={(text) => handleChange("salePrice", text)}
+          />
+          {errors.salePrice && (
+            <Text style={styles.errorText}>{errors.salePrice}</Text>
           )}
         </View>
 

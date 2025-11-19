@@ -1,6 +1,6 @@
 import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -62,22 +62,20 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       return;
     }
 
-    const product = products.find((p) => p.id === formData.productId);
-
-    if (!product) {
+    if (!selectedProduct) {
       setErrors({ productId: "Produit introuvable" });
       return;
     }
 
     const quantitySold = Number(formData.quantity);
-    if (quantitySold > product.quantity) {
+    if (quantitySold > selectedProduct.quantity) {
       setErrors({ quantity: "Quantité supérieure au stock disponible" });
       return;
     }
 
     const sale: Sale = {
       id: Date.now().toString(),
-      productId: product.id,
+      productId: selectedProduct.id,
       quantity: quantitySold,
       salePrice: Number(formData.salePrice),
       totalAmount: quantitySold * Number(formData.salePrice),
@@ -97,6 +95,14 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
 
   const selectedProduct =
     products && products.find((p) => p.id === formData.productId);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      salePrice: String(selectedProduct?.salePrice ?? ""),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProduct]);
 
   return (
     <KeyboardAvoidingView

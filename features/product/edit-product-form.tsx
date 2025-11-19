@@ -21,6 +21,10 @@ const productSchema = z.object({
   purchasePrice: z
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide"),
+  salePrice: z
+    .string()
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
+    .optional(),
 });
 
 export type productDTO = z.infer<typeof productSchema>;
@@ -40,6 +44,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     name: product.name,
     quantity: String(product.quantity),
     purchasePrice: String(product.purchasePrice),
+    salePrice: String(product.salePrice ?? ""),
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -67,6 +72,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       name: result.data.name,
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
+      salePrice: Number(result.data.salePrice),
       updatedAt: new Date().toISOString(),
     };
 
@@ -118,6 +124,21 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
           />
           {errors.purchasePrice && (
             <Text style={styles.errorText}>{errors.purchasePrice}</Text>
+          )}
+        </View>
+
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Prix de vente (Ar)</Text>
+          <TextInput
+            style={[styles.input, errors.salePrice && styles.errorInput]}
+            placeholder="Ex : 2500"
+            placeholderTextColor="#9CA3AF"
+            keyboardType="numeric"
+            value={formData.salePrice}
+            onChangeText={(text) => handleChange("salePrice", text)}
+          />
+          {errors.salePrice && (
+            <Text style={styles.errorText}>{errors.salePrice}</Text>
           )}
         </View>
 
