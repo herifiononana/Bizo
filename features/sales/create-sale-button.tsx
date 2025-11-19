@@ -1,4 +1,5 @@
 import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
+import { useFinance } from "@/hooks/finance/useFinance";
 import { useProducts } from "@/hooks/product/useProduct";
 import { useSale } from "@/hooks/sale/useSale";
 import { Sale } from "@/interface/sale/sale";
@@ -12,9 +13,11 @@ function CreateSaleButton() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { products } = useProducts();
   const { sales } = useSale();
+  const { changeFinanceStatus } = useFinance();
 
   const setProducts = useProductsStore(({ setProducts }) => setProducts);
   const setSales = useSalesStore(({ setSales }) => setSales);
+
   const handleAddSale = async (sale: Sale) => {
     if (!products || !sales) return;
 
@@ -39,6 +42,8 @@ function CreateSaleButton() {
     }
 
     setModalVisible(false);
+    // Mettre a jour l'etat de la finance
+    changeFinanceStatus();
   };
 
   return (

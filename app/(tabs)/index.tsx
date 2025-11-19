@@ -1,80 +1,9 @@
-import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
-import { Sale } from "@/interface/sale/sale";
-import { getFinance } from "@/services/finance";
-import { getData, saveData } from "@/storage";
-import { useFinanceSummaryStore } from "@/stores/finance.store";
-import { useProductsStore } from "@/stores/product.store";
-import { useSalesStore } from "@/stores/sales.store";
-import React, { useEffect, useState } from "react";
+import { useFinance } from "@/hooks/finance/useFinance";
+import React from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const Dashboard = () => {
-  const { products, setProducts } = useProductsStore((state) => state);
-  const { sales, setSales } = useSalesStore((state) => state);
-  const [filteredSales, setFilteredSales] = useState<Sale[]>([]);
-
-  const { finance: data, setFinance } = useFinanceSummaryStore(
-    (state) => state
-  );
-
-  const handleFilterSales = (date: Date) => {
-    if (!sales) return;
-
-    setFilteredSales(
-      sales.filter((sale) => {
-        const saleDate = new Date(sale.saleDate);
-
-        const isSameDay =
-          saleDate.getFullYear() === date.getFullYear() &&
-          saleDate.getMonth() === date.getMonth() &&
-          saleDate.getDate() === date.getDate();
-
-        return isSameDay;
-      })
-    );
-  };
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const storedProducts = await getData(PRODUCTS_KEY);
-        const storedSales = await getData(SALES_KEY);
-
-        if (storedProducts) {
-          setProducts(storedProducts);
-        } else {
-          setProducts([]);
-          await saveData(PRODUCTS_KEY, []);
-        }
-
-        if (storedSales) {
-          setSales(storedSales);
-        } else {
-          setSales([]);
-          await saveData(SALES_KEY, []);
-        }
-      } catch (e) {
-        console.log("Erreur de chargement :", e);
-      }
-    };
-
-    loadData();
-  }, [setProducts, setSales]);
-
-  // --- Quand sales change → filtrer les ventes du jour ---
-  useEffect(() => {
-    if (sales) {
-      handleFilterSales(new Date());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sales]);
-
-  useEffect(() => {
-    if (products && sales) {
-      setFinance(getFinance({ products, sales: filteredSales }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, sales]);
+  const { data } = useFinance();
 
   return (
     <View style={styles.screen}>

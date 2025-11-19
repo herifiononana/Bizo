@@ -1,6 +1,6 @@
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import { useProducts } from "@/hooks/product/useProduct";
-import { useSale } from "@/hooks/sale/useSale";
+import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -14,68 +14,29 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
   const { products } = useProducts();
-  const { sales } = useSale();
-  const [search, setSearch] = useState<string>("");
+  const { handleFilterSale } = useSale();
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
-  const [filterStartDate, setFilterStartDate] = useState<Date | null>(
-    new Date()
-  );
-  const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
+
+  const [params, setParams] = useState<FilteredParamsType>({
+    search: "",
+    startDate: new Date(),
+    endDate: null,
+  });
 
   // Handlers Date Picker
   const handleConfirmStart = (date: Date) => {
     setStartPickerVisible(false);
-    setFilterStartDate(date);
+    setParams({ ...params, startDate: date });
   };
   const handleConfirmEnd = (date: Date) => {
     setEndPickerVisible(false);
-    setFilterEndDate(date);
+    setParams({ ...params, endDate: date });
   };
 
   // Filtrage ventes
-  const filteredSales =
-    Array.isArray(sales) && Array.isArray(products)
-      ? sales.filter((sale) => {
-          const product = products.find((p) => p.id === sale.productId);
-
-          // Sécuriser nameMatch
-          const nameMatch =
-            product?.name?.toLowerCase().includes(search.toLowerCase()) ??
-            false;
-
-          // Convertir les dates en YYYY-MM-DD pour ignorer l'heure
-          const saleDate = new Date(sale.saleDate);
-          const saleDay = new Date(
-            saleDate.getFullYear(),
-            saleDate.getMonth(),
-            saleDate.getDate()
-          );
-
-          let dateMatch = true;
-
-          if (filterStartDate) {
-            const startDay = new Date(
-              filterStartDate.getFullYear(),
-              filterStartDate.getMonth(),
-              filterStartDate.getDate()
-            );
-            dateMatch = saleDay >= startDay;
-          }
-
-          if (filterEndDate) {
-            const endDay = new Date(
-              filterEndDate.getFullYear(),
-              filterEndDate.getMonth(),
-              filterEndDate.getDate()
-            );
-            dateMatch = dateMatch && saleDay <= endDay;
-          }
-
-          return nameMatch && dateMatch;
-        })
-      : [];
+  const filteredSales = handleFilterSale({ ...params });
 
   return (
     <View style={styles.container}>
@@ -85,8 +46,8 @@ const SalesScreen = () => {
       <TextInput
         placeholder="🔍 Rechercher un produit..."
         style={styles.searchInput}
-        value={search}
-        onChangeText={setSearch}
+        value={params.search}
+        onChangeText={(search) => setParams({ ...params, search })}
       />
 
       {/* Filtres de date */}
@@ -96,8 +57,8 @@ const SalesScreen = () => {
           onPress={() => setStartPickerVisible(true)}
         >
           <Text style={styles.dateButtonText}>
-            {filterStartDate
-              ? `Début: ${filterStartDate.toLocaleDateString()}`
+            {params.startDate
+              ? `Début: ${params.startDate.toLocaleDateString()}`
               : "📅 Date début"}
           </Text>
         </TouchableOpacity>
@@ -107,8 +68,8 @@ const SalesScreen = () => {
           onPress={() => setEndPickerVisible(true)}
         >
           <Text style={styles.dateButtonText}>
-            {filterEndDate
-              ? `Fin: ${filterEndDate.toLocaleDateString()}`
+            {params.endDate
+              ? `Fin: ${params.endDate.toLocaleDateString()}`
               : "📅 Date fin"}
           </Text>
         </TouchableOpacity>
