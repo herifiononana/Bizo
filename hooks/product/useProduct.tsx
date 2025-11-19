@@ -29,13 +29,6 @@ export const useProducts = () => {
     await saveData(PRODUCTS_KEY, next);
   };
 
-  // const handleAddProduct = async (newProduct: Product) => {
-  //   const updatedProducts = products ? [...products, newProduct] : [newProduct];
-  //   setProducts(updatedProducts);
-  //   await saveData(PRODUCTS_KEY, updatedProducts); // persistance offline
-  //   setModalVisible(false);
-  // };
-
   return {
     products,
     addProduct,

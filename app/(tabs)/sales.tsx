@@ -1,13 +1,9 @@
-import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
-import CreateSaleForm from "@/features/sales/create-sale-form";
-import { Sale } from "@/interface/sale/sale";
-import { getData, saveData } from "@/storage";
-import { useProductsStore } from "@/stores/product.store";
-import { useSalesStore } from "@/stores/sales.store";
-import React, { useEffect, useState } from "react";
+import CreateSaleButton from "@/features/sales/create-sale-button";
+import { useProducts } from "@/hooks/product/useProduct";
+import { useSale } from "@/hooks/sale/useSale";
+import React, { useState } from "react";
 import {
   FlatList,
-  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -17,8 +13,8 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
-  const { products, setProducts } = useProductsStore((state) => state);
-  const { sales, setSales } = useSalesStore((state) => state);
+  const { products } = useProducts();
+  const { sales } = useSale();
   const [search, setSearch] = useState<string>("");
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
@@ -28,7 +24,15 @@ const SalesScreen = () => {
   );
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  // Handlers Date Picker
+  const handleConfirmStart = (date: Date) => {
+    setStartPickerVisible(false);
+    setFilterStartDate(date);
+  };
+  const handleConfirmEnd = (date: Date) => {
+    setEndPickerVisible(false);
+    setFilterEndDate(date);
+  };
 
   // Filtrage ventes
   const filteredSales =
@@ -72,69 +76,6 @@ const SalesScreen = () => {
           return nameMatch && dateMatch;
         })
       : [];
-
-  // Handlers Date Picker
-  const handleConfirmStart = (date: Date) => {
-    setStartPickerVisible(false);
-    setFilterStartDate(date);
-  };
-  const handleConfirmEnd = (date: Date) => {
-    setEndPickerVisible(false);
-    setFilterEndDate(date);
-  };
-
-  const handleAddSale = async (sale: Sale) => {
-    if (!products || !sales) return;
-
-    // 1. Mettre à jour les ventes
-    const updatedSales = [...sales, sale];
-    setSales(updatedSales);
-
-    // 2. Mettre à jour le stock
-    const updatedProducts = products.map((p) =>
-      p.id === sale.productId
-        ? { ...p, quantity: p.quantity - sale.quantity }
-        : p
-    );
-    setProducts(updatedProducts);
-
-    // 3. Sauvegarder dans AsyncStorage
-    try {
-      await saveData(SALES_KEY, updatedSales);
-      await saveData(PRODUCTS_KEY, updatedProducts);
-    } catch (e) {
-      console.log("Erreur de sauvegarde :", e);
-    }
-
-    setModalVisible(false);
-  };
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const storedProducts = await getData(PRODUCTS_KEY);
-        const storedSales = await getData(SALES_KEY);
-
-        if (storedProducts) {
-          setProducts(storedProducts);
-        } else {
-          setProducts([]);
-          await saveData(PRODUCTS_KEY, []);
-        }
-
-        if (storedSales) {
-          setSales(storedSales);
-        } else {
-          setSales([]);
-          await saveData(SALES_KEY, []);
-        }
-      } catch (e) {
-        console.log("Erreur de chargement :", e);
-      }
-    };
-
-    loadData();
-  }, [setProducts, setSales]);
 
   return (
     <View style={styles.container}>
@@ -216,27 +157,7 @@ const SalesScreen = () => {
       />
 
       {/* Bouton Ajouter une vente */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.addButtonText}>+ Ajouter une vente</Text>
-      </TouchableOpacity>
-
-      {/* Modal Nouvelle vente */}
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <CreateSaleForm
-            onAddSale={handleAddSale}
-            onCancel={() => setModalVisible(false)}
-          />
-        </View>
-      </Modal>
+      <CreateSaleButton />
     </View>
   );
 };
@@ -306,35 +227,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     color: "#94A3B8",
     fontSize: 15,
-  },
-  addButton: {
-    backgroundColor: "#16A34A",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 17,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
-  },
-  modalBox: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 14,
   },
   label: { fontWeight: "600", marginBottom: 6 },
   productSelect: {
