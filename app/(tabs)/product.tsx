@@ -1,22 +1,12 @@
-import AddProductForm from "@/features/product/add-product-form";
+import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
 import { useProducts } from "@/hooks/product/useProduct";
-import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
-import {
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  const { products, addProduct } = useProducts();
+  const { products } = useProducts();
   const [search, setSearch] = useState<string>("");
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   // Filtrer les produits par recherche
   const filteredProducts = products
@@ -24,12 +14,6 @@ const ProductsScreen: React.FC = () => {
         p.name.toLowerCase().includes(search.toLowerCase())
       )
     : [];
-
-  // Ajouter un produit
-  const handleAddProduct = async (newProduct: Product) => {
-    addProduct(newProduct);
-    setModalVisible(false);
-  };
 
   return (
     <View style={styles.container}>
@@ -54,27 +38,7 @@ const ProductsScreen: React.FC = () => {
       />
 
       {/* Bouton ajout produit */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.addButtonText}>+ Ajouter un produit</Text>
-      </TouchableOpacity>
-
-      {/* Modal d'ajout */}
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <AddProductForm
-            onAddProduct={handleAddProduct}
-            onCancel={() => setModalVisible(false)}
-          />
-        </View>
-      </Modal>
+      <AddProductButton />
     </View>
   );
 };
@@ -122,49 +86,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 40,
     color: "#888",
-  },
-  addButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 16,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 17,
-    fontWeight: "600",
-  },
-
-  // -------- Modal --------
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
-  },
-  modalActions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  saveButton: {
-    backgroundColor: "#4CAF50",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-  cancelButton: {
-    backgroundColor: "#ddd",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  cancelButtonText: {
-    fontWeight: "600",
   },
 });
 
