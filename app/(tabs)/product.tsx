@@ -1,10 +1,8 @@
-import { PRODUCTS_KEY } from "@/constants/key-storage";
 import AddProductForm from "@/features/product/add-product-form";
 import ProductListItem from "@/features/product/product-list-item";
+import { useProducts } from "@/hooks/product/useProduct";
 import { Product } from "@/interface/product/product";
-import { getData, saveData } from "@/storage";
-import { useProductsStore } from "@/stores/product.store";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   Modal,
@@ -16,8 +14,7 @@ import {
 } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  // const [products, setProducts] = useState<Product[]>([]);
-  const { products, setProducts } = useProductsStore((state) => state);
+  const { products, addProduct } = useProducts();
   const [search, setSearch] = useState<string>("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -30,25 +27,9 @@ const ProductsScreen: React.FC = () => {
 
   // Ajouter un produit
   const handleAddProduct = async (newProduct: Product) => {
-    const updatedProducts = products ? [...products, newProduct] : [newProduct];
-    setProducts(updatedProducts);
-    await saveData(PRODUCTS_KEY, updatedProducts); // persistance offline
+    addProduct(newProduct);
     setModalVisible(false);
   };
-
-  // Charger les produits depuis AsyncStorage
-  useEffect(() => {
-    const loadProducts = async () => {
-      const storedProducts = await getData(PRODUCTS_KEY);
-      if (storedProducts) setProducts(storedProducts);
-      else {
-        setProducts([]);
-        await saveData(PRODUCTS_KEY, []);
-      }
-    };
-    loadProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -69,9 +50,7 @@ const ProductsScreen: React.FC = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
         }
-        renderItem={({ item }) => (
-          <ProductListItem {...{ item, refetch: setProducts }} />
-        )}
+        renderItem={({ item }) => <ProductListItem {...{ item }} />}
       />
 
       {/* Bouton ajout produit */}
