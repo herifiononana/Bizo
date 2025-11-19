@@ -2,6 +2,7 @@ import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import {
+  Alert,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -84,6 +85,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
     };
 
     onAddSale(sale);
+    Alert.alert("✅ Succès", "Vente réalisée avec succès !");
   };
 
   // Produits filtrés pour l’autocomplete

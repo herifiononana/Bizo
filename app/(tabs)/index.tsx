@@ -18,18 +18,18 @@ const Dashboard = () => {
   );
 
   const handleFilterSales = (date: Date) => {
-    if (!sales) return [];
+    if (!sales) return;
 
     setFilteredSales(
       sales.filter((sale) => {
-        let dateMatch = true;
+        const saleDate = new Date(sale.saleDate);
 
-        const saleDate = new Date();
+        const isSameDay =
+          saleDate.getFullYear() === date.getFullYear() &&
+          saleDate.getMonth() === date.getMonth() &&
+          saleDate.getDate() === date.getDate();
 
-        // todo : fix this date
-        dateMatch = saleDate >= date;
-
-        return dateMatch;
+        return isSameDay;
       })
     );
   };
@@ -49,7 +49,6 @@ const Dashboard = () => {
 
         if (storedSales) {
           setSales(storedSales);
-          handleFilterSales(new Date());
         } else {
           setSales([]);
           await saveData(SALES_KEY, []);
@@ -60,13 +59,19 @@ const Dashboard = () => {
     };
 
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setProducts, setSales]);
+
+  // --- Quand sales change → filtrer les ventes du jour ---
+  useEffect(() => {
+    if (sales) {
+      handleFilterSales(new Date());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sales]);
 
   useEffect(() => {
     if (products && sales) {
-      // todo : use filteredSales
-      setFinance(getFinance({ products, sales }));
+      setFinance(getFinance({ products, sales: filteredSales }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, sales]);
