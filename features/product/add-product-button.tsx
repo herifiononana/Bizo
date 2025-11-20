@@ -53,8 +53,8 @@ export default AddProductButton;
 
 const styles = StyleSheet.create({
   addButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 16,
+    backgroundColor: "#000000DD",
+    paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",
     marginTop: 10,

@@ -78,7 +78,7 @@ export default CreateSaleButton;
 
 const styles = StyleSheet.create({
   addButton: {
-    backgroundColor: "#16A34A",
+    backgroundColor: "#000000DD",
     paddingVertical: 14,
     borderRadius: 10,
     alignItems: "center",

@@ -1,4 +1,5 @@
 import CreateSaleButton from "@/features/sales/create-sale-button";
+import SaleListItem from "@/features/sales/sale-list-item";
 import { useProducts } from "@/hooks/product/useProduct";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
 import React, { useState } from "react";
@@ -98,30 +99,7 @@ const SalesScreen = () => {
         renderItem={({ item }) => {
           if (!products) return <></>;
           const product = products.find((p) => p.id === item.productId);
-          return (
-            <View style={styles.saleCard}>
-              <View style={styles.saleHeader}>
-                <Text style={styles.saleProduct}>{product?.name}</Text>
-                <Text style={styles.saleDate}>
-                  {new Date(item.saleDate).toLocaleDateString()}
-                </Text>
-              </View>
-
-              <Text style={styles.saleDetails}>
-                Qté : {item.quantity} | Prix unitaire :{" "}
-                {item.salePrice.toLocaleString()} Ar
-              </Text>
-
-              <Text style={styles.saleTotal}>
-                💰 Total : {item.totalAmount.toLocaleString()} Ar
-              </Text>
-
-              {/* Affichage si la vente est à crédit */}
-              {item.isCredit && (
-                <Text style={styles.creditLabel}>💳 Vente à crédit</Text>
-              )}
-            </View>
-          );
+          return product ? <SaleListItem {...{ product, item }} /> : <></>;
         }}
       />
 
@@ -170,74 +148,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#334155",
   },
-  saleCard: {
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    marginBottom: 10,
-  },
-  saleHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  creditLabel: {
-    color: "#B45309", // orange foncé pour se démarquer
-    fontWeight: "600",
-    marginTop: 4,
-  },
-  saleProduct: { fontSize: 17, fontWeight: "600", color: "#0F172A" },
-  saleDate: { fontSize: 13, color: "#64748B" },
-  saleDetails: { fontSize: 15, color: "#475569", marginTop: 6 },
-  saleTotal: {
-    fontSize: 15,
-    color: "#16A34A",
-    fontWeight: "600",
-    marginTop: 4,
-  },
   emptyText: {
     textAlign: "center",
     marginTop: 40,
     color: "#94A3B8",
     fontSize: 15,
   },
-  label: { fontWeight: "600", marginBottom: 6 },
-  productSelect: {
-    padding: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    marginBottom: 6,
-  },
-  selectedProduct: {
-    backgroundColor: "#DCFCE7",
-    borderColor: "#22C55E",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
-  },
-  saveButton: {
-    backgroundColor: "#16A34A",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  saveButtonText: { color: "#fff", fontWeight: "700" },
-  cancelButton: {
-    backgroundColor: "#E5E7EB",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
-  cancelButtonText: { fontWeight: "600", color: "#334155" },
 });
