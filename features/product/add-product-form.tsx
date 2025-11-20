@@ -67,6 +67,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       name: result.data.name,
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
+      salePrice: Number(result.data.salePrice),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

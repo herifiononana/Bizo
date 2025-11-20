@@ -5,4 +5,5 @@ export interface Sale {
   salePrice: number;
   totalAmount: number;
   saleDate: string; // ISO date string
+  isCredit?: boolean;
 }

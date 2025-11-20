@@ -106,12 +106,20 @@ const SalesScreen = () => {
                   {new Date(item.saleDate).toLocaleDateString()}
                 </Text>
               </View>
+
               <Text style={styles.saleDetails}>
-                Qté : {item.quantity} | Prix unitaire : {item.salePrice} Ar
+                Qté : {item.quantity} | Prix unitaire :{" "}
+                {item.salePrice.toLocaleString()} Ar
               </Text>
+
               <Text style={styles.saleTotal}>
                 💰 Total : {item.totalAmount.toLocaleString()} Ar
               </Text>
+
+              {/* Affichage si la vente est à crédit */}
+              {item.isCredit && (
+                <Text style={styles.creditLabel}>💳 Vente à crédit</Text>
+              )}
             </View>
           );
         }}
@@ -173,6 +181,11 @@ const styles = StyleSheet.create({
   saleHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  creditLabel: {
+    color: "#B45309", // orange foncé pour se démarquer
+    fontWeight: "600",
+    marginTop: 4,
   },
   saleProduct: { fontSize: 17, fontWeight: "600", color: "#0F172A" },
   saleDate: { fontSize: 13, color: "#64748B" },

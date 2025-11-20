@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -25,6 +26,7 @@ const saleSchema = z.object({
   salePrice: z
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Prix invalide"),
+  isCredit: z.boolean().optional(),
 });
 
 interface CreateSaleProps {
@@ -38,6 +40,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
     productId: "",
     quantity: "",
     salePrice: "",
+    isCredit: false,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -80,11 +83,17 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       salePrice: Number(formData.salePrice),
       totalAmount: quantitySold * Number(formData.salePrice),
       saleDate: new Date().toISOString(),
+      isCredit: formData.isCredit,
     };
 
     onAddSale(sale);
     Alert.alert("✅ Succès", "Vente réalisée avec succès !");
-    setFormData({ productId: "", quantity: "", salePrice: "" });
+    setFormData({
+      productId: "",
+      quantity: "",
+      salePrice: "",
+      isCredit: false,
+    });
   };
 
   // Produits filtrés pour l’autocomplete
@@ -182,6 +191,19 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
         <Text style={styles.errorText}>{errors.salePrice}</Text>
       )}
 
+      {/* Vente à crédit */}
+      <View style={styles.creditRow}>
+        <Text style={styles.label}>Vente à crédit :</Text>
+        <Switch
+          value={formData.isCredit}
+          onValueChange={(value) =>
+            setFormData({ ...formData, isCredit: value })
+          }
+          thumbColor={formData.isCredit ? "#16A34A" : "#f4f3f4"}
+          trackColor={{ false: "#D1D5DB", true: "#A7F3D0" }}
+        />
+      </View>
+
       {/* Boutons */}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
@@ -266,6 +288,12 @@ const styles = StyleSheet.create({
   clearText: {
     color: "#047857",
     fontWeight: "600",
+  },
+  creditRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 10,
   },
   actions: {
     flexDirection: "row",
