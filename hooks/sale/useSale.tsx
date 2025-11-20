@@ -13,6 +13,22 @@ export const useSale = () => {
   const { products } = useProducts();
   const { sales, setSales } = useSalesStore();
 
+  const getTodaySaleList = () => {
+    if (!sales) return [];
+
+    const date = new Date();
+    return sales.filter((sale) => {
+      const saleDate = new Date(sale.saleDate);
+
+      const isSameDay =
+        saleDate.getFullYear() === date.getFullYear() &&
+        saleDate.getMonth() === date.getMonth() &&
+        saleDate.getDate() === date.getDate();
+
+      return isSameDay;
+    });
+  };
+
   const handleFilterSale = ({
     search = "",
     startDate,
@@ -82,5 +98,6 @@ export const useSale = () => {
   return {
     sales,
     handleFilterSale,
+    getTodaySaleList,
   };
 };

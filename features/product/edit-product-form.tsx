@@ -1,3 +1,4 @@
+import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
 import {
@@ -47,6 +48,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     salePrice: String(product.salePrice ?? ""),
   });
 
+  const { changeFinanceStatus } = useFinance();
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (field: string, value: string) => {
@@ -78,6 +80,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
 
     onEditProduct(updatedProduct);
     Alert.alert("✅ Succès", "Produit modifié avec succès !");
+    changeFinanceStatus();
   };
 
   return (

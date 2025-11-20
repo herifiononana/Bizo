@@ -1,5 +1,5 @@
+import { useProducts } from "@/hooks/product/useProduct";
 import { Sale } from "@/interface/sale/sale";
-import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -33,12 +33,12 @@ interface CreateSaleProps {
 }
 
 const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
+  const { products } = useProducts();
   const [formData, setFormData] = useState({
     productId: "",
     quantity: "",
     salePrice: "",
   });
-  const { products } = useProductsStore((state) => state);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [search, setSearch] = useState<string>("");
@@ -84,6 +84,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
 
     onAddSale(sale);
     Alert.alert("✅ Succès", "Vente réalisée avec succès !");
+    setFormData({ productId: "", quantity: "", salePrice: "" });
   };
 
   // Produits filtrés pour l’autocomplete

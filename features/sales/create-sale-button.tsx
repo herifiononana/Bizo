@@ -42,6 +42,7 @@ function CreateSaleButton() {
     }
 
     setModalVisible(false);
+
     // Mettre a jour l'etat de la finance
     changeFinanceStatus();
   };
