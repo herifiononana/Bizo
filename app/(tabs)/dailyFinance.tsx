@@ -116,25 +116,25 @@ const DailyFinanceScreen = () => {
 export default DailyFinanceScreen;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F1F5F9" },
+  screen: { flex: 1, backgroundColor: "#1E293BAA" },
   container: { padding: 20 },
   title: {
     fontSize: 26,
     fontWeight: "800",
     textAlign: "center",
-    color: "#0F172A",
+    color: "#FFF",
   },
   subtitle: {
     textAlign: "center",
-    color: "#475569",
+    color: "#FFFFFFAA",
     marginBottom: 16,
   },
   dateRow: { flexDirection: "row", justifyContent: "center", marginBottom: 20 },
   datePickerButton: {
     backgroundColor: "#1E293B",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 14,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 10,
     marginHorizontal: 4,
   },
   resetButton: { backgroundColor: "#334155" },
