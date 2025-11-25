@@ -1,126 +1,125 @@
 import { useFinance } from "@/hooks/finance/useFinance";
+import { Product } from "@/interface/product/product";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const Dashboard = () => {
-  const { data } = useFinance();
+  const {
+    data,
+    topSoldProducts,
+    leastSoldProducts,
+    mostExpensiveProducts,
+    leastExpensiveProducts,
+    newestProducts,
+    oldestProducts,
+  } = useFinance();
 
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Titre */}
+        {/* HEADER */}
         <Text style={styles.title}>Tableau de bord</Text>
-        <Text style={styles.subtitle}>
-          Aperçu de vos statistiques en un coup d’œil 📊
-        </Text>
+        <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
 
-        {/* Cartes principales */}
+        {/* CARDS PRINCIPALES */}
         <View style={styles.statsGrid}>
-          <View style={[styles.statCard, styles.cardBlue]}>
-            <Text style={styles.statLabel}>Produits</Text>
-            <Text style={styles.statValue}>{data?.totalProducts ?? 0}</Text>
-            <Text style={styles.statHint}>articles en stock</Text>
-          </View>
-
-          <View style={[styles.statCard, styles.cardGreen]}>
-            <Text style={styles.statLabel}>Valeur du stock</Text>
-            <Text style={styles.statValue}>
-              {data?.totalStockValue ?? 0} Ar
-            </Text>
-            <Text style={styles.statHint}>valeur totale</Text>
-          </View>
-
-          <View style={[styles.statCard, styles.cardYellow]}>
-            <Text style={styles.statLabel}>Ventes totales</Text>
-            <Text style={styles.statValue}>
-              {data?.totalSalesValue ?? 0} Ar
-            </Text>
-            <Text style={styles.statHint}>cumul des ventes</Text>
-          </View>
-
-          {/* Ventes Cash */}
-          <View style={[styles.statCard, styles.cardEmerald]}>
-            <Text style={styles.statLabel}>Ventes Cash</Text>
-            <Text style={styles.statValue}>{data?.totalCashSales ?? 0} Ar</Text>
-            <Text style={styles.statHint}>paiements immédiats</Text>
-          </View>
-
-          {/* Ventes à Crédit */}
-          <View style={[styles.statCard, styles.cardRed]}>
-            <Text style={styles.statLabel}>Ventes à Crédit</Text>
-            <Text style={styles.statValue}>
-              {data?.totalCreditSales ?? 0} Ar
-            </Text>
-            <Text style={styles.statHint}>montant non payé</Text>
-          </View>
-
-          <View style={[styles.statCard, styles.cardEmeraldDark]}>
-            <Text style={styles.statLabel}>Bénéfice total</Text>
-            <Text style={styles.statValue}>+{data?.totalProfit ?? 0} Ar</Text>
-            <Text style={styles.statHint}>revenu net</Text>
-          </View>
+          <StatCard
+            label="Produits"
+            value={data?.totalProducts}
+            color="#E0F2FE"
+            icon="inventory"
+          />
+          <StatCard
+            label="Valeur du stock"
+            value={data?.totalStockValue + " Ar"}
+            color="#DCFCE7"
+            icon="monetization-on"
+          />
+          <StatCard
+            label="Ventes totales"
+            value={data?.totalSalesValue + " Ar"}
+            color="#FEF9C3"
+            icon="show-chart"
+          />
+          <StatCard
+            label="Ventes Cash"
+            value={data?.totalCashSales + " Ar"}
+            color="#D1FAE5"
+            icon="payments"
+          />
+          <StatCard
+            label="Crédit"
+            value={data?.totalCreditSales + " Ar"}
+            color="#FEE2E2"
+            icon="credit-card"
+          />
+          <StatCard
+            label="Bénéfice"
+            value={"+" + (data?.totalProfit ?? 0) + " Ar"}
+            color="#BBF7D0"
+            icon="trending-up"
+          />
         </View>
 
-        {/* Résumé */}
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryTitle}>Résumé financier</Text>
+        {/* LISTES DYNAMIQUES */}
 
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Produits</Text>
-              <Text style={styles.summaryValue}>
-                {data?.totalProducts ?? 0}
-              </Text>
-            </View>
+        <TopSodl
+          title="Top 5 - Produits les plus vendus"
+          icon="arrow-up"
+          color="#0EA5E9"
+          data={topSoldProducts}
+        />
 
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Stock total</Text>
-              <Text style={styles.summaryValue}>
-                {data?.totalStockValue ?? 0} Ar
-              </Text>
-            </View>
-          </View>
+        <TopSodl
+          title="Top 5 - Produits les moins vendus"
+          icon="arrow-down"
+          color="#EF4444"
+          data={leastSoldProducts}
+        />
 
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Ventes Cash</Text>
-              <Text style={styles.summaryValue}>
-                {data?.totalCashSales ?? 0} Ar
-              </Text>
-            </View>
+        <MiniBlockList
+          title="Produits les plus chers"
+          icon="dollar-sign"
+          color="#16A34A"
+          data={mostExpensiveProducts}
+          valueKey="purchasePrice"
+        />
 
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Ventes Crédit</Text>
-              <Text style={styles.summaryValue}>
-                {data?.totalCreditSales ?? 0} Ar
-              </Text>
-            </View>
-          </View>
+        <MiniBlockList
+          title="Produits les moins chers"
+          icon="tag"
+          color="#F59E0B"
+          data={leastExpensiveProducts}
+          valueKey="purchasePrice"
+        />
 
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Ventes totales</Text>
-              <Text style={styles.summaryValue}>
-                {data?.totalSalesValue ?? 0} Ar
-              </Text>
-            </View>
+        <MiniBlockList
+          title="Nouveaux produits"
+          icon="clock"
+          color="#6366F1"
+          data={newestProducts}
+          valueKey="createdAt"
+          isDate
+        />
 
-            <View style={styles.summaryItem}>
-              <Text style={[styles.summaryValue, { color: "#16A34A" }]}>
-                +{data?.totalProfit ?? 0} Ar
-              </Text>
-              <Text style={styles.summaryLabel}>Bénéfice</Text>
-            </View>
-          </View>
-        </View>
+        <MiniBlockList
+          title="Produits anciens (stock)"
+          icon="archive"
+          color="#475569"
+          data={oldestProducts}
+          valueKey="createdAt"
+          isDate
+        />
 
         <Text style={styles.footerText}>
-          Dernière mise à jour : {new Date().toLocaleDateString()}
+          Mise à jour : {new Date().toLocaleDateString()}
         </Text>
       </ScrollView>
     </View>
@@ -129,69 +128,170 @@ const Dashboard = () => {
 
 export default Dashboard;
 
+/* -------------------
+   COMPONENTS RÉUTILISABLES
+--------------------*/
+
+const StatCard = ({ label, value, color, icon }: any) => (
+  <View style={[styles.statCard, { backgroundColor: color }]}>
+    <MaterialIcons name={icon} size={26} color="#0F172A" />
+    <Text style={styles.statLabel}>{label}</Text>
+    <Text style={styles.statValue}>{value}</Text>
+  </View>
+);
+
+const MiniBlockList = ({ title, icon, color, data, valueKey, isDate }: any) => (
+  <>
+    <Text style={styles.sectionTitle}>{title}</Text>
+
+    <View style={styles.blockContainer}>
+      {data.map((item: any) => (
+        <View style={styles.miniBlock} key={item.id}>
+          <View style={[styles.iconCircle, { backgroundColor: color }]}>
+            <Feather name={icon} size={18} color="white" />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.blockTitle}>{item.name}</Text>
+
+            <Text style={styles.blockValue}>
+              {isDate
+                ? new Date(item[valueKey]).toLocaleDateString()
+                : item[valueKey] + (valueKey === "purchasePrice" ? " Ar" : "")}
+            </Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  </>
+);
+
+const TopSodl = ({
+  title,
+  data,
+  icon,
+  color,
+}: {
+  title: string;
+  data: { product: Product; sold: number }[];
+  icon: string | any;
+  color: string;
+}) => (
+  <>
+    <Text style={styles.sectionTitle}>{title}</Text>
+
+    <View style={styles.blockContainer}>
+      {data.map((item) => (
+        <View style={styles.miniBlock} key={item.product.id}>
+          <View style={[styles.iconCircle, { backgroundColor: color }]}>
+            <Feather name={icon} size={18} color="white" />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.blockTitle}>{item.product.name}</Text>
+
+            <Text style={styles.blockValue}>{`${item.sold}`}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  </>
+);
+
+/* -------------------
+   STYLES
+--------------------*/
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F8FAFC" },
   container: { flex: 1 },
-  scrollContent: { padding: 20, alignItems: "center" },
+  scrollContent: { padding: 20, paddingBottom: 40 },
 
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "800",
     color: "#0F172A",
-    marginBottom: 4,
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#475569",
-    marginBottom: 24,
+    marginBottom: 22,
     textAlign: "center",
   },
 
+  /* CARDS */
   statsGrid: {
-    width: "100%",
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 24,
+    marginBottom: 20,
   },
   statCard: {
     width: "48%",
-    borderRadius: 18,
-    paddingVertical: 22,
-    paddingHorizontal: 14,
-    marginBottom: 14,
+    borderRadius: 16,
+    padding: 18,
+    marginVertical: 8,
   },
-  statLabel: { fontSize: 15, fontWeight: "600", color: "#1E293B" },
-  statValue: { fontSize: 22, fontWeight: "800", color: "#0F172A" },
-  statHint: { fontSize: 13, color: "#475569", marginTop: 4 },
+  statLabel: {
+    fontSize: 14,
+    color: "#334155",
+    marginTop: 8,
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#0F172A",
+  },
 
-  cardBlue: { backgroundColor: "#E0F2FE" },
-  cardGreen: { backgroundColor: "#DCFCE7" },
-  cardYellow: { backgroundColor: "#FEF9C3" },
-  cardEmerald: { backgroundColor: "#D1FAE5" },
-  cardEmeraldDark: { backgroundColor: "#BBF7D0" },
-  cardRed: { backgroundColor: "#FEE2E2" },
+  /* LISTE DYNAMIQUE */
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    marginTop: 25,
+    marginBottom: 10,
+    color: "#0F172A",
+  },
 
-  summaryCard: {
-    backgroundColor: "#FFF",
-    borderRadius: 20,
-    padding: 20,
+  blockContainer: {
     width: "100%",
   },
-  summaryTitle: { fontSize: 20, fontWeight: "700", marginBottom: 16 },
-  summaryRow: {
+
+  miniBlock: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 12,
+    alignItems: "center",
+    padding: 12,
+    marginBottom: 8,
+    backgroundColor: "#FFF",
+    borderRadius: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
-  summaryItem: { alignItems: "center", flex: 1 },
-  summaryLabel: { color: "#64748B", fontSize: 14 },
-  summaryValue: { fontSize: 18, fontWeight: "700" },
+
+  iconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+
+  blockTitle: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#0F172A",
+  },
+
+  blockValue: {
+    fontSize: 13,
+    color: "#475569",
+  },
 
   footerText: {
-    marginTop: 28,
-    fontSize: 13,
+    marginTop: 25,
+    fontSize: 12,
     color: "#94A3B8",
     textAlign: "center",
   },
