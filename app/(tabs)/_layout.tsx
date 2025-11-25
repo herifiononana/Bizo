@@ -51,6 +51,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="dailyFinance"
+        options={{
+          title: "historique",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="list" size={24} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -53,3 +53,47 @@ export const getFinance = ({
     totalCashSales,
   };
 };
+
+// --- Regroupe les ventes par date ---
+const groupSalesByDay = (sales: Sale[]) => {
+  const groups: Record<string, Sale[]> = {};
+
+  for (const sale of sales) {
+    const date = new Date(sale.saleDate);
+    const key = date.toISOString().substring(0, 10); // "YYYY-MM-DD"
+
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(sale);
+  }
+
+  return groups;
+};
+
+export const getDailyFinanceList = ({
+  products,
+  sales,
+}: {
+  products: Product[];
+  sales: Sale[];
+}): { date: string; summary: FinanceSummary }[] => {
+  const grouped = groupSalesByDay(sales);
+
+  const results: { date: string; summary: FinanceSummary }[] = [];
+
+  for (const date in grouped) {
+    const summary = getFinance({
+      products,
+      sales: grouped[date],
+    });
+
+    results.push({
+      date,
+      summary,
+    });
+  }
+
+  // trier par date DESC
+  results.sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  return results;
+};
