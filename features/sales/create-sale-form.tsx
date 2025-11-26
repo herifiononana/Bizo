@@ -27,6 +27,7 @@ const saleSchema = z.object({
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Prix invalide"),
   isCredit: z.boolean().optional(),
+  clientName: z.string().optional(),
 });
 
 interface CreateSaleProps {
@@ -41,6 +42,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
     quantity: "",
     salePrice: "",
     isCredit: false,
+    clientName: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -84,6 +86,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       totalAmount: quantitySold * Number(formData.salePrice),
       saleDate: new Date().toISOString(),
       isCredit: formData.isCredit,
+      clientName: formData.isCredit ? formData.clientName : "",
     };
 
     onAddSale(sale);
@@ -93,6 +96,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       quantity: "",
       salePrice: "",
       isCredit: false,
+      clientName: "",
     });
   };
 
@@ -203,6 +207,21 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
           trackColor={{ false: "#D1D5DB", true: "#A7F3D0" }}
         />
       </View>
+
+      {/* Nom du client */}
+      {formData.isCredit && (
+        <>
+          <Text style={styles.label}>Nom du client :</Text>
+          <TextInput
+            placeholder="Ex: Tamby"
+            style={[styles.input, errors.clientName && styles.errorInput]}
+            value={formData.clientName}
+            onChangeText={(text) =>
+              setFormData({ ...formData, clientName: text })
+            }
+          />
+        </>
+      )}
 
       {/* Boutons */}
       <View style={styles.actions}>

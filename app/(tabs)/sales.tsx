@@ -24,6 +24,7 @@ const SalesScreen = () => {
     search: "",
     startDate: new Date(),
     endDate: null,
+    creditOnly: false,
   });
 
   // Handlers Date Picker
@@ -76,6 +77,24 @@ const SalesScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* 🔥 Bouton filtre ventes à crédit */}
+      <TouchableOpacity
+        style={[
+          styles.creditButton,
+          params.creditOnly && { backgroundColor: "#B45309" },
+        ]}
+        onPress={() => setParams({ ...params, creditOnly: !params.creditOnly })}
+      >
+        <Text
+          style={[
+            styles.creditButtonText,
+            params.creditOnly && { color: "#fff" },
+          ]}
+        >
+          💳 Ventes à crédit uniquement
+        </Text>
+      </TouchableOpacity>
+
       <DateTimePickerModal
         isVisible={isStartPickerVisible}
         mode="date"
@@ -103,7 +122,6 @@ const SalesScreen = () => {
         }}
       />
 
-      {/* Bouton Ajouter une vente */}
       <CreateSaleButton />
     </View>
   );
@@ -148,6 +166,22 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#334155",
   },
+
+  creditButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#B45309",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    alignItems: "center",
+  },
+  creditButtonText: {
+    color: "#B45309",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+
   emptyText: {
     textAlign: "center",
     marginTop: 40,

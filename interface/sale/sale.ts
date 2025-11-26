@@ -6,4 +6,5 @@ export interface Sale {
   totalAmount: number;
   saleDate: string; // ISO date string
   isCredit?: boolean;
+  clientName?: string;
 }

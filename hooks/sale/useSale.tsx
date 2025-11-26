@@ -8,7 +8,9 @@ export type FilteredParamsType = {
   search?: string;
   startDate: Date | null;
   endDate: Date | null;
+  creditOnly?: boolean;
 };
+
 export const useSale = () => {
   const { products } = useProducts();
   const { sales, setSales } = useSalesStore();
@@ -33,17 +35,18 @@ export const useSale = () => {
     search = "",
     startDate,
     endDate,
+    creditOnly = false,
   }: FilteredParamsType) => {
     if (!Array.isArray(sales) || !Array.isArray(products)) return [];
 
     return sales.filter((sale) => {
       const product = products.find((p) => p.id === sale.productId);
-
-      // Sécuriser nameMatch
       const nameMatch =
         product?.name?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
-      // Convertir les dates en YYYY-MM-DD pour ignorer l'heure
+      const clientNameMatch =
+        sale?.clientName?.toLowerCase().includes(search.toLowerCase()) ?? false;
+
       const saleDate = new Date(sale.saleDate);
       const saleDay = new Date(
         saleDate.getFullYear(),
@@ -71,7 +74,10 @@ export const useSale = () => {
         dateMatch = dateMatch && saleDay <= endDay;
       }
 
-      return nameMatch && dateMatch;
+      // 🔥 Filtre ventes à crédit
+      const creditMatch = creditOnly ? sale.isCredit === true : true;
+
+      return (nameMatch || clientNameMatch) && dateMatch && creditMatch;
     });
   };
 
