@@ -31,12 +31,12 @@ function CreateSaleButton() {
         ? { ...p, quantity: p.quantity - sale.quantity }
         : p
     );
-    setProducts(updatedProducts);
 
     // 3. Sauvegarder dans AsyncStorage
     try {
       await saveData(SALES_KEY, updatedSales);
       await saveData(PRODUCTS_KEY, updatedProducts);
+      setProducts(updatedProducts);
     } catch (e) {
       console.log("Erreur de sauvegarde :", e);
     }
