@@ -46,7 +46,7 @@ const SalesScreen = () => {
 
       {/* Recherche */}
       <TextInput
-        placeholder="🔍 Rechercher un produit..."
+        placeholder="🔍 Rechercher un produit ou client"
         style={styles.searchInput}
         value={params.search}
         onChangeText={(search) => setParams({ ...params, search })}
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderWidth: 1,
     borderColor: "#B45309",
-    padding: 12,
+    padding: 8,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: "center",
