@@ -22,7 +22,7 @@ function CreateSaleButton() {
     if (!products || !sales) return;
 
     // 1. Mettre à jour les ventes
-    const updatedSales = [...sales, sale];
+    const updatedSales = [sale, ...sales];
     setSales(updatedSales);
 
     // 2. Mettre à jour le stock

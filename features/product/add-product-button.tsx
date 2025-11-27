@@ -15,7 +15,7 @@ function AddProductButton() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleAddProduct = async (product: Product) => {
-    const next = products ? [...products, product] : [product];
+    const next = products ? [product, ...products] : [product];
     setProducts(next);
     await saveData(PRODUCTS_KEY, next);
     setModalVisible(false);

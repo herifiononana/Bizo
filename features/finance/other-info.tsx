@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   miniBlock: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
-    marginBottom: 8,
+    padding: 6,
+    marginBottom: 4,
     backgroundColor: "#FFF",
     borderRadius: 14,
     shadowColor: "#000",
