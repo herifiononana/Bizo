@@ -1,3 +1,4 @@
+import CloudButtons from "@/components/cloud-button";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
 import React from "react";
@@ -15,6 +16,7 @@ const Dashboard = () => {
       >
         {/* HEADER */}
         <Text style={styles.title}>Tableau de bord</Text>
+        <CloudButtons />
         <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
 
         {/* CARDS PRINCIPALES */}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156713572538",
+    "project_id": "bizo-3359b",
+    "storage_bucket": "bizo-3359b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156713572538:android:0942b0779c44f9e5ff0a83",
+        "android_client_info": {
+          "package_name": "com.anonymous.Bizo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD41DzKqao1LBofaQnymp7OnCgOPRaJf-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
