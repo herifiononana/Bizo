@@ -40,11 +40,11 @@ function SaleListItem({ product, item }: SaleListItemProps) {
 
       <Text style={styles.saleDetails}>
         Qté : {item.quantity} | Prix unitaire :{" "}
-        {item.salePrice.toLocaleString()} Ar
+        {item.salePrice.toFixed(2).toLocaleString()} Ar
       </Text>
 
       <Text style={styles.saleTotal}>
-        💰 Total : {item.totalAmount.toLocaleString()} Ar
+        💰 Total : {item.totalAmount.toFixed(2).toLocaleString()} Ar
       </Text>
 
       {/* Affichage si vente à crédit */}

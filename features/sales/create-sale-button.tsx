@@ -1,7 +1,5 @@
 import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
 import { useFinance } from "@/hooks/finance/useFinance";
-import { useProducts } from "@/hooks/product/useProduct";
-import { useSale } from "@/hooks/sale/useSale";
 import { Sale } from "@/interface/sale/sale";
 import { saveData } from "@/storage";
 import { useProductsStore } from "@/stores/product.store";
@@ -11,12 +9,10 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CreateSaleForm from "./create-sale-form";
 function CreateSaleButton() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const { products } = useProducts();
-  const { sales } = useSale();
   const { changeFinanceStatus } = useFinance();
 
-  const setProducts = useProductsStore(({ setProducts }) => setProducts);
-  const setSales = useSalesStore(({ setSales }) => setSales);
+  const { products, setProducts } = useProductsStore((state) => state);
+  const { sales, setSales } = useSalesStore((state) => state);
 
   const handleAddSale = async (sale: Sale) => {
     if (!products || !sales) return;
