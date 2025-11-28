@@ -81,6 +81,16 @@ export const useFinance = () => {
         .slice(0, 5)
     : [];
 
+  const outStockProducts = products
+    ? [...products]
+        .filter((p) => p.quantity >= 3) // Produit en rupture de stock
+        .sort(
+          (a, b) =>
+            new Date(a?.createdAt ?? "").getTime() -
+            new Date(b?.createdAt ?? "").getTime()
+        )
+    : [];
+
   useEffect(() => {
     if (!products || !sales) return;
 
@@ -100,5 +110,6 @@ export const useFinance = () => {
     leastExpensiveProducts,
     newestProducts,
     oldestProducts,
+    outStockProducts,
   };
 };

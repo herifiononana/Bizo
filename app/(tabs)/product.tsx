@@ -1,38 +1,160 @@
+// import AddProductButton from "@/features/product/add-product-button";
+// import ProductListItem from "@/features/product/product-list-item";
+// import { useProducts } from "@/hooks/product/useProduct";
+// import React, { useState } from "react";
+// import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+
+// const ProductsScreen: React.FC = () => {
+//   const { products } = useProducts();
+//   const [search, setSearch] = useState<string>("");
+
+//   // Filtrer les produits par recherche
+//   const filteredProducts = products
+//     ? products.filter((p) =>
+//         p.name.toLowerCase().includes(search.toLowerCase())
+//       )
+//     : [];
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.title}>Produits</Text>
+
+//       {/* Barre de recherche */}
+//       <TextInput
+//         placeholder="Rechercher un produit..."
+//         style={styles.searchInput}
+//         value={search}
+//         onChangeText={setSearch}
+//       />
+
+//       {/* Liste des produits */}
+//       <FlatList
+//         data={filteredProducts}
+//         keyExtractor={(item) => item.id.toString()}
+//         ListEmptyComponent={
+//           <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
+//         }
+//         renderItem={({ item }) => <ProductListItem {...{ item }} />}
+//       />
+
+//       {/* Bouton ajout produit */}
+//       <AddProductButton />
+//     </View>
+//   );
+// };
+
+// // ------------------ STYLES ------------------
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#F9FAFB",
+//     padding: 16,
+//   },
+//   title: {
+//     fontSize: 26,
+//     fontWeight: "700",
+//     marginBottom: 10,
+//     textAlign: "center",
+//   },
+//   searchInput: {
+//     backgroundColor: "#fff",
+//     borderRadius: 8,
+//     padding: 10,
+//     fontSize: 16,
+//     marginBottom: 10,
+//     borderWidth: 1,
+//     borderColor: "#E5E7EB",
+//   },
+//   productCard: {
+//     backgroundColor: "#fff",
+//     borderRadius: 8,
+//     padding: 14,
+//     marginBottom: 10,
+//     borderWidth: 1,
+//     borderColor: "#E5E7EB",
+//   },
+//   productName: {
+//     fontSize: 18,
+//     fontWeight: "600",
+//   },
+//   productDetails: {
+//     fontSize: 15,
+//     color: "#555",
+//     marginTop: 4,
+//   },
+//   emptyText: {
+//     textAlign: "center",
+//     marginTop: 40,
+//     color: "#888",
+//   },
+// });
+
+// export default ProductsScreen;
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
 import { useProducts } from "@/hooks/product/useProduct";
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const ProductsScreen: React.FC = () => {
   const { products } = useProducts();
   const [search, setSearch] = useState<string>("");
+  const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false);
 
-  // Filtrer les produits par recherche
+  // Filtrer les produits par recherche + rupture
   const filteredProducts = products
-    ? products.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase())
-      )
+    ? products.filter((p) => {
+        const matchesSearch = p.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
+        return matchesSearch && matchesOutOfStock;
+      })
     : [];
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Produits</Text>
 
-      {/* Barre de recherche */}
-      <TextInput
-        placeholder="Rechercher un produit..."
-        style={styles.searchInput}
-        value={search}
-        onChangeText={setSearch}
-      />
+      {/* Zone recherche + filtre */}
+      <View style={styles.topRow}>
+        <TextInput
+          placeholder="Rechercher..."
+          style={styles.searchInput}
+          value={search}
+          onChangeText={setSearch}
+        />
+
+        <TouchableOpacity
+          style={[styles.filterChip, showOutOfStock && styles.filterChipActive]}
+          onPress={() => setShowOutOfStock(!showOutOfStock)}
+        >
+          <Text
+            style={[
+              styles.filterChipText,
+              showOutOfStock && styles.filterChipTextActive,
+            ]}
+          >
+            📦
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Liste des produits */}
       <FlatList
         data={filteredProducts}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>Aucun produit pour le moment.</Text>
+          <Text style={styles.emptyText}>
+            Aucun produit {showOutOfStock ? "en rupture" : ""} pour le moment.
+          </Text>
         }
         renderItem={({ item }) => <ProductListItem {...{ item }} />}
       />
@@ -56,32 +178,50 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
   },
+
+  // === FILTRE ===
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+
   searchInput: {
+    flex: 1,
     backgroundColor: "#fff",
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
-    marginBottom: 10,
     borderWidth: 1,
     borderColor: "#E5E7EB",
   },
-  productCard: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 14,
-    marginBottom: 10,
+
+  // --- Chip / Tag style ---
+  filterChip: {
+    marginLeft: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#D1D5DB",
   },
-  productName: {
-    fontSize: 18,
+
+  filterChipActive: {
+    backgroundColor: "#DC2626",
+    borderColor: "#B91C1C",
+  },
+
+  filterChipText: {
+    fontSize: 16,
+    color: "#374151",
+  },
+
+  filterChipTextActive: {
+    color: "#fff",
     fontWeight: "600",
   },
-  productDetails: {
-    fontSize: 15,
-    color: "#555",
-    marginTop: 4,
-  },
+
   emptyText: {
     textAlign: "center",
     marginTop: 40,
