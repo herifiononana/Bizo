@@ -13,22 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { z } from "zod";
-
-const saleSchema = z.object({
-  productId: z.string().min(1, "Veuillez choisir un produit"),
-  quantity: z
-    .string()
-    .refine(
-      (val) => !isNaN(Number(val)) && Number(val) > 0,
-      "Quantité invalide"
-    ),
-  salePrice: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, "Prix invalide"),
-  isCredit: z.boolean().optional(),
-  clientName: z.string().optional(),
-});
+import { CreateSaleDTO, saleSchema } from "./create-sale.schema";
 
 interface CreateSaleProps {
   onAddSale: (sale: Sale) => void;
@@ -37,9 +22,10 @@ interface CreateSaleProps {
 
 const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
   const { products } = useProducts();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CreateSaleDTO>({
     productId: "",
     quantity: "",
+    totalPrice: "",
     salePrice: "",
     isCredit: false,
     clientName: "",
@@ -95,6 +81,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       productId: "",
       quantity: "",
       salePrice: "",
+      totalPrice: "",
       isCredit: false,
       clientName: "",
     });
@@ -176,7 +163,17 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
         style={[styles.input, errors.quantity && styles.errorInput]}
         keyboardType="numeric"
         value={formData.quantity}
-        onChangeText={(text) => setFormData({ ...formData, quantity: text })}
+        onChangeText={(text) => {
+          const total = selectedProduct?.salePrice
+            ? Number(text) * selectedProduct?.salePrice
+            : 0;
+
+          setFormData({
+            ...formData,
+            quantity: text,
+            totalPrice: total ? total.toFixed(2) : "",
+          });
+        }}
       />
       {errors.quantity && (
         <Text style={styles.errorText}>{errors.quantity}</Text>
@@ -190,6 +187,29 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
         keyboardType="numeric"
         value={formData.salePrice}
         onChangeText={(text) => setFormData({ ...formData, salePrice: text })}
+      />
+      {errors.salePrice && (
+        <Text style={styles.errorText}>{errors.salePrice}</Text>
+      )}
+
+      {/* Prix */}
+      <Text style={styles.label}>Total (Ar) :</Text>
+      <TextInput
+        placeholder="Ex: 2500"
+        style={[styles.input, errors.totalPrice && styles.errorInput]}
+        keyboardType="numeric"
+        value={formData.totalPrice}
+        onChangeText={(text) => {
+          const quantitySold = selectedProduct?.salePrice
+            ? Number(text) / selectedProduct.salePrice
+            : Number(formData.quantity);
+
+          setFormData({
+            ...formData,
+            totalPrice: text,
+            quantity: String(quantitySold.toFixed(3)),
+          });
+        }}
       />
       {errors.salePrice && (
         <Text style={styles.errorText}>{errors.salePrice}</Text>
