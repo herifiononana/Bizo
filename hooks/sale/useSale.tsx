@@ -8,6 +8,7 @@ export type FilteredParamsType = {
   startDate: Date | null;
   endDate: Date | null;
   creditOnly?: boolean;
+  referenceProduct?: string | null;
 };
 
 export const useSale = () => {
@@ -30,22 +31,54 @@ export const useSale = () => {
     });
   };
 
+  const getTodaySaleListGroupedByReferences = (referenceId: string) => {
+    if (!sales) return [];
+
+    const date = new Date();
+    return sales.filter((sale) => {
+      const saleDate = new Date(sale.saleDate);
+
+      if (!Array.isArray(sales) || !Array.isArray(products)) return [];
+      const product = products.find((p) => p.id === sale.productId);
+      const matchesReference = referenceId
+        ? product?.referenceId === referenceId
+        : true;
+
+      const isSameDay =
+        saleDate.getFullYear() === date.getFullYear() &&
+        saleDate.getMonth() === date.getMonth() &&
+        saleDate.getDate() === date.getDate();
+
+      return isSameDay && matchesReference;
+    });
+  };
+
   const handleFilterSale = ({
     search = "",
     startDate,
     endDate,
     creditOnly = false,
+    referenceProduct,
   }: FilteredParamsType) => {
     if (!Array.isArray(sales) || !Array.isArray(products)) return [];
 
     return sales.filter((sale) => {
       const product = products.find((p) => p.id === sale.productId);
+
+      // search
       const nameMatch =
         product?.name?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
+      // search by clientName
       const clientNameMatch =
         sale?.clientName?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
+      // filter by reference of product
+      const matchesReference = referenceProduct
+        ? product?.referenceId === referenceProduct
+        : true;
+
+      // filter by date
       const saleDate = new Date(sale.saleDate);
       const saleDay = new Date(
         saleDate.getFullYear(),
@@ -76,7 +109,12 @@ export const useSale = () => {
       // 🔥 Filtre ventes à crédit
       const creditMatch = creditOnly ? sale.isCredit === true : true;
 
-      return (nameMatch || clientNameMatch) && dateMatch && creditMatch;
+      return (
+        (nameMatch || clientNameMatch) &&
+        dateMatch &&
+        creditMatch &&
+        matchesReference
+      );
     });
   };
 
@@ -105,5 +143,6 @@ export const useSale = () => {
     handleFilterSale,
     getTodaySaleList,
     loadSales,
+    getTodaySaleListGroupedByReferences,
   };
 };

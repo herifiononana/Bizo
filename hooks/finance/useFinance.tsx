@@ -1,20 +1,26 @@
 import { getFinance } from "@/services/finance";
 import { useFinanceSummaryStore } from "@/stores/finance.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
 
 export const useFinance = () => {
   const { products } = useProducts();
-  const { sales, getTodaySaleList } = useSale();
+  const { sales, getTodaySaleList, getTodaySaleListGroupedByReferences } =
+    useSale();
   const { finance: data, setFinance } = useFinanceSummaryStore(
     (state) => state
   );
+  const [selectedReference, setSelectedReference] = useState<
+    string | null | undefined
+  >();
 
   const changeFinanceStatus = () => {
     if (!sales || !products) return;
 
-    const filteredSales = getTodaySaleList();
+    const filteredSales = !selectedReference
+      ? getTodaySaleList()
+      : getTodaySaleListGroupedByReferences(selectedReference);
     setFinance(getFinance({ products, sales: filteredSales }));
   };
 
@@ -94,12 +100,13 @@ export const useFinance = () => {
   useEffect(() => {
     if (!products || !sales) return;
 
-    const filteredSales = getTodaySaleList();
-    const newFinance = getFinance({ products, sales: filteredSales });
+    // const filteredSales = getTodaySaleList();
+    // const newFinance = getFinance({ products, sales: filteredSales });
 
-    setFinance(newFinance);
+    // setFinance(newFinance);
+    changeFinanceStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, sales]);
+  }, [products, sales, selectedReference]);
 
   return {
     data,
@@ -111,5 +118,7 @@ export const useFinance = () => {
     newestProducts,
     oldestProducts,
     outStockProducts,
+    selectedReference,
+    setSelectedReference,
   };
 };

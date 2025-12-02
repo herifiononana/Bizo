@@ -4,6 +4,7 @@ import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import ReferenceFilter from "../reference/reference-filter";
 
 type StatProps = { label: string; value: any; color: string; icon: string };
 const StatCard = ({ label, value, color, icon }: StatProps) => (
@@ -65,17 +66,24 @@ const data = (financeSummary: FinanceSummary): StatProps[] => {
 };
 
 function GlobalDashboard() {
-  const { data: finance } = useFinance();
+  const {
+    data: finance,
+    selectedReference,
+    setSelectedReference,
+  } = useFinance();
 
   //   todo : ajouter un skeleton
   if (!finance) return <></>;
 
   return (
-    <View style={styles.statsGrid}>
-      {data(finance).map((finance) => (
-        <StatCard key={finance.label} {...{ ...finance }} />
-      ))}
-    </View>
+    <>
+      <ReferenceFilter {...{ selectedReference, setSelectedReference }} />
+      <View style={styles.statsGrid}>
+        {data(finance).map((finance) => (
+          <StatCard key={finance.label} {...{ ...finance }} />
+        ))}
+      </View>
+    </>
   );
 }
 

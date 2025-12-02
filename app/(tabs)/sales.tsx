@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/theme";
+import ReferenceFilter from "@/features/reference/reference-filter";
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleListItem from "@/features/sales/sale-list-item";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
@@ -18,11 +19,13 @@ const SalesScreen = () => {
   const { products } = useProductsStore((state) => state);
   const { handleFilterSale } = useSale();
 
-  const [isStartPickerVisible, setStartPickerVisible] = useState(false);
-  const [isEndPickerVisible, setEndPickerVisible] = useState(false);
+  const [isStartPickerVisible, setStartPickerVisible] =
+    useState<boolean>(false);
+  const [isEndPickerVisible, setEndPickerVisible] = useState<boolean>(false);
 
   const [params, setParams] = useState<FilteredParamsType>({
     search: "",
+    referenceProduct: null,
     startDate: new Date(),
     endDate: null,
     creditOnly: false,
@@ -51,6 +54,15 @@ const SalesScreen = () => {
         style={styles.searchInput}
         value={params.search}
         onChangeText={(search) => setParams({ ...params, search })}
+      />
+
+      {/* Filtres références */}
+      <ReferenceFilter
+        {...{
+          selectedReference: params.referenceProduct,
+          setSelectedReference: (ref) =>
+            setParams({ ...params, referenceProduct: ref }),
+        }}
       />
 
       {/* Filtres de date */}
@@ -130,80 +142,6 @@ const SalesScreen = () => {
 
 export default SalesScreen;
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: Colors.light.background,
-//     padding: 16,
-//   },
-
-//   title: {
-//     fontSize: 22,
-//     fontWeight: "700",
-//     color: Colors.light.primary,
-//     textAlign: "center",
-//     marginBottom: 14,
-//   },
-
-//   searchInput: {
-//     backgroundColor: Colors.light.surface,
-//     borderRadius: 10,
-//     borderWidth: 1,
-//     borderColor: Colors.light.border,
-//     padding: 12,
-//     fontSize: 16,
-//     marginBottom: 12,
-//   },
-
-//   filterRow: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginBottom: 10,
-//   },
-
-//   dateButton: {
-//     flex: 1,
-//     backgroundColor: Colors.light.surface,
-//     borderRadius: 8,
-//     borderWidth: 1,
-//     borderColor: Colors.light.border,
-//     padding: 10,
-//     marginHorizontal: 4,
-//     alignItems: "center",
-//     shadowColor: Colors.light.shadow,
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.1,
-//     shadowRadius: 4,
-//   },
-
-//   dateButtonText: {
-//     fontSize: 15,
-//     color: Colors.light.text,
-//   },
-
-//   creditButton: {
-//     backgroundColor: Colors.light.surface,
-//     borderWidth: 1,
-//     borderColor: Colors.light.accent,
-//     padding: 10,
-//     borderRadius: 10,
-//     marginBottom: 12,
-//     alignItems: "center",
-//   },
-
-//   creditButtonText: {
-//     color: Colors.light.accent,
-//     fontSize: 15,
-//     fontWeight: "600",
-//   },
-
-//   emptyText: {
-//     textAlign: "center",
-//     marginTop: 40,
-//     color: Colors.light.icon,
-//     fontSize: 15,
-//   },
-// });
 const styles = StyleSheet.create({
   container: {
     flex: 1,

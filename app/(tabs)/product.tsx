@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/theme";
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
+import ReferenceFilter from "@/features/reference/reference-filter";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import {
@@ -16,15 +17,23 @@ const ProductsScreen: React.FC = () => {
   const { products } = useProductsStore((state) => state);
   const [search, setSearch] = useState<string>("");
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false);
+  const [selectedReference, setSelectedReference] = useState<
+    string | null | undefined
+  >(null);
 
-  // Filtrer les produits par recherche + rupture
+  // Filtrer les produits par recherche + rupture + ref
   const filteredProducts = products
     ? products.filter((p) => {
         const matchesSearch = p?.name
           ?.toLowerCase()
           .includes(search?.toLowerCase());
+
+        const matchesReference = selectedReference
+          ? p.referenceId === selectedReference
+          : true;
+
         const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
-        return matchesSearch && matchesOutOfStock;
+        return matchesSearch && matchesOutOfStock && matchesReference;
       })
     : [];
 
@@ -55,6 +64,9 @@ const ProductsScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {/* Filtres références */}
+      <ReferenceFilter {...{ selectedReference, setSelectedReference }} />
 
       {/* Liste des produits */}
       <FlatList
@@ -137,6 +149,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 40,
     color: Colors.dark.icon, // texte secondaire clair
+  },
+
+  referenceRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+
+  refChip: {
+    backgroundColor: "#F3F4F6",
+    paddingVertical: 2,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    marginRight: 8,
+    marginBottom: 6,
+  },
+
+  refChipActive: {
+    backgroundColor: "#2563EB",
+    borderColor: "#1E40AF",
+  },
+
+  refChipText: {
+    color: "#374151",
+    fontSize: 14,
+  },
+
+  refChipTextActive: {
+    color: "#fff",
+    fontWeight: "600",
   },
 });
 

@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { v4 as uuidv4 } from "uuid"; // pour générer un ID unique
 
 const AddReferenceButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,7 +16,10 @@ const AddReferenceButton = () => {
 
   const handleAdd = () => {
     if (!refName.trim()) return;
-    addReference({ id: uuidv4(), name: refName.trim().toUpperCase() });
+    addReference({
+      id: new Date().toISOString(),
+      name: refName.trim().toUpperCase(),
+    });
     setRefName("");
     setModalVisible(false);
   };
