@@ -1,7 +1,9 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
 import { Colors } from "@/constants/theme";
+import { useReference } from "@/hooks/reference/useRefecence";
 import { Product } from "@/interface/product/product";
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { z } from "zod";
@@ -21,6 +23,7 @@ const productSchema = z.object({
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
     .optional(),
+  referenceId: z.string().optional(),
 });
 
 interface AddProductFormProps {
@@ -37,7 +40,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     quantity: "",
     purchasePrice: "",
     salePrice: "",
+    referenceId: "",
   });
+  const { references } = useReference();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -58,19 +63,29 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       return;
     }
 
+    const selectedReference =
+      references?.find((r) => r.id === result.data.referenceId)?.id ?? "";
+
     const newProduct: Product = {
       id: String(Date.now()),
       name: result.data.name,
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
       salePrice: Number(result.data.salePrice),
+      referenceId: selectedReference,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     onAddProduct(newProduct);
     Alert.alert("✅ Succès", "Produit ajouté avec succès !");
-    setFormData({ name: "", quantity: "", purchasePrice: "", salePrice: "" });
+    setFormData({
+      name: "",
+      quantity: "",
+      purchasePrice: "",
+      salePrice: "",
+      referenceId: "",
+    });
   };
 
   return (
@@ -134,6 +149,25 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
             <Text style={styles.errorText}>{errors.salePrice}</Text>
           )}
         </View>
+        {references?.length ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Référence</Text>
+            <View style={styles.selectContainer}>
+              <Picker
+                selectedValue={formData.referenceId}
+                onValueChange={(val) => handleChange("referenceId", val)}
+                style={styles.pickerContainer}
+              >
+                <Picker.Item label="Sélectionner une référence..." value="" />
+                {references.map((ref) => (
+                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
 
         <View style={styles.actions}>
           <SaveButton onPress={handleSubmit} />
@@ -189,6 +223,19 @@ const styles = StyleSheet.create({
     color: Colors.dark.danger,
     fontSize: 13,
     marginTop: 4,
+  },
+  selectContainer: {
+    borderWidth: 1,
+    borderColor: "#D1D5DB",
+    borderRadius: 10,
+    height: 42,
+    overflow: "hidden",
+    backgroundColor: "#FFFFFF",
+  },
+  pickerContainer: {
+    backgroundColor: "#FFF",
+    borderColor: "#FFFFFF00",
+    height: 40,
   },
   actions: {
     flexDirection: "row",

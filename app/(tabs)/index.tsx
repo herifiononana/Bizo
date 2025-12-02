@@ -2,6 +2,7 @@ import CsvButtons from "@/components/csv-button";
 import { Colors } from "@/constants/theme";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
+import AddReferenceButton from "@/features/reference/add-reference-button";
 import React from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
@@ -27,6 +28,7 @@ const Dashboard = () => {
           }}
           title="load"
         /> */}
+        <AddReferenceButton />
 
         {/* CARDS PRINCIPALES */}
         <GlobalDashboard />
