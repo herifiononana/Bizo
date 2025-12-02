@@ -3,10 +3,13 @@ import { Colors } from "@/constants/theme";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
 import AddReferenceButton from "@/features/reference/add-reference-button";
+import ReferenceFilterModal from "@/features/reference/reference-filter";
+import { useFinance } from "@/hooks/finance/useFinance";
 import React from "react";
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const Dashboard = () => {
+  const { selectedReference, setSelectedReference } = useFinance();
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
@@ -18,24 +21,23 @@ const Dashboard = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* HEADER */}
-        <Text style={styles.title}>Tableau de bord</Text>
-        <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
-        {/* <Button onPress={() => AsyncStorage.clear()} title="clear" />
-        <Button
-          onPress={() => {
-            loadProducts();
-            loadSales();
-          }}
-          title="load"
-        /> */}
-        <AddReferenceButton />
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          <AddReferenceButton />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.title}>Tableau de bord</Text>
+            <Text style={styles.subtitle}>
+              Vue d’ensemble de votre activité
+            </Text>
+          </View>
+          <ReferenceFilterModal
+            {...{ selectedReference, setSelectedReference }}
+          />
+        </View>
 
         {/* CARDS PRINCIPALES */}
         <GlobalDashboard />
-
         {/* LISTES DYNAMIQUES */}
         <OtherInfo />
-
         <Text style={styles.footerText}>
           Mise à jour : {new Date().toLocaleDateString()}
         </Text>

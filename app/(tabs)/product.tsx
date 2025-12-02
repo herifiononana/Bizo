@@ -43,13 +43,13 @@ const ProductsScreen: React.FC = () => {
 
       {/* Zone recherche + filtre */}
       <View style={styles.topRow}>
+        <ReferenceFilter {...{ selectedReference, setSelectedReference }} />
         <TextInput
           placeholder="Rechercher..."
           style={styles.searchInput}
           value={search}
           onChangeText={setSearch}
         />
-
         <TouchableOpacity
           style={[styles.filterChip, showOutOfStock && styles.filterChipActive]}
           onPress={() => setShowOutOfStock(!showOutOfStock)}
@@ -66,7 +66,6 @@ const ProductsScreen: React.FC = () => {
       </View>
 
       {/* Filtres références */}
-      <ReferenceFilter {...{ selectedReference, setSelectedReference }} />
 
       {/* Liste des produits */}
       <FlatList
@@ -115,8 +114,8 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
-    color: Colors.dark.text, // texte clair
+    borderColor: "#E5E7EB",
+    marginLeft: 8,
   },
 
   // --- Chip / Tag style ---

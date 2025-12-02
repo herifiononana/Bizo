@@ -47,24 +47,23 @@ const SalesScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>📊 Gestion des ventes</Text>
-
       {/* Recherche */}
-      <TextInput
-        placeholder="🔍 Rechercher un produit ou client"
-        style={styles.searchInput}
-        value={params.search}
-        onChangeText={(search) => setParams({ ...params, search })}
-      />
-
-      {/* Filtres références */}
-      <ReferenceFilter
-        {...{
-          selectedReference: params.referenceProduct,
-          setSelectedReference: (ref) =>
-            setParams({ ...params, referenceProduct: ref }),
-        }}
-      />
-
+      <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
+        <TextInput
+          placeholder="🔍 Rechercher un produit ou client"
+          style={styles.searchInput}
+          value={params.search}
+          onChangeText={(search) => setParams({ ...params, search })}
+        />
+        {/* Filtres références */}
+        <ReferenceFilter
+          {...{
+            selectedReference: params.referenceProduct,
+            setSelectedReference: (ref) =>
+              setParams({ ...params, referenceProduct: ref }),
+          }}
+        />
+      </View>
       {/* Filtres de date */}
       <View style={styles.filterRow}>
         <TouchableOpacity
@@ -77,7 +76,6 @@ const SalesScreen = () => {
               : "📅 Date début"}
           </Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.dateButton}
           onPress={() => setEndPickerVisible(true)}
@@ -107,7 +105,6 @@ const SalesScreen = () => {
           💳 Ventes à crédit uniquement
         </Text>
       </TouchableOpacity>
-
       <DateTimePickerModal
         isVisible={isStartPickerVisible}
         mode="date"
@@ -120,7 +117,6 @@ const SalesScreen = () => {
         onConfirm={handleConfirmEnd}
         onCancel={() => setEndPickerVisible(false)}
       />
-
       {/* Liste des ventes */}
       <FlatList
         data={filteredSales}
@@ -134,7 +130,6 @@ const SalesScreen = () => {
           return product ? <SaleListItem {...{ product, item }} /> : <></>;
         }}
       />
-
       <CreateSaleButton />
     </View>
   );
@@ -161,6 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.dark.border, // bordure neutre
     padding: 12,
+    flex: 1,
     fontSize: 16,
     color: Colors.dark.text, // texte clair
     marginBottom: 12,
