@@ -21,7 +21,13 @@ export const useFinance = () => {
     const filteredSales = !selectedReference
       ? getTodaySaleList()
       : getTodaySaleListGroupedByReferences(selectedReference);
-    setFinance(getFinance({ products, sales: filteredSales }));
+    setFinance(
+      getFinance({
+        products,
+        sales: filteredSales,
+        reference: selectedReference,
+      })
+    );
   };
 
   // --- Calcul des listes pour le dashboard ---

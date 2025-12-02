@@ -5,15 +5,20 @@ import { Sale } from "@/interface/sale/sale";
 export const getFinance = ({
   products,
   sales,
+  reference,
 }: {
   products: Product[];
   sales: Sale[];
+  reference?: string | null;
 }): FinanceSummary => {
+  const currentProduct = reference
+    ? products.filter((p) => p.referenceId === reference)
+    : products;
   // total de produits
-  const totalProducts = products.length;
+  const totalProducts = currentProduct.length;
 
   // valeur totale du stock = somme (quantité * prix d’achat)
-  const totalStockValue = products.reduce(
+  const totalStockValue = currentProduct.reduce(
     (sum, product) => sum + product.quantity * product.purchasePrice,
     0
   );
