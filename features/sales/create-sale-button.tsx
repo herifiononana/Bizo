@@ -1,3 +1,4 @@
+import { AddButton } from "@/components/add-button";
 import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Sale } from "@/interface/sale/sale";
@@ -5,7 +6,7 @@ import { saveData } from "@/storage";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 import CreateSaleForm from "./create-sale-form";
 function CreateSaleButton() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -43,12 +44,9 @@ function CreateSaleButton() {
 
   return (
     <>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.addButtonText}>+ Ajouter une vente</Text>
-      </TouchableOpacity>
+      <View style={styles.addButtonContainer}>
+        <AddButton onPress={() => setModalVisible(true)} />
+      </View>
 
       {/* Modal Nouvelle vente */}
       <Modal
@@ -71,17 +69,11 @@ function CreateSaleButton() {
 export default CreateSaleButton;
 
 const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: "#000000DD",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 17,
+  addButtonContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
   modalOverlay: {
     flex: 1,

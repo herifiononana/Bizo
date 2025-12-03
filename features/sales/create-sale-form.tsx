@@ -1,3 +1,5 @@
+import { CancelButton } from "@/components/cancel-button";
+import { SaveButton } from "@/components/save-button";
 import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
@@ -245,13 +247,9 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
 
       {/* Boutons */}
       <View style={styles.actions}>
-        <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-          <Text style={styles.saveText}>💾 Enregistrer</Text>
-        </TouchableOpacity>
+        <SaveButton onPress={handleSubmit} />
 
-        <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelText}>✖ Annuler</Text>
-        </TouchableOpacity>
+        <CancelButton onPress={onCancel} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -336,31 +334,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: 10,
-  },
-  saveButton: {
-    flex: 1,
-    backgroundColor: "#16A34A",
-    borderRadius: 10,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginRight: 6,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#E5E7EB",
-    borderRadius: 10,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginLeft: 6,
-  },
-  saveText: {
-    color: "#fff",
-    fontWeight: "700",
-  },
-  cancelText: {
-    color: "#374151",
-    fontWeight: "600",
   },
 });

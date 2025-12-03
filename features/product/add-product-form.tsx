@@ -1,13 +1,8 @@
+import { CancelButton } from "@/components/cancel-button";
+import { SaveButton } from "@/components/save-button";
 import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -140,13 +135,9 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
         </View>
 
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveText}>💾 Enregistrer</Text>
-          </TouchableOpacity>
+          <SaveButton onPress={handleSubmit} />
 
-          <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-            <Text style={styles.cancelText}>❌ Annuler</Text>
-          </TouchableOpacity>
+          <CancelButton onPress={onCancel} />
         </View>
       </View>
     </View>
@@ -205,35 +196,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: 16,
-    gap: 10,
-  },
-  saveButton: {
-    flex: 1,
-    backgroundColor: "#16A34A",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    shadowColor: "#16A34A",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 3 },
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  saveText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  cancelText: {
-    color: "#374151",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });

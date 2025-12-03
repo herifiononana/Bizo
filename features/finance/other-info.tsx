@@ -139,8 +139,8 @@ function OtherInfo() {
       {topSoldConfig.map((topSold) => (
         <TopSodl key={topSold.title} {...{ ...topSold }} />
       ))}
-      {otherInfoListsConfig.map((other) => (
-        <MiniBlockList key={other.valueKey} {...{ ...other }} />
+      {otherInfoListsConfig.map((other, index) => (
+        <MiniBlockList key={other.valueKey + index} {...{ ...other }} />
       ))}
     </>
   );

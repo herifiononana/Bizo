@@ -1,3 +1,4 @@
+import { AddButton } from "@/components/add-button";
 import { PRODUCTS_KEY } from "@/constants/key-storage";
 import AddProductForm from "@/features/product/add-product-form";
 import { useFinance } from "@/hooks/finance/useFinance";
@@ -5,7 +6,7 @@ import { Product } from "@/interface/product/product";
 import { saveData } from "@/storage";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
 
 function AddProductButton() {
   const { products, setProducts } = useProductsStore((state) => state);
@@ -22,12 +23,9 @@ function AddProductButton() {
 
   return (
     <>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.addButtonText}>+ Ajouter un produit</Text>
-      </TouchableOpacity>
+      <View style={styles.addButtonContainer}>
+        <AddButton onPress={() => setModalVisible(true)} />
+      </View>
 
       {/* Modal d'ajout */}
       <Modal
@@ -50,17 +48,11 @@ function AddProductButton() {
 export default AddProductButton;
 
 const styles = StyleSheet.create({
-  addButton: {
-    backgroundColor: "#000000DD",
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 17,
-    fontWeight: "600",
+  addButtonContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
 
   // -------- Modal --------
