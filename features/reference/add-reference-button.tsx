@@ -128,6 +128,8 @@
 //     fontSize: 16,
 //   },
 // });
+import { CancelButton } from "@/components/cancel-button";
+import { SaveButton } from "@/components/save-button";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -179,16 +181,9 @@ const AddReferenceButton = () => {
             />
 
             <View style={styles.actions}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.cancelText}>Annuler</Text>
-              </TouchableOpacity>
+              <SaveButton onPress={handleAdd} />
 
-              <TouchableOpacity style={styles.saveButton} onPress={handleAdd}>
-                <Text style={styles.saveText}>Ajouter</Text>
-              </TouchableOpacity>
+              <CancelButton onPress={() => setModalVisible(false)} />
             </View>
           </View>
         </View>
@@ -231,37 +226,9 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 16,
   },
-
   actions: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginTop: 16,
-    gap: 10,
-  },
-
-  saveButton: {
-    flex: 1,
-    backgroundColor: "#16A34A",
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "#F3F4F6",
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-
-  saveText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  cancelText: {
-    color: "#374151",
-    fontWeight: "700",
-    fontSize: 16,
   },
 });
