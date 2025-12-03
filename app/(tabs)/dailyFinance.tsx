@@ -9,15 +9,15 @@ import {
 } from "react-native";
 
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
-import { useProducts } from "@/hooks/product/useProduct";
 import { getFinance } from "@/services/finance";
+import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const DailyFinanceScreen = () => {
   const { sales } = useSalesStore();
-  const { products } = useProducts();
+  const { products } = useProductsStore((state) => state);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);

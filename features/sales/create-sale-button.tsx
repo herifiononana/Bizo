@@ -37,8 +37,6 @@ function CreateSaleButton() {
       console.log("Erreur de sauvegarde :", e);
     }
 
-    setModalVisible(false);
-
     // Mettre a jour l'etat de la finance
     changeFinanceStatus();
   };

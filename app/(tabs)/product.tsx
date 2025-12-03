@@ -1,6 +1,6 @@
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
-import { useProducts } from "@/hooks/product/useProduct";
+import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  const { products } = useProducts();
+  const { products } = useProductsStore((state) => state);
   const [search, setSearch] = useState<string>("");
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false);
 

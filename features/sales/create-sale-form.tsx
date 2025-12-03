@@ -1,5 +1,5 @@
-import { useProducts } from "@/hooks/product/useProduct";
 import { Sale } from "@/interface/sale/sale";
+import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -21,7 +21,7 @@ interface CreateSaleProps {
 }
 
 const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
-  const { products } = useProducts();
+  const { products } = useProductsStore((state) => state);
   const [formData, setFormData] = useState<CreateSaleDTO>({
     productId: "",
     quantity: "",

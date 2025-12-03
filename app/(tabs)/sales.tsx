@@ -1,7 +1,7 @@
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleListItem from "@/features/sales/sale-list-item";
-import { useProducts } from "@/hooks/product/useProduct";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
+import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import {
   FlatList,
@@ -14,7 +14,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
-  const { products } = useProducts();
+  const { products } = useProductsStore((state) => state);
   const { handleFilterSale } = useSale();
 
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);

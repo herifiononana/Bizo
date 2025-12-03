@@ -1,7 +1,6 @@
 import { PRODUCTS_KEY } from "@/constants/key-storage";
 import AddProductForm from "@/features/product/add-product-form";
 import { useFinance } from "@/hooks/finance/useFinance";
-import { useProducts } from "@/hooks/product/useProduct";
 import { Product } from "@/interface/product/product";
 import { saveData } from "@/storage";
 import { useProductsStore } from "@/stores/product.store";
@@ -9,8 +8,7 @@ import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 function AddProductButton() {
-  const { products } = useProducts();
-  const setProducts = useProductsStore(({ setProducts }) => setProducts);
+  const { products, setProducts } = useProductsStore((state) => state);
   const { changeFinanceStatus } = useFinance();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 

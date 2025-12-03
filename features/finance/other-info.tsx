@@ -19,8 +19,8 @@ const TopSodl = ({
     <Text style={styles.sectionTitle}>{title}</Text>
 
     <View style={styles.blockContainer}>
-      {data.map((item) => (
-        <View style={styles.miniBlock} key={item.product.id}>
+      {data.map((item, index) => (
+        <View style={styles.miniBlock} key={item.product.id + index}>
           <View style={[styles.iconCircle, { backgroundColor: color }]}>
             <Feather name={icon} size={18} color="white" />
           </View>
@@ -55,8 +55,8 @@ const MiniBlockList = ({
     <Text style={styles.sectionTitle}>{title}</Text>
 
     <View style={styles.blockContainer}>
-      {data.map((item: any) => (
-        <View style={styles.miniBlock} key={item.id}>
+      {data.map((item: any, index) => (
+        <View style={styles.miniBlock} key={index}>
           <View style={[styles.iconCircle, { backgroundColor: color }]}>
             <Feather name={icon as any} size={18} color="white" />
           </View>
