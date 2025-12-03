@@ -1,26 +1,36 @@
 {
   "project_info": {
-    "project_number": "156713572538",
-    "project_id": "bizo-3359b",
-    "storage_bucket": "bizo-3359b.firebasestorage.app"
+    "project_number": "806493698090",
+    "project_id": "bizo-73c6d",
+    "storage_bucket": "bizo-73c6d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:156713572538:android:0942b0779c44f9e5ff0a83",
+        "mobilesdk_app_id": "1:806493698090:android:f091723dca5a5209abab53",
         "android_client_info": {
           "package_name": "com.anonymous.Bizo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "806493698090-4ianmdimp6c00plbuojcaqm3175nafdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyD41DzKqao1LBofaQnymp7OnCgOPRaJf-I"
+          "current_key": "AIzaSyAcIPDXo9LQ9R0OVORelByQYzzfm_5DqqE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "806493698090-4ianmdimp6c00plbuojcaqm3175nafdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

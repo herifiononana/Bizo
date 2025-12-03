@@ -1,10 +1,22 @@
-import CloudButtons from "@/components/cloud-button";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
+import { useGoogleLogin } from "@/hooks/useGoogleLogin";
+import { backupToCloud } from "@/lib/backupToCloud";
+import { restoreBackup } from "@/lib/restoreBackup";
+import * as AuthSession from "expo-auth-session";
 import React from "react";
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const Dashboard = () => {
+  const { login } = useGoogleLogin();
+  console.log(":>>", AuthSession.makeRedirectUri());
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
@@ -16,7 +28,31 @@ const Dashboard = () => {
       >
         {/* HEADER */}
         <Text style={styles.title}>Tableau de bord</Text>
-        <CloudButtons />
+        <View style={{ padding: 20 }}>
+          <Button title="Connexion Google" onPress={login} />
+
+          <View style={{ height: 20 }} />
+
+          <Button
+            title="Restaurer les données du cloud"
+            onPress={async () => {
+              const ok = await restoreBackup();
+              alert(ok ? "Restauré !" : "Aucune sauvegarde trouvée.");
+            }}
+          />
+
+          <View style={{ height: 20 }} />
+
+          <Button
+            title="Sauvegarder mes données en ligne"
+            onPress={async () => {
+              const ok = await backupToCloud();
+              console.log("ok :>> ", ok);
+              alert(ok ? "Sauvegardé !" : "Erreur de sauvegarde");
+            }}
+          />
+        </View>
+
         <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
 
         {/* CARDS PRINCIPALES */}
