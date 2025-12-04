@@ -68,6 +68,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       return;
     }
 
+    const selectedReference =
+      references?.find((r) => r.id === result.data.referenceId)?.id ?? "";
+
     // Mettre à jour le produit existant (même id et createdAt)
     const updatedProduct: Product = {
       ...product,
@@ -75,6 +78,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
       salePrice: Number(result.data.salePrice),
+      referenceId: selectedReference,
       updatedAt: new Date().toISOString(),
     };
 
