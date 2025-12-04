@@ -164,7 +164,7 @@ const AddReferenceButton = () => {
         style={styles.iconButton}
         onPress={() => setModalVisible(true)}
       >
-        <Ionicons name="settings-outline" size={22} color="#0EA5E9" />
+        <Ionicons name="settings-outline" size={22} color="#FFF" />
       </TouchableOpacity>
 
       {/* --- Modal ajout référence --- */}
@@ -197,12 +197,12 @@ export default AddReferenceButton;
 const styles = StyleSheet.create({
   iconButton: {
     padding: 6,
-    backgroundColor: "#E0F2FE",
+    backgroundColor: "#1F2937",
     borderRadius: 50,
     alignSelf: "flex-start",
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: "#BAE6FD",
+    borderColor: "#1F2937",
   },
 
   modalOverlay: {
