@@ -181,11 +181,11 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
+    borderColor: Colors.dark.border,
     borderRadius: 10,
-    padding: 12,
-    backgroundColor: Colors.dark.surface, // surface sombre
-    fontSize: 16,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: Colors.dark.surface,
     color: Colors.dark.text,
   },
   errorInput: {
