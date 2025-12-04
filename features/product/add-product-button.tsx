@@ -49,10 +49,9 @@ export default AddProductButton;
 
 const styles = StyleSheet.create({
   addButtonContainer: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 
   // -------- Modal --------

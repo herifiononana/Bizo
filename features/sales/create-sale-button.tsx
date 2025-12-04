@@ -70,10 +70,9 @@ export default CreateSaleButton;
 
 const styles = StyleSheet.create({
   addButtonContainer: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
   modalOverlay: {
     flex: 1,

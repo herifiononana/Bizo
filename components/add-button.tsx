@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.dark.surface, // fond sombre pour le bouton
     shadowColor: Colors.dark.accent,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,

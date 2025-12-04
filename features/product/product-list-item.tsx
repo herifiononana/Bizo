@@ -73,7 +73,8 @@ function ProductListItem({ item }: { item: Product }) {
           <Text style={styles.productName}>{item.name}</Text>
 
           <Text style={styles.productDetails}>
-            Quantité : <Text style={styles.qty}>{item.quantity}</Text> | Prix
+            Quantité :{" "}
+            <Text style={styles.qty}>{item.quantity.toFixed(3)}</Text> | Prix
             achat : <Text style={styles.purchase}>{item.purchasePrice} Ar</Text>
           </Text>
 
