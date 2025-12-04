@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
 import React from "react";
@@ -36,26 +37,38 @@ export default Dashboard;
 /* -------------------
    STYLES
 --------------------*/
+
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F8FAFC" },
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.dark.background,
+  },
+
   container: { flex: 1 },
-  scrollContent: { padding: 20, paddingBottom: 40 },
+
+  scrollContent: {
+    padding: 20,
+    paddingBottom: 40,
+  },
+
   title: {
     fontSize: 26,
     fontWeight: "800",
-    color: "#0F172A",
+    color: Colors.dark.text,
     textAlign: "center",
   },
+
   subtitle: {
     fontSize: 15,
-    color: "#475569",
+    color: Colors.dark.icon,
     marginBottom: 22,
     textAlign: "center",
   },
+
   footerText: {
     marginTop: 25,
     fontSize: 12,
-    color: "#94A3B8",
+    color: Colors.dark.tabIconDefault,
     textAlign: "center",
   },
 });

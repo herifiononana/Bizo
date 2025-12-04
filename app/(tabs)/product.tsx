@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
 import { useProductsStore } from "@/stores/product.store";
@@ -77,14 +78,15 @@ const ProductsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Colors.dark.background, // fond sombre
     padding: 16,
   },
   title: {
     fontSize: 26,
     fontWeight: "700",
-    marginBottom: 10,
+    color: Colors.dark.text, // texte clair
     textAlign: "center",
+    marginBottom: 10,
   },
 
   // === FILTRE ===
@@ -96,12 +98,13 @@ const styles = StyleSheet.create({
 
   searchInput: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre pour input
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Colors.dark.border, // bordure neutre
+    color: Colors.dark.text, // texte clair
   },
 
   // --- Chip / Tag style ---
@@ -109,20 +112,20 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    backgroundColor: "#F3F4F6",
+    backgroundColor: Colors.dark.surface,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Colors.dark.border,
   },
 
   filterChipActive: {
-    backgroundColor: "#DC2626",
-    borderColor: "#B91C1C",
+    backgroundColor: Colors.dark.danger, // rouge accent
+    borderColor: Colors.dark.danger,
   },
 
   filterChipText: {
     fontSize: 16,
-    color: "#374151",
+    color: Colors.dark.text, // texte clair
   },
 
   filterChipTextActive: {
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     marginTop: 40,
-    color: "#888",
+    color: Colors.dark.icon, // texte secondaire clair
   },
 });
 

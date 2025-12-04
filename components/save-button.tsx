@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
@@ -5,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 export function SaveButton({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.saveBtn} onPress={onPress}>
-      <Ionicons name="save" size={20} color="#3B82F6" />
+      <Ionicons name="save" size={20} color={Colors.dark.info} />
       <Text style={styles.saveText}>Enregistrer</Text>
     </TouchableOpacity>
   );
@@ -13,8 +14,9 @@ export function SaveButton({ onPress }: { onPress: () => void }) {
 
 const styles = StyleSheet.create({
   saveBtn: {
-    backgroundColor: "#1F2937",
+    backgroundColor: Colors.dark.primary, // couleur principale sombre
     borderWidth: 1,
+    borderColor: Colors.dark.accent, // accent orange pour la bordure
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 8,
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   saveText: {
-    color: "#FFF",
+    color: Colors.dark.text, // texte clair
     fontSize: 15,
     fontWeight: "800",
   },

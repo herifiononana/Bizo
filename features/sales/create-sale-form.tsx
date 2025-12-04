@@ -1,5 +1,6 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
+import { Colors } from "@/constants/theme";
 import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useEffect, useState } from "react";
@@ -259,7 +260,7 @@ export default CreateSaleForm;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre
     padding: 20,
     borderRadius: 16,
   },
@@ -268,33 +269,34 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 16,
-    color: "#1E293B",
+    color: Colors.dark.text, // texte principal
   },
   label: {
     fontWeight: "600",
     marginBottom: 6,
-    color: "#334155",
+    color: Colors.dark.text, // texte principal
   },
   input: {
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: Colors.dark.border,
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    backgroundColor: "#F8FAFC",
+    backgroundColor: Colors.dark.surface,
+    color: Colors.dark.text,
   },
   errorInput: {
-    borderColor: "#DC2626",
+    borderColor: Colors.dark.danger, // rouge pour erreur
   },
   errorText: {
-    color: "#DC2626",
+    color: Colors.dark.danger,
     fontSize: 13,
     marginBottom: 6,
   },
   dropdown: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: Colors.dark.border,
     borderRadius: 10,
     maxHeight: 150,
     marginTop: 4,
@@ -302,28 +304,28 @@ const styles = StyleSheet.create({
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
+    borderBottomColor: Colors.dark.border,
   },
   dropdownText: {
     fontSize: 15,
-    color: "#1E293B",
+    color: Colors.dark.text,
   },
   selectedBox: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "#DCFCE7",
-    borderColor: "#22C55E",
+    backgroundColor: Colors.dark.success + "33", // vert clair transparent
+    borderColor: Colors.dark.success,
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
   },
   selectedText: {
-    color: "#065F46",
+    color: Colors.dark.success,
     fontWeight: "600",
   },
   clearText: {
-    color: "#047857",
+    color: Colors.dark.success,
     fontWeight: "600",
   },
   creditRow: {

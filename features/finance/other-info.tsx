@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
 import { Feather } from "@expo/vector-icons";
@@ -151,33 +152,89 @@ export default OtherInfo;
 /* -------------------
    STYLES
 --------------------*/
+// const styles = StyleSheet.create({
+//   /* LISTE DYNAMIQUE */
+//   sectionTitle: {
+//     fontSize: 17,
+//     fontWeight: "700",
+//     marginTop: 25,
+//     marginBottom: 10,
+//     color: "#0F172A",
+//   },
+
+//   blockContainer: {
+//     width: "100%",
+//   },
+
+//   miniBlock: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     padding: 6,
+//     marginBottom: 4,
+//     backgroundColor: "#FFF",
+//     borderRadius: 14,
+//     shadowColor: "#000",
+//     shadowOpacity: 0.05,
+//     shadowRadius: 4,
+//     elevation: 2,
+//   },
+
+//   iconCircle: {
+//     width: 32,
+//     height: 32,
+//     borderRadius: 50,
+//     justifyContent: "center",
+//     alignItems: "center",
+//     marginRight: 12,
+//   },
+
+//   blockTitle: {
+//     fontSize: 15,
+//     fontWeight: "600",
+//     color: "#0F172A",
+//   },
+
+//   blockValue: {
+//     fontSize: 13,
+//     color: "#475569",
+//   },
+// });
+
 const styles = StyleSheet.create({
-  /* LISTE DYNAMIQUE */
+  /* TITRE DES SECTIONS */
   sectionTitle: {
     fontSize: 17,
     fontWeight: "700",
     marginTop: 25,
     marginBottom: 10,
-    color: "#0F172A",
+    color: Colors.dark.text,
   },
 
+  /* CONTAINER */
   blockContainer: {
     width: "100%",
   },
 
+  /* BLOC PRINCIPAL */
   miniBlock: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 6,
-    marginBottom: 4,
-    backgroundColor: "#FFF",
+
+    padding: 8,
+    marginBottom: 6,
+
+    backgroundColor: Colors.dark.surface,
     borderRadius: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
+
+    shadowColor: Colors.dark.shadow,
+    shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
   },
 
+  /* ICÔNE */
   iconCircle: {
     width: 32,
     height: 32,
@@ -187,14 +244,16 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
 
+  /* NOM DU PRODUIT */
   blockTitle: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#0F172A",
+    color: Colors.dark.text,
   },
 
+  /* VALEURS (prix, nombre, date…) */
   blockValue: {
     fontSize: 13,
-    color: "#475569",
+    color: Colors.dark.accent,
   },
 });

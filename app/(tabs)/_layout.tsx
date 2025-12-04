@@ -3,22 +3,23 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  // const colorScheme = useColorScheme() ?? "dark";
+  const colorScheme = "dark";
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: Colors[colorScheme].accent, // Orange
+        tabBarInactiveTintColor: Colors[colorScheme].icon, // Gris neutre
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: Colors["dark"].background,
+          backgroundColor: Colors[colorScheme].background, // BG dynamique
           borderTopWidth: 0.5,
-          borderTopColor: "#E5E7EB",
+          borderTopColor: Colors[colorScheme].border, // Border palette
         },
       }}
     >
@@ -27,7 +28,7 @@ export default function TabLayout() {
         options={{
           title: "Dashboard",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color={color} />
+            <Ionicons name="home-outline" size={24} color={color} />
           ),
         }}
       />
@@ -37,7 +38,7 @@ export default function TabLayout() {
         options={{
           title: "Ventes",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="card" size={24} color={color} />
+            <Ionicons name="card-outline" size={24} color={color} />
           ),
         }}
       />
@@ -47,16 +48,17 @@ export default function TabLayout() {
         options={{
           title: "Produits",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="albums" size={24} color={color} />
+            <Ionicons name="albums-outline" size={24} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
         name="dailyFinance"
         options={{
-          title: "historique",
+          title: "Historique",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="list" size={24} color={color} />
+            <Ionicons name="list-outline" size={24} color={color} />
           ),
         }}
       />

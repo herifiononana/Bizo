@@ -1,4 +1,5 @@
 import { PRODUCTS_KEY } from "@/constants/key-storage";
+import { Colors } from "@/constants/theme";
 import { useProducts } from "@/hooks/product/useProduct";
 import { Product } from "@/interface/product/product";
 import { saveData } from "@/storage";
@@ -119,41 +120,43 @@ const styles = StyleSheet.create({
   },
   productCard: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre
     borderRadius: 8,
     padding: 14,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: Colors.dark.border, // bordure neutre
   },
   productName: {
     fontSize: 16,
+    color: Colors.dark.text, // texte principal
+    fontWeight: "600",
   },
   productDetails: {
     fontSize: 15,
-    color: "#475569",
+    color: Colors.dark.icon, // texte secondaire
     marginTop: 4,
   },
   qty: {
-    color: "#0EA5E9",
+    color: Colors.dark.info, // bleu
     fontWeight: "600",
   },
   purchase: {
-    color: "#DC2626",
+    color: Colors.dark.danger, // rouge
     fontWeight: "600",
   },
   salePrice: {
     marginTop: 6,
     fontSize: 15,
-    color: "#166534",
+    color: Colors.dark.success, // vert
   },
   sale: {
-    color: "#16A34A",
+    color: Colors.dark.success,
     fontWeight: "700",
   },
   deleteButton: {
     marginLeft: 8,
     padding: 6,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: Colors.dark.danger + "33", // rouge léger pour fond
     borderRadius: 8,
   },
   deleteIcon: {
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0,0,0,0.5)", // overlay plus visible en dark mode
     justifyContent: "center",
     padding: 20,
   },

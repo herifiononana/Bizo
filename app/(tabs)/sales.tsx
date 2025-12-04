@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleListItem from "@/features/sales/sale-list-item";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
@@ -81,7 +82,7 @@ const SalesScreen = () => {
       <TouchableOpacity
         style={[
           styles.creditButton,
-          params.creditOnly && { backgroundColor: "#B45309" },
+          params.creditOnly && { backgroundColor: Colors.dark.accent },
         ]}
         onPress={() => setParams({ ...params, creditOnly: !params.creditOnly })}
       >
@@ -129,22 +130,101 @@ const SalesScreen = () => {
 
 export default SalesScreen;
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: Colors.light.background,
+//     padding: 16,
+//   },
+
+//   title: {
+//     fontSize: 22,
+//     fontWeight: "700",
+//     color: Colors.light.primary,
+//     textAlign: "center",
+//     marginBottom: 14,
+//   },
+
+//   searchInput: {
+//     backgroundColor: Colors.light.surface,
+//     borderRadius: 10,
+//     borderWidth: 1,
+//     borderColor: Colors.light.border,
+//     padding: 12,
+//     fontSize: 16,
+//     marginBottom: 12,
+//   },
+
+//   filterRow: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     marginBottom: 10,
+//   },
+
+//   dateButton: {
+//     flex: 1,
+//     backgroundColor: Colors.light.surface,
+//     borderRadius: 8,
+//     borderWidth: 1,
+//     borderColor: Colors.light.border,
+//     padding: 10,
+//     marginHorizontal: 4,
+//     alignItems: "center",
+//     shadowColor: Colors.light.shadow,
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//   },
+
+//   dateButtonText: {
+//     fontSize: 15,
+//     color: Colors.light.text,
+//   },
+
+//   creditButton: {
+//     backgroundColor: Colors.light.surface,
+//     borderWidth: 1,
+//     borderColor: Colors.light.accent,
+//     padding: 10,
+//     borderRadius: 10,
+//     marginBottom: 12,
+//     alignItems: "center",
+//   },
+
+//   creditButtonText: {
+//     color: Colors.light.accent,
+//     fontSize: 15,
+//     fontWeight: "600",
+//   },
+
+//   emptyText: {
+//     textAlign: "center",
+//     marginTop: 40,
+//     color: Colors.light.icon,
+//     fontSize: 15,
+//   },
+// });
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F8FAFC", padding: 16 },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.dark.background, // fond sombre
+    padding: 16,
+  },
   title: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#1E293B",
+    color: Colors.dark.text, // texte clair
     textAlign: "center",
     marginBottom: 14,
   },
   searchInput: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: Colors.dark.border, // bordure neutre
     padding: 12,
     fontSize: 16,
+    color: Colors.dark.text, // texte clair
     marginBottom: 12,
   },
   filterRow: {
@@ -154,30 +234,30 @@ const styles = StyleSheet.create({
   },
   dateButton: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: Colors.dark.border,
     padding: 10,
     marginHorizontal: 4,
     alignItems: "center",
   },
   dateButtonText: {
     fontSize: 15,
-    color: "#334155",
+    color: Colors.dark.text,
   },
 
   creditButton: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface,
     borderWidth: 1,
-    borderColor: "#B45309",
+    borderColor: Colors.dark.accent, // accent orange
     padding: 8,
     borderRadius: 8,
     marginBottom: 12,
     alignItems: "center",
   },
   creditButtonText: {
-    color: "#B45309",
+    color: Colors.dark.accent,
     fontSize: 15,
     fontWeight: "600",
   },
@@ -185,7 +265,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     marginTop: 40,
-    color: "#94A3B8",
+    color: Colors.dark.icon, // texte secondaire clair
     fontSize: 15,
   },
 });

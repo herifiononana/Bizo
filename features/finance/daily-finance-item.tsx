@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -56,11 +57,11 @@ export default DailyFinanceItem;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#1E293BEE",
+    backgroundColor: Colors.dark.card, // carte sombre
     padding: 8,
     borderRadius: 12,
     marginBottom: 6,
-    shadowColor: "#000",
+    shadowColor: Colors.dark.primary,
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#F1F5F9",
+    color: Colors.dark.text,
     marginBottom: 8,
   },
   statsRow: {
@@ -80,18 +81,27 @@ const styles = StyleSheet.create({
   statItem: {
     width: "48%",
     marginBottom: 4,
-    backgroundColor: "#334155",
+    backgroundColor: Colors.dark.surface, // bloc des stats sombre
     paddingVertical: 4,
     paddingHorizontal: 6,
     borderRadius: 6,
   },
   label: {
     fontSize: 12,
-    color: "#94A3B8",
+    color: Colors.dark.icon, // texte secondaire
   },
   value: {
     fontSize: 14,
     fontWeight: "700",
-    color: "#F1F5F9",
+    color: Colors.dark.text, // texte principal
+  },
+  valueCash: {
+    color: Colors.dark.success, // vert
+  },
+  valueCredit: {
+    color: Colors.dark.accent, // orange
+  },
+  valueProfit: {
+    color: Colors.dark.success, // vert
   },
 });

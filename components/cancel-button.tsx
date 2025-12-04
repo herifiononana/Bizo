@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
@@ -5,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 export function CancelButton({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.cancelBtn} onPress={onPress}>
-      <Ionicons name="close-circle" size={20} color="#F87171" />
+      <Ionicons name="close-circle" size={20} color={Colors.dark.danger} />
       <Text style={styles.cancelText}>Annuler</Text>
     </TouchableOpacity>
   );
@@ -13,8 +14,9 @@ export function CancelButton({ onPress }: { onPress: () => void }) {
 
 const styles = StyleSheet.create({
   cancelBtn: {
-    backgroundColor: "#1F2937",
+    backgroundColor: Colors.dark.surface, // surface sombre
     borderWidth: 1,
+    borderColor: Colors.dark.danger, // bordure rouge
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 8,
@@ -23,7 +25,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   cancelText: {
-    color: "#FFF",
+    color: Colors.dark.danger, // texte rouge
     fontSize: 15,
     fontWeight: "800",
   },

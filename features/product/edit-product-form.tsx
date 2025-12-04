@@ -1,5 +1,6 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
+import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
 import React, { useState } from "react";
@@ -152,17 +153,11 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
 
 export default EditProductForm;
 
-// Les styles peuvent rester identiques
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: Colors.dark.surface, // fond sombre
     borderRadius: 18,
     padding: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 2,
     marginVertical: 12,
   },
   title: {
@@ -170,27 +165,37 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    color: "#166534",
+    color: Colors.dark.text, // couleur principale
   },
-  form: { gap: 14 },
-  formGroup: { marginBottom: 6 },
+  form: {
+    gap: 14,
+  },
+  formGroup: {
+    marginBottom: 6,
+  },
   label: {
     fontWeight: "600",
-    color: "#374151",
+    color: Colors.dark.text, // texte clair
     marginBottom: 6,
     fontSize: 15,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Colors.dark.border, // bordure neutre
     borderRadius: 10,
     padding: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Colors.dark.surface, // surface sombre
     fontSize: 16,
-    color: "#111827",
+    color: Colors.dark.text,
   },
-  errorInput: { borderColor: "#DC2626" },
-  errorText: { color: "#DC2626", fontSize: 13, marginTop: 4 },
+  errorInput: {
+    borderColor: Colors.dark.danger, // rouge d’erreur
+  },
+  errorText: {
+    color: Colors.dark.danger,
+    fontSize: 13,
+    marginTop: 4,
+  },
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",

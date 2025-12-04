@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 
+import { Colors } from "@/constants/theme";
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
 import { getFinance } from "@/services/finance";
 import { useProductsStore } from "@/stores/product.store";
@@ -116,29 +117,35 @@ const DailyFinanceScreen = () => {
 export default DailyFinanceScreen;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#1E293BAA" },
+  screen: { flex: 1, backgroundColor: Colors.dark.background },
   container: { padding: 20 },
+
   title: {
     fontSize: 26,
     fontWeight: "800",
     textAlign: "center",
-    color: "#FFF",
+    color: Colors.dark.text,
   },
   subtitle: {
     textAlign: "center",
-    color: "#FFFFFFAA",
+    color: Colors.dark.icon,
     marginBottom: 16,
   },
+
   dateRow: { flexDirection: "row", justifyContent: "center", marginBottom: 20 },
   datePickerButton: {
-    backgroundColor: "#1E293B",
+    backgroundColor: Colors.dark.surface,
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 10,
     marginHorizontal: 4,
   },
-  resetButton: { backgroundColor: "#334155" },
-  datePickerText: { color: "#E2E8F0", fontSize: 16, fontWeight: "700" },
+  resetButton: { backgroundColor: Colors.dark.primary },
+  datePickerText: {
+    color: Colors.dark.text,
+    fontSize: 16,
+    fontWeight: "700",
+  },
 
-  empty: { textAlign: "center", color: "#64748B", marginTop: 20 },
+  empty: { textAlign: "center", color: Colors.dark.icon, marginTop: 20 },
 });
