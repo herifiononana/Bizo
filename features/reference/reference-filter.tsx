@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -108,9 +109,9 @@ export default function ReferenceFilterModal({
 const styles = StyleSheet.create({
   iconButton: {
     alignSelf: "flex-start",
-    backgroundColor: "#1F2937",
+    backgroundColor: Colors.dark.primary, // couleur primaire
     borderWidth: 1,
-    borderColor: "#1F2937",
+    borderColor: Colors.dark.primary,
     padding: 8,
     borderRadius: 50,
     marginBottom: 8,
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre
     padding: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -133,6 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 16,
+    color: Colors.dark.text, // texte clair
   },
 
   row: {
@@ -141,26 +143,26 @@ const styles = StyleSheet.create({
   },
 
   chip: {
-    backgroundColor: "#EEF2FF",
+    backgroundColor: Colors.dark.surface, // fond sombre
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 50,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: "#E0E7FF",
+    borderColor: Colors.dark.border, // bordure thème
   },
 
   chipActive: {
-    backgroundColor: "#3B82F6",
-    borderColor: "#2563EB",
-    shadowColor: "#3B82F6",
+    backgroundColor: Colors.dark.accent, // accent orange
+    borderColor: Colors.dark.accent,
+    shadowColor: Colors.dark.accent,
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 3,
   },
 
   chipText: {
-    color: "#4B5563",
+    color: Colors.dark.text, // texte clair
     fontSize: 14,
   },
 
@@ -173,12 +175,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: "#E5E7EB",
+    backgroundColor: Colors.dark.primary, // bouton fermer thème sombre
   },
 
   closeText: {
     textAlign: "center",
     fontWeight: "600",
-    color: "#374151",
+    color: "#fff",
   },
 });

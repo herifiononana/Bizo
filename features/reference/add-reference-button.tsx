@@ -1,135 +1,6 @@
-// import { useReference } from "@/hooks/reference/useRefecence";
-// import React, { useState } from "react";
-// import {
-//   Modal,
-//   StyleSheet,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View,
-// } from "react-native";
-
-// const AddReferenceButton = () => {
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const [refName, setRefName] = useState("");
-//   const { addReference } = useReference();
-
-//   const handleAdd = () => {
-//     if (!refName.trim()) return;
-//     addReference({
-//       id: new Date().toISOString(),
-//       name: refName.trim().toUpperCase(),
-//     });
-//     setRefName("");
-//     setModalVisible(false);
-//   };
-
-//   return (
-//     <>
-//       <TouchableOpacity
-//         style={styles.button}
-//         onPress={() => setModalVisible(true)}
-//       >
-//         <Text style={styles.buttonText}>+ Ajouter une référence</Text>
-//       </TouchableOpacity>
-
-//       <Modal visible={modalVisible} transparent animationType="slide">
-//         <View style={styles.modalOverlay}>
-//           <View style={styles.modalContent}>
-//             <Text style={styles.modalTitle}>Nouvelle référence</Text>
-//             <TextInput
-//               style={styles.input}
-//               placeholder="Nom de la référence"
-//               value={refName}
-//               onChangeText={setRefName}
-//             />
-//             <View style={styles.actions}>
-//               <TouchableOpacity
-//                 style={styles.cancelButton}
-//                 onPress={() => setModalVisible(false)}
-//               >
-//                 <Text style={styles.cancelText}>Annuler</Text>
-//               </TouchableOpacity>
-//               <TouchableOpacity style={styles.saveButton} onPress={handleAdd}>
-//                 <Text style={styles.saveText}>Ajouter</Text>
-//               </TouchableOpacity>
-//             </View>
-//           </View>
-//         </View>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default AddReferenceButton;
-
-// const styles = StyleSheet.create({
-//   button: {
-//     paddingVertical: 6,
-//     paddingHorizontal: 10,
-//     backgroundColor: "#E0F2FE",
-//     borderRadius: 50,
-//     alignSelf: "flex-start",
-//     marginVertical: 8,
-//   },
-//   buttonText: { color: "#0EA5E9", fontWeight: "600" },
-
-//   modalOverlay: {
-//     flex: 1,
-//     backgroundColor: "#00000066",
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   modalContent: {
-//     backgroundColor: "#fff",
-//     padding: 20,
-//     borderRadius: 12,
-//     width: "80%",
-//   },
-//   modalTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12 },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: "#CBD5E1",
-//     borderRadius: 8,
-//     padding: 10,
-//     marginBottom: 16,
-//   },
-//   actions: {
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginTop: 16,
-//     gap: 10,
-//   },
-//   saveButton: {
-//     flex: 1,
-//     backgroundColor: "#16A34A",
-//     paddingVertical: 10,
-//     borderRadius: 10,
-//     alignItems: "center",
-//     shadowColor: "#16A34A",
-//     shadowOpacity: 0.2,
-//     shadowOffset: { width: 0, height: 3 },
-//   },
-//   cancelButton: {
-//     flex: 1,
-//     backgroundColor: "#F3F4F6",
-//     paddingVertical: 10,
-//     borderRadius: 10,
-//     alignItems: "center",
-//   },
-//   saveText: {
-//     color: "#FFFFFF",
-//     fontWeight: "700",
-//     fontSize: 16,
-//   },
-//   cancelText: {
-//     color: "#374151",
-//     fontWeight: "700",
-//     fontSize: 16,
-//   },
-// });
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
+import { Colors } from "@/constants/theme";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -195,37 +66,51 @@ const AddReferenceButton = () => {
 export default AddReferenceButton;
 
 const styles = StyleSheet.create({
+  // Petit bouton icône paramètre
   iconButton: {
     padding: 6,
-    backgroundColor: "#1F2937",
+    backgroundColor: Colors.dark.primary, // fond sombre
     borderRadius: 50,
     alignSelf: "flex-start",
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: "#1F2937",
+    borderColor: Colors.dark.primary,
   },
 
+  // Overlay du modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: "#00000066",
+    backgroundColor: "#00000066", // semi-transparent
     justifyContent: "center",
     alignItems: "center",
   },
+
+  // Contenu du modal
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.dark.surface, // surface sombre
     padding: 20,
     borderRadius: 12,
     width: "80%",
   },
-  modalTitle: { fontSize: 18, fontWeight: "700", marginBottom: 12 },
+
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 12,
+    color: Colors.dark.text, // texte clair
+    textAlign: "center",
+  },
 
   input: {
     borderWidth: 1,
-    borderColor: "#CBD5E1",
+    borderColor: Colors.dark.border, // bordure neutre
     borderRadius: 8,
     padding: 10,
     marginBottom: 16,
+    color: Colors.dark.text, // texte saisi clair
+    backgroundColor: Colors.dark.background, // champ input sombre
   },
+
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",
