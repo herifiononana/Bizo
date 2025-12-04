@@ -1,8 +1,8 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
 import { Colors } from "@/constants/theme";
-import { useReference } from "@/hooks/reference/useRefecence";
 import { Product } from "@/interface/product/product";
+import { useReferencesStore } from "@/stores/reference.store";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
@@ -42,7 +42,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     salePrice: "",
     referenceId: "",
   });
-  const { references } = useReference();
+  const { references } = useReferencesStore();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -226,16 +226,17 @@ const styles = StyleSheet.create({
   },
   selectContainer: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: Colors.dark.border,
     borderRadius: 10,
     height: 42,
     overflow: "hidden",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Colors.dark.surface,
   },
   pickerContainer: {
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.dark.surface,
     borderColor: "#FFFFFF00",
     height: 40,
+    color: Colors.dark.text,
   },
   actions: {
     flexDirection: "row",

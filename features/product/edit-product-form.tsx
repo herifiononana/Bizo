@@ -3,6 +3,8 @@ import { SaveButton } from "@/components/save-button";
 import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
+import { useReferencesStore } from "@/stores/reference.store";
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { z } from "zod";
@@ -22,6 +24,7 @@ const productSchema = z.object({
     .string()
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
     .optional(),
+  referenceId: z.string().optional(),
 });
 
 export type productDTO = z.infer<typeof productSchema>;
@@ -43,6 +46,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     purchasePrice: String(product.purchasePrice),
     salePrice: String(product.salePrice ?? ""),
   });
+  const { references } = useReferencesStore();
 
   const { changeFinanceStatus } = useFinance();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -140,6 +144,25 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
             <Text style={styles.errorText}>{errors.salePrice}</Text>
           )}
         </View>
+        {references?.length ? (
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Référence</Text>
+            <View style={styles.selectContainer}>
+              <Picker
+                selectedValue={formData.referenceId}
+                onValueChange={(val) => handleChange("referenceId", val)}
+                style={styles.pickerContainer}
+              >
+                <Picker.Item label="Sélectionner une référence..." value="" />
+                {references.map((ref) => (
+                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
 
         <View style={styles.actions}>
           <SaveButton onPress={handleSubmit} />
@@ -195,6 +218,20 @@ const styles = StyleSheet.create({
     color: Colors.dark.danger,
     fontSize: 13,
     marginTop: 4,
+  },
+  selectContainer: {
+    borderWidth: 1,
+    borderColor: Colors.dark.border, // bordure neutre
+    borderRadius: 10,
+    height: 42,
+    overflow: "hidden",
+    backgroundColor: Colors.dark.surface, // surface sombre
+  },
+  pickerContainer: {
+    backgroundColor: Colors.dark.surface,
+    borderColor: "#FFFFFF00",
+    color: Colors.dark.text,
+    height: 40,
   },
   actions: {
     flexDirection: "row",
