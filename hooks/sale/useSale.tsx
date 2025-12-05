@@ -1,5 +1,6 @@
 import { SALES_KEY } from "@/constants/key-storage";
-import { getData, saveData } from "@/storage";
+import { getSales } from "@/services/sale";
+import { saveData } from "@/storage";
 import { useSalesStore } from "@/stores/sales.store";
 import { useEffect } from "react";
 import { useProducts } from "../product/useProduct";
@@ -81,23 +82,23 @@ export const useSale = () => {
     });
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const storedSales = await getData(SALES_KEY);
+  const loadSales = async () => {
+    try {
+      const storedSales = await getSales();
 
-        if (storedSales) {
-          setSales(storedSales);
-        } else {
-          setSales([]);
-          await saveData(SALES_KEY, []);
-        }
-      } catch (e) {
-        console.log("Erreur de chargement :", e);
+      if (storedSales) {
+        setSales(storedSales);
+      } else {
+        setSales([]);
+        await saveData(SALES_KEY, []);
       }
-    };
+    } catch (e) {
+      console.log("Erreur de chargement :", e);
+    }
+  };
 
-    loadData();
+  useEffect(() => {
+    loadSales();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -105,5 +106,6 @@ export const useSale = () => {
     sales,
     handleFilterSale,
     getTodaySaleList,
+    loadSales,
   };
 };

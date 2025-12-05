@@ -93,7 +93,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
   // Produits filtrés pour l’autocomplete
   const filteredProducts = products
     ? products.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase())
+        p?.name?.toLowerCase().includes(search.toLowerCase())
       )
     : [];
 

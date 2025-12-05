@@ -1,3 +1,4 @@
+import CsvButtons from "@/components/csv-button";
 import { Colors } from "@/constants/theme";
 import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
@@ -17,6 +18,15 @@ const Dashboard = () => {
         {/* HEADER */}
         <Text style={styles.title}>Tableau de bord</Text>
         <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
+        <CsvButtons />
+        {/* <Button onPress={() => AsyncStorage.clear()} title="clear" />
+        <Button
+          onPress={() => {
+            loadProducts();
+            loadSales();
+          }}
+          title="load"
+        /> */}
 
         {/* CARDS PRINCIPALES */}
         <GlobalDashboard />

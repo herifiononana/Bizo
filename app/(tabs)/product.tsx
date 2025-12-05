@@ -20,9 +20,9 @@ const ProductsScreen: React.FC = () => {
   // Filtrer les produits par recherche + rupture
   const filteredProducts = products
     ? products.filter((p) => {
-        const matchesSearch = p.name
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        const matchesSearch = p?.name
+          ?.toLowerCase()
+          .includes(search?.toLowerCase());
         const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
         return matchesSearch && matchesOutOfStock;
       })
