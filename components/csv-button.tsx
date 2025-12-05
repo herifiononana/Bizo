@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useProducts } from "@/hooks/product/useProduct";
 import { useSale } from "@/hooks/sale/useSale";
 import { exportAllDataToCSV, importAllDataFromCSV } from "@/libs/export-to-csv";
@@ -11,7 +12,7 @@ const CsvButtons = () => {
   const { loadSales } = useSale();
   const handleExport = async () => {
     try {
-      const path = await exportAllDataToCSV("backup_all");
+      const path = await exportAllDataToCSV("backup_bizo");
       if (path) Alert.alert("Export terminée", "Le fichier a été partagé.");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
@@ -58,16 +59,22 @@ export default CsvButtons;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    position: "absolute",
+    top: 40,
+    right: 10,
+
+    flexDirection: "column",
     gap: 12,
-    marginVertical: 8,
+
+    backgroundColor: "transparent",
+    zIndex: 999, // pour rester au dessus
   },
   iconButton: {
     padding: 10,
-    backgroundColor: "#1F2937",
+    backgroundColor: Colors.dark.primary,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#1F2937",
+    borderColor: Colors.dark.primary,
     alignItems: "center",
     justifyContent: "center",
   },

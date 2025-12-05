@@ -9,6 +9,7 @@ const Dashboard = () => {
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+      <CsvButtons />
 
       <ScrollView
         style={styles.container}
@@ -18,7 +19,6 @@ const Dashboard = () => {
         {/* HEADER */}
         <Text style={styles.title}>Tableau de bord</Text>
         <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
-        <CsvButtons />
         {/* <Button onPress={() => AsyncStorage.clear()} title="clear" />
         <Button
           onPress={() => {

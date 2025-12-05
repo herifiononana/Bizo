@@ -6,38 +6,6 @@ import Papa from "papaparse";
 
 const storageKeys = [SALES_KEY, PRODUCTS_KEY];
 
-/** EXPORT TOUT EN 1 CSV + PARTAGE */
-// export const exportAllDataToCSV = async (fileName: string) => {
-//   try {
-//     let allData: Product[] | Sale[] = [];
-
-//     for (const key of storageKeys) {
-//       const data = await getData(key);
-//       const typed = data.map((item: Product | Sale) => ({
-//         _type: key,
-//         ...item,
-//       }));
-//       allData = [...allData, ...typed];
-//     }
-
-//     const csv = Papa.unparse(allData as any);
-
-//     const fileUri = FileSystem.documentDirectory + `${fileName}.csv`;
-
-//     await FileSystem.writeAsStringAsync(fileUri, csv, {
-//       encoding: FileSystem.EncodingType.UTF8,
-//     });
-
-//     if (await Sharing.isAvailableAsync()) {
-//       await Sharing.shareAsync(fileUri);
-//     }
-
-//     return fileUri;
-//   } catch (err) {
-//     console.error("Erreur exportAllDataToCSV :", err);
-//     return null;
-//   }
-// };
 export const exportAllDataToCSV = async (fileName: string) => {
   try {
     let allData: any[] = [];
