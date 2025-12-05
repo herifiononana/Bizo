@@ -31,10 +31,10 @@ export default function ReferenceFilterModal({
   };
 
   return (
-    <>
+    <View style={styles.container}>
       {/* --- BOUTON QUI OUVRE LE MODAL --- */}
       <TouchableOpacity style={styles.iconButton} onPress={() => setOpen(true)}>
-        <Ionicons name="filter" size={20} color="#FFF" />
+        <Ionicons name="filter" size={22} color="#FFF" />
       </TouchableOpacity>
 
       {/* --- MODAL --- */}
@@ -102,19 +102,26 @@ export default function ReferenceFilterModal({
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    top: 200,
+    right: 10,
+    zIndex: 10,
+  },
+
   iconButton: {
-    alignSelf: "flex-start",
-    backgroundColor: Colors.dark.primary, // couleur primaire
+    padding: 10,
+    backgroundColor: Colors.dark.primary,
+    borderRadius: 50,
     borderWidth: 1,
     borderColor: Colors.dark.primary,
-    padding: 8,
-    borderRadius: 50,
-    marginBottom: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   overlay: {

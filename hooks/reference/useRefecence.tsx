@@ -1,7 +1,6 @@
 // hooks/useProducts.ts
-import { REFERENCE_KEY } from "@/constants/key-storage";
 import { Reference } from "@/interface/reference";
-import { getData, saveData } from "@/storage";
+import { getReference, saveReference } from "@/services/reference";
 import { useReferencesStore } from "@/stores/reference.store";
 import { useEffect } from "react";
 import { Alert } from "react-native";
@@ -12,11 +11,11 @@ export const useReference = () => {
   // Charger au montage
   useEffect(() => {
     const loadReferences = async () => {
-      const storedReferences = await getData(REFERENCE_KEY);
+      const storedReferences = await getReference();
       if (storedReferences) setReferences(storedReferences);
       else {
         setReferences([]);
-        await saveData(REFERENCE_KEY, []);
+        await saveReference([]);
       }
     };
     loadReferences();
@@ -27,7 +26,7 @@ export const useReference = () => {
   const addReference = async (reference: Reference) => {
     const next = references ? [reference, ...references] : [reference];
     setReferences(next);
-    await saveData(REFERENCE_KEY, next);
+    await saveReference(next);
     Alert.alert("✅ Succès", "Référence ajouté avec succès !");
   };
 

@@ -14,24 +14,17 @@ const Dashboard = () => {
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
       <CsvButtons />
-
+      <AddReferenceButton />
+      <ReferenceFilterModal {...{ selectedReference, setSelectedReference }} />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* HEADER */}
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          <AddReferenceButton />
-          <View style={{ flex: 1 }}>
-            <Text style={styles.title}>Tableau de bord</Text>
-            <Text style={styles.subtitle}>
-              Vue d’ensemble de votre activité
-            </Text>
-          </View>
-          <ReferenceFilterModal
-            {...{ selectedReference, setSelectedReference }}
-          />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>Tableau de bord</Text>
+          <Text style={styles.subtitle}>Vue d’ensemble de votre activité</Text>
         </View>
 
         {/* CARDS PRINCIPALES */}

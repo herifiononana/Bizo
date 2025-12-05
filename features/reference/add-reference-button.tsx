@@ -29,7 +29,7 @@ const AddReferenceButton = () => {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       {/* --- Petit bouton icône paramètre --- */}
       <TouchableOpacity
         style={styles.iconButton}
@@ -59,22 +59,28 @@ const AddReferenceButton = () => {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 
 export default AddReferenceButton;
 
 const styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    top: 150,
+    right: 10,
+    zIndex: 10,
+  },
   // Petit bouton icône paramètre
   iconButton: {
-    padding: 6,
-    backgroundColor: Colors.dark.primary, // fond sombre
+    padding: 10,
+    backgroundColor: Colors.dark.primary,
     borderRadius: 50,
-    alignSelf: "flex-start",
-    marginVertical: 8,
     borderWidth: 1,
     borderColor: Colors.dark.primary,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   // Overlay du modal
