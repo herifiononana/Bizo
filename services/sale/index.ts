@@ -1,6 +1,6 @@
 import { SALES_KEY } from "@/constants/key-storage";
 import { Sale } from "@/interface/sale/sale";
-import { getData } from "@/storage";
+import { getData, saveData } from "@/storage";
 
 export const getSales = async () => {
   const data = await getData(SALES_KEY);
@@ -20,4 +20,8 @@ export const getSales = async () => {
     }) ?? [];
 
   return sales;
+};
+
+export const saveSales = async (data: Sale[]) => {
+  await saveData(SALES_KEY, data);
 };

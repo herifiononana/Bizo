@@ -1,8 +1,6 @@
 // hooks/useProducts.ts
-import { PRODUCTS_KEY } from "@/constants/key-storage";
 import { Product } from "@/interface/product/product";
-import { getProduct } from "@/services/product";
-import { saveData } from "@/storage";
+import { getProduct, saveProducts } from "@/services/product";
 import { useProductsStore } from "@/stores/product.store";
 import { useEffect } from "react";
 
@@ -14,7 +12,7 @@ export const useProducts = () => {
     if (storedProducts) setProducts(storedProducts);
     else {
       setProducts([]);
-      await saveData(PRODUCTS_KEY, []);
+      await saveProducts([]);
     }
   };
   // Charger au montage
@@ -27,7 +25,7 @@ export const useProducts = () => {
   const addProduct = async (product: Product) => {
     const next = products ? [...products, product] : [product];
     setProducts(next);
-    await saveData(PRODUCTS_KEY, next);
+    await saveProducts(next);
   };
 
   return {

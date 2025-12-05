@@ -1,9 +1,9 @@
-import { PRODUCTS_KEY } from "@/constants/key-storage";
 import { Colors } from "@/constants/theme";
-import { useProducts } from "@/hooks/product/useProduct";
 import { Product } from "@/interface/product/product";
-import { saveData } from "@/storage";
+import { saveProducts } from "@/services/product";
+import { saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
+import { useSalesStore } from "@/stores/sales.store";
 import React, { useState } from "react";
 import {
   Alert,
@@ -17,8 +17,8 @@ import EditProductForm from "./edit-product-form";
 
 function ProductListItem({ item }: { item: Product }) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const { products } = useProducts();
-  const { setProducts } = useProductsStore();
+  const { products, setProducts } = useProductsStore();
+  const { sales, setSales } = useSalesStore();
 
   // Modifier un produit
   const handleEditProduct = async (updatedProduct: Product) => {
@@ -30,7 +30,7 @@ function ProductListItem({ item }: { item: Product }) {
     setProducts(updatedProducts);
 
     try {
-      await saveData(PRODUCTS_KEY, updatedProducts);
+      await saveProducts(updatedProducts);
     } catch (error) {
       console.error("Erreur sauvegarde produit", error);
     }
@@ -51,9 +51,14 @@ function ProductListItem({ item }: { item: Product }) {
           onPress: async () => {
             if (!products) return;
             const updatedProducts = products.filter((p) => p.id !== item.id);
+            const updatedSales = sales
+              ? sales.filter((s) => s.productId !== item.id)
+              : [];
             setProducts(updatedProducts);
+            setSales(updatedSales);
             try {
-              await saveData(PRODUCTS_KEY, updatedProducts);
+              await saveProducts(updatedProducts);
+              await saveSales(updatedSales);
             } catch (error) {
               console.error("Erreur suppression produit", error);
             }

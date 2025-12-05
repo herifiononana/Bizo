@@ -1,8 +1,8 @@
 import { AddButton } from "@/components/add-button";
-import { PRODUCTS_KEY, SALES_KEY } from "@/constants/key-storage";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Sale } from "@/interface/sale/sale";
-import { saveData } from "@/storage";
+import { saveProducts } from "@/services/product";
+import { saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
 import React, { useState } from "react";
@@ -31,8 +31,8 @@ function CreateSaleButton() {
 
     // 3. Sauvegarder dans AsyncStorage
     try {
-      await saveData(SALES_KEY, updatedSales);
-      await saveData(PRODUCTS_KEY, updatedProducts);
+      await saveSales(updatedSales);
+      await saveProducts(updatedProducts);
       setProducts(updatedProducts);
     } catch (e) {
       console.log("Erreur de sauvegarde :", e);

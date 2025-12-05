@@ -1,9 +1,8 @@
 import { AddButton } from "@/components/add-button";
-import { PRODUCTS_KEY } from "@/constants/key-storage";
 import AddProductForm from "@/features/product/add-product-form";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
-import { saveData } from "@/storage";
+import { saveProducts } from "@/services/product";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
@@ -16,7 +15,7 @@ function AddProductButton() {
   const handleAddProduct = async (product: Product) => {
     const next = products ? [product, ...products] : [product];
     setProducts(next);
-    await saveData(PRODUCTS_KEY, next);
+    await saveProducts(next);
     setModalVisible(false);
     changeFinanceStatus();
   };

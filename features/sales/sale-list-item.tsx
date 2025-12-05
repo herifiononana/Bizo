@@ -1,8 +1,7 @@
-import { SALES_KEY } from "@/constants/key-storage";
 import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
-import { saveData } from "@/storage";
+import { saveSales } from "@/services/sale";
 import { useSalesStore } from "@/stores/sales.store";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -22,7 +21,7 @@ function SaleListItem({ product, item }: SaleListItemProps) {
     );
     setSales(updatedSales);
     try {
-      await saveData(SALES_KEY, updatedSales);
+      await saveSales(updatedSales);
       Alert.alert("✅ Succès", "paiement reussi !");
     } catch (error) {
       console.error("Erreur de paiement", error);

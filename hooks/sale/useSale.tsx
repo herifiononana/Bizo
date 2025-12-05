@@ -1,6 +1,4 @@
-import { SALES_KEY } from "@/constants/key-storage";
-import { getSales } from "@/services/sale";
-import { saveData } from "@/storage";
+import { getSales, saveSales } from "@/services/sale";
 import { useSalesStore } from "@/stores/sales.store";
 import { useEffect } from "react";
 import { useProducts } from "../product/useProduct";
@@ -90,7 +88,7 @@ export const useSale = () => {
         setSales(storedSales);
       } else {
         setSales([]);
-        await saveData(SALES_KEY, []);
+        await saveSales([]);
       }
     } catch (e) {
       console.log("Erreur de chargement :", e);
