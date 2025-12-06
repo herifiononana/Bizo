@@ -12,6 +12,8 @@ export const useFinanceSummaryStore = create<FinanceState>((set) => ({
     totalProfit: 0,
     totalSalesValue: 0,
     totalStockValue: 0,
+    totalCashSales: 0,
+    totalCreditSales: 0,
   },
   setFinance: (finance: FinanceSummary) => {
     set({ finance });

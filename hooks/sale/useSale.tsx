@@ -1,7 +1,7 @@
 import { getSales, saveSales } from "@/services/sale";
+import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
 import { useEffect } from "react";
-import { useProducts } from "../product/useProduct";
 
 export type FilteredParamsType = {
   search?: string;
@@ -12,7 +12,7 @@ export type FilteredParamsType = {
 };
 
 export const useSale = () => {
-  const { products } = useProducts();
+  const { products } = useProductsStore();
   const { sales, setSales } = useSalesStore();
 
   const getTodaySaleList = () => {

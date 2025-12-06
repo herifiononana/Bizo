@@ -142,6 +142,9 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
           {search.length > 0 && (
             <FlatList
               data={filteredProducts}
+              initialNumToRender={5}
+              maxToRenderPerBatch={5}
+              windowSize={5}
               keyExtractor={(item) => item.id}
               style={styles.dropdown}
               renderItem={({ item }) => (

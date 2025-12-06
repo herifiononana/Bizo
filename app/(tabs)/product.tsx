@@ -3,7 +3,7 @@ import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
 import ReferenceFilter from "@/features/reference/reference-filter";
 import { useProductsStore } from "@/stores/product.store";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -21,29 +21,27 @@ const ProductsScreen: React.FC = () => {
     string | null | undefined
   >(null);
 
-  // Filtrer les produits par recherche + rupture + ref
-  const filteredProducts = products
-    ? products.filter((p) => {
-        const matchesSearch = p?.name
-          ?.toLowerCase()
-          .includes(search?.toLowerCase());
-
-        const matchesReference = selectedReference
-          ? p.referenceId === selectedReference
-          : true;
-
-        const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
-        return matchesSearch && matchesOutOfStock && matchesReference;
-      })
-    : [];
+  const filteredProducts = useMemo(() => {
+    if (!products) return [];
+    return products.filter((p) => {
+      const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
+      const matchesReference = selectedReference
+        ? p.referenceId === selectedReference
+        : true;
+      const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
+      return matchesSearch && matchesReference && matchesOutOfStock;
+    });
+  }, [products, search, selectedReference, showOutOfStock]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Produits</Text>
+      <ReferenceFilter
+        {...{ selectedReference, setSelectedReference, top: 10, right: 10 }}
+      />
 
       {/* Zone recherche + filtre */}
       <View style={styles.topRow}>
-        <ReferenceFilter {...{ selectedReference, setSelectedReference }} />
         <TextInput
           placeholder="Rechercher..."
           style={styles.searchInput}
@@ -70,6 +68,9 @@ const ProductsScreen: React.FC = () => {
       {/* Liste des produits */}
       <FlatList
         data={filteredProducts}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={10}
         keyExtractor={(item) => item.id.toString()}
         ListEmptyComponent={
           <Text style={styles.emptyText}>

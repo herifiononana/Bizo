@@ -14,11 +14,15 @@ import {
 type ReferenceFilterProps = {
   selectedReference?: string | null;
   setSelectedReference: (reference?: string | null) => void;
+  top?: number;
+  right?: number;
 };
 
 export default function ReferenceFilterModal({
   selectedReference,
   setSelectedReference,
+  right = 10,
+  top = 205,
 }: ReferenceFilterProps) {
   const { references } = useReference();
   const [open, setOpen] = useState(false);
@@ -31,7 +35,7 @@ export default function ReferenceFilterModal({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, top, right }}>
       {/* --- BOUTON QUI OUVRE LE MODAL --- */}
       <TouchableOpacity style={styles.iconButton} onPress={() => setOpen(true)}>
         <Ionicons name="filter" size={22} color="#FFF" />
@@ -109,8 +113,6 @@ export default function ReferenceFilterModal({
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 200,
-    right: 10,
     zIndex: 10,
   },
 

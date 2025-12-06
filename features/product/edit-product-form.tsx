@@ -45,6 +45,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     quantity: String(product.quantity),
     purchasePrice: String(product.purchasePrice),
     salePrice: String(product.salePrice ?? ""),
+    referenceId: product?.referenceId ?? "",
   });
   const { references } = useReferencesStore();
 
@@ -78,7 +79,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
       salePrice: Number(result.data.salePrice),
-      referenceId: selectedReference,
+      referenceId: selectedReference ?? product.referenceId,
       updatedAt: new Date().toISOString(),
     };
 

@@ -47,6 +47,15 @@ const SalesScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>📊 Gestion des ventes</Text>
+      <ReferenceFilter
+        {...{
+          top: 10,
+          right: 10,
+          selectedReference: params.referenceProduct,
+          setSelectedReference: (ref) =>
+            setParams({ ...params, referenceProduct: ref }),
+        }}
+      />
       {/* Recherche */}
       <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
         <TextInput
@@ -56,13 +65,6 @@ const SalesScreen = () => {
           onChangeText={(search) => setParams({ ...params, search })}
         />
         {/* Filtres références */}
-        <ReferenceFilter
-          {...{
-            selectedReference: params.referenceProduct,
-            setSelectedReference: (ref) =>
-              setParams({ ...params, referenceProduct: ref }),
-          }}
-        />
       </View>
       {/* Filtres de date */}
       <View style={styles.filterRow}>
@@ -120,6 +122,9 @@ const SalesScreen = () => {
       {/* Liste des ventes */}
       <FlatList
         data={filteredSales}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={10}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucune vente trouvée.</Text>

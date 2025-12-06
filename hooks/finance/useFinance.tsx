@@ -1,11 +1,11 @@
 import { getFinance } from "@/services/finance";
 import { useFinanceSummaryStore } from "@/stores/finance.store";
+import { useProductsStore } from "@/stores/product.store";
 import { useEffect, useState } from "react";
-import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
 
 export const useFinance = () => {
-  const { products } = useProducts();
+  const { products } = useProductsStore();
   const { sales, getTodaySaleList, getTodaySaleListGroupedByReferences } =
     useSale();
   const { finance: data, setFinance } = useFinanceSummaryStore(
@@ -106,10 +106,6 @@ export const useFinance = () => {
   useEffect(() => {
     if (!products || !sales) return;
 
-    // const filteredSales = getTodaySaleList();
-    // const newFinance = getFinance({ products, sales: filteredSales });
-
-    // setFinance(newFinance);
     changeFinanceStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, sales, selectedReference]);
