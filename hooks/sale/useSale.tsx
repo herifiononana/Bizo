@@ -40,9 +40,19 @@ export const useSale = () => {
 
       if (!Array.isArray(sales) || !Array.isArray(products)) return [];
       const product = products.find((p) => p.id === sale.productId);
-      const matchesReference = referenceId
-        ? product?.referenceId === referenceId
-        : true;
+
+      let matchesReference = true;
+
+      if (referenceId && product) {
+        if (referenceId === "OTHER") {
+          matchesReference =
+            product.referenceId === null ||
+            product.referenceId === undefined ||
+            product.referenceId === "";
+        } else {
+          matchesReference = product.referenceId === referenceId;
+        }
+      }
 
       const isSameDay =
         saleDate.getFullYear() === date.getFullYear() &&

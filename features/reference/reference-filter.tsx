@@ -94,6 +94,22 @@ export default function ReferenceFilterModal({
                   </Text>
                 </TouchableOpacity>
               ))}
+              <TouchableOpacity
+                style={[
+                  styles.chip,
+                  selectedReference === "OTHER" && styles.chipActive,
+                ]}
+                onPress={() => selectRef("OTHER")}
+              >
+                <Text
+                  style={[
+                    styles.chipText,
+                    selectedReference === "OTHER" && styles.chipTextActive,
+                  ]}
+                >
+                  Autres
+                </Text>
+              </TouchableOpacity>
             </ScrollView>
 
             {/* FERMER */}

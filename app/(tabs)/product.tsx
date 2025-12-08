@@ -23,12 +23,25 @@ const ProductsScreen: React.FC = () => {
 
   const filteredProducts = useMemo(() => {
     if (!products) return [];
+
     return products.filter((p) => {
       const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
-      const matchesReference = selectedReference
-        ? p.referenceId === selectedReference
-        : true;
+
+      let matchesReference = true;
+
+      if (selectedReference) {
+        if (selectedReference === "OTHER") {
+          matchesReference =
+            p.referenceId === null ||
+            p.referenceId === undefined ||
+            p.referenceId === "";
+        } else {
+          matchesReference = p.referenceId === selectedReference;
+        }
+      }
+
       const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
+
       return matchesSearch && matchesReference && matchesOutOfStock;
     });
   }, [products, search, selectedReference, showOutOfStock]);
@@ -62,8 +75,6 @@ const ProductsScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* Filtres références */}
 
       {/* Liste des produits */}
       <FlatList
