@@ -14,7 +14,7 @@ export const getSales = async () => {
         quantity: Number(s?.quantity ?? 0),
         salePrice: Number(s?.salePrice ?? 0),
         totalAmount: Number(s?.totalAmount ?? 0),
-        isCredit: s?.isCredit === "true" ? true : false,
+        isCredit: s?.isCredit === "true" || s?.isCredit === true ? true : false,
       };
       return response;
     }) ?? [];
