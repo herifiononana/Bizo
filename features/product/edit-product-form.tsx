@@ -3,6 +3,8 @@ import { SaveButton } from "@/components/save-button";
 import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
+import { saveProducts, updateLocalProduct } from "@/services/product";
+import { useProductsStore } from "@/stores/product.store";
 import { useReferencesStore } from "@/stores/reference.store";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
@@ -30,16 +32,16 @@ const productSchema = z.object({
 export type productDTO = z.infer<typeof productSchema>;
 
 interface EditProductFormProps {
-  onEditProduct: (product: Product) => void;
   onCancel: () => void;
   product: Product;
 }
 
 const EditProductForm: React.FC<EditProductFormProps> = ({
-  onEditProduct,
   onCancel,
   product,
 }) => {
+  const { products, setProducts } = useProductsStore();
+
   const [formData, setFormData] = useState<productDTO>({
     name: product.name,
     quantity: String(product.quantity),
@@ -57,7 +59,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     setErrors({ ...errors, [field]: "" });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!products) return;
     const result = productSchema.safeParse(formData);
 
     if (!result.success) {
@@ -69,8 +72,9 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       return;
     }
 
-    const selectedReference =
-      references?.find((r) => r.id === result.data.referenceId)?.id ?? "";
+    const selectedReference = references?.find(
+      (r) => r.id === result.data.referenceId
+    )?.id;
 
     // Mettre à jour le produit existant (même id et createdAt)
     const updatedProduct: Product = {
@@ -83,9 +87,20 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       updatedAt: new Date().toISOString(),
     };
 
-    onEditProduct(updatedProduct);
-    Alert.alert("✅ Succès", "Produit modifié avec succès !");
-    changeFinanceStatus();
+    try {
+      const updatedProducts = await updateLocalProduct(
+        products,
+        updatedProduct
+      );
+
+      setProducts(updatedProducts);
+      await saveProducts(updatedProducts);
+      changeFinanceStatus();
+      Alert.alert("✅ Succès", "Produit modifié avec succès !");
+      onCancel();
+    } catch (error) {
+      console.error("Erreur sauvegarde produit", error);
+    }
   };
 
   return (

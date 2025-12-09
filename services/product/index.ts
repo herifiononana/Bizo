@@ -23,3 +23,10 @@ export const getProduct = async () => {
 export const saveProducts = async (data: Product[]) => {
   await saveData(PRODUCTS_KEY, data);
 };
+
+export const updateLocalProduct = async (
+  data: Product[],
+  updatedProduct: Product
+) => {
+  return data.map((p) => (p.id === updatedProduct.id ? updatedProduct : p));
+};
