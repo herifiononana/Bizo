@@ -5,42 +5,6 @@
 
 import { Platform } from "react-native";
 
-// const primaryColor = "#1F2937"; // Couleur principale
-// const orangeAccent = "#F97316"; // Accent orange
-// const blueAccent = "#3B82F6";
-// const greenAccent = "#10B981";
-// const redAccent = "#EF4444";
-
-// export const Colors = {
-//   light: {
-//     text: "#11181C",
-//     background: "#FFFFFF",
-//     tint: primaryColor,
-//     icon: "#6B7280",
-//     tabIconDefault: "#6B7280",
-//     tabIconSelected: orangeAccent,
-//     primary: primaryColor,
-//     accent: orangeAccent,
-//     success: greenAccent,
-//     danger: redAccent,
-//     info: blueAccent,
-//   },
-//   dark: {
-//     text: "#ECEDEE",
-//     background: "#111827",
-//     tint: primaryColor,
-//     icon: "#9BA1A6",
-//     tabIconDefault: "#9BA1A6",
-//     tabIconSelected: orangeAccent,
-//     primary: primaryColor,
-//     accent: orangeAccent,
-//     success: greenAccent,
-//     danger: redAccent,
-//     info: blueAccent,
-//     card: "#000",
-//   },
-// };
-
 const primaryColor = "#1F2937"; // Couleur principale
 const orangeAccent = "#F97316"; // Accent orange
 const blueAccent = "#3B82F6";
