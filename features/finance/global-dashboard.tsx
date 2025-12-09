@@ -4,6 +4,7 @@ import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import DashboardSkeleton from "./skeleton-dashboard";
 
 type StatProps = { label: string; value: any; color: string; icon: string };
 const StatCard = ({ label, value, color, icon }: StatProps) => (
@@ -65,10 +66,10 @@ const data = (financeSummary: FinanceSummary): StatProps[] => {
 };
 
 function GlobalDashboard() {
-  const { data: finance } = useFinance();
+  const { data: finance, loading } = useFinance();
 
   //   todo : ajouter un skeleton
-  if (!finance) return <></>;
+  if (!finance || loading) return <DashboardSkeleton />;
 
   return (
     <View style={styles.statsGrid}>

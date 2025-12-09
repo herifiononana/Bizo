@@ -1,7 +1,9 @@
 import { Colors } from "@/constants/theme";
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
+import SkeletonProduct from "@/features/product/skeleton-product";
 import ReferenceFilter from "@/features/reference/reference-filter";
+import { useProducts } from "@/hooks/product/useProduct";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useMemo, useState } from "react";
 import {
@@ -14,46 +16,48 @@ import {
 } from "react-native";
 
 const ProductsScreen: React.FC = () => {
-  const { products } = useProductsStore((state) => state);
+  const { loading } = useProducts();
+  const products = useProductsStore((state) => state.products);
+
   const [search, setSearch] = useState<string>("");
   const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false);
   const [selectedReference, setSelectedReference] = useState<
     string | null | undefined
   >(null);
 
+  // 🔍 Filtering optimisé
   const filteredProducts = useMemo(() => {
     if (!products) return [];
+    const s = search.toLowerCase();
 
     return products.filter((p) => {
-      const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
-
-      let matchesReference = true;
+      if (s && !p.name.toLowerCase().includes(s)) return false;
 
       if (selectedReference) {
         if (selectedReference === "OTHER") {
-          matchesReference =
-            p.referenceId === null ||
-            p.referenceId === undefined ||
-            p.referenceId === "";
+          if (p.referenceId) return false;
         } else {
-          matchesReference = p.referenceId === selectedReference;
+          if (p.referenceId !== selectedReference) return false;
         }
       }
 
-      const matchesOutOfStock = showOutOfStock ? p.quantity <= 3 : true;
+      if (showOutOfStock && p.quantity > 3) return false;
 
-      return matchesSearch && matchesReference && matchesOutOfStock;
+      return true;
     });
   }, [products, search, selectedReference, showOutOfStock]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Produits</Text>
+
       <ReferenceFilter
-        {...{ selectedReference, setSelectedReference, top: 10, right: 10 }}
+        selectedReference={selectedReference}
+        setSelectedReference={setSelectedReference}
+        top={10}
+        right={10}
       />
 
-      {/* Zone recherche + filtre */}
       <View style={styles.topRow}>
         <TextInput
           placeholder="Rechercher..."
@@ -61,6 +65,7 @@ const ProductsScreen: React.FC = () => {
           value={search}
           onChangeText={setSearch}
         />
+
         <TouchableOpacity
           style={[styles.filterChip, showOutOfStock && styles.filterChipActive]}
           onPress={() => setShowOutOfStock(!showOutOfStock)}
@@ -76,22 +81,27 @@ const ProductsScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Liste des produits */}
       <FlatList
         data={filteredProducts}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={10}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) =>
+          loading ? "skeleton-" + index : item.id.toString()
+        }
+        renderItem={({ item }) =>
+          loading ? <SkeletonProduct /> : <ProductListItem item={item} />
+        }
         ListEmptyComponent={
           <Text style={styles.emptyText}>
             Aucun produit {showOutOfStock ? "en rupture" : ""} pour le moment.
           </Text>
         }
-        renderItem={({ item }) => <ProductListItem {...{ item }} />}
+        // ⚡ Recommended optimization when data > 500 items :
+        initialNumToRender={15}
+        maxToRenderPerBatch={15}
+        windowSize={10}
+        updateCellsBatchingPeriod={50}
+        removeClippedSubviews={true}
       />
 
-      {/* Bouton ajout produit */}
       <AddProductButton />
     </View>
   );

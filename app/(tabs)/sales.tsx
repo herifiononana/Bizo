@@ -2,6 +2,7 @@ import { Colors } from "@/constants/theme";
 import ReferenceFilter from "@/features/reference/reference-filter";
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleListItem from "@/features/sales/sale-list-item";
+import SaleListItemSkeleton from "@/features/sales/sale-skeleton";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
@@ -17,7 +18,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
   const { products } = useProductsStore((state) => state);
-  const { handleFilterSale } = useSale();
+  const { handleFilterSale, loading } = useSale();
 
   const [isStartPickerVisible, setStartPickerVisible] =
     useState<boolean>(false);
@@ -130,6 +131,7 @@ const SalesScreen = () => {
           <Text style={styles.emptyText}>Aucune vente trouvée.</Text>
         }
         renderItem={({ item }) => {
+          if (loading) return <SaleListItemSkeleton />;
           if (!products) return <></>;
           const product = products.find((p) => p.id === item.productId);
           return product ? <SaleListItem {...{ product, item }} /> : <></>;

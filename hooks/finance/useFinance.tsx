@@ -1,26 +1,31 @@
 import { getFinance } from "@/services/finance";
 import { useFinanceSummaryStore } from "@/stores/finance.store";
-import { useProductsStore } from "@/stores/product.store";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
 
 export const useFinance = () => {
-  const { products } = useProductsStore();
+  const { products } = useProducts();
   const { sales, getTodaySaleList, getTodaySaleListGroupedByReferences } =
     useSale();
   const { finance: data, setFinance } = useFinanceSummaryStore(
     (state) => state
   );
+
+  const [loading, setLoading] = useState(true);
+
   const [selectedReference, setSelectedReference] = useState<
     string | null | undefined
   >();
 
+  // ===== Actualisation du dashboard =====
   const changeFinanceStatus = () => {
     if (!sales || !products) return;
 
     const filteredSales = !selectedReference
       ? getTodaySaleList()
       : getTodaySaleListGroupedByReferences(selectedReference);
+
     setFinance(
       getFinance({
         products,
@@ -30,97 +35,79 @@ export const useFinance = () => {
     );
   };
 
-  // --- Calcul des listes pour le dashboard ---
-  const topSoldProducts = products
-    ? [...products]
-        .map((p) => {
-          const qty =
-            sales
-              ?.filter((s) => s.productId === p.id)
-              .reduce((sum, s) => sum + s.quantity, 0) ?? 0;
+  // ---------- Données dérivées optimisées ----------
+  const summaryLists = useMemo(() => {
+    if (!products || !sales) return null;
 
-          return { product: p, sold: qty };
-        })
+    const withSoldCount = products.map((p) => {
+      const qty =
+        sales
+          ?.filter((s) => s.productId === p.id)
+          .reduce((sum, s) => sum + s.quantity, 0) ?? 0;
+
+      return { product: p, sold: qty };
+    });
+
+    return {
+      topSoldProducts: withSoldCount
         .filter((item) => item.sold > 0)
         .sort((a, b) => b.sold - a.sold)
-        .slice(0, 5)
-    : [];
+        .slice(0, 5),
 
-  const leastSoldProducts = products
-    ? [...products]
-        .map((p) => {
-          const qty =
-            sales
-              ?.filter((s) => s.productId === p.id)
-              .reduce((sum, s) => sum + s.quantity, 0) ?? 0;
-
-          return { product: p, sold: qty };
-        })
+      leastSoldProducts: withSoldCount
         .sort((a, b) => a.sold - b.sold)
-        .slice(0, 5)
-    : [];
+        .slice(0, 5),
 
-  const mostExpensiveProducts = products
-    ? [...products]
+      mostExpensiveProducts: [...products]
         .sort((a, b) => b.purchasePrice - a.purchasePrice)
-        .slice(0, 3)
-    : [];
+        .slice(0, 3),
 
-  const leastExpensiveProducts = products
-    ? [...products]
+      leastExpensiveProducts: [...products]
         .sort((a, b) => a.purchasePrice - b.purchasePrice)
-        .slice(0, 3)
-    : [];
+        .slice(0, 3),
 
-  const newestProducts = products
-    ? [...products]
+      newestProducts: [...products]
         .sort(
           (a, b) =>
-            new Date(b?.createdAt ?? "").getTime() -
-            new Date(a?.createdAt ?? "").getTime()
+            new Date(b.createdAt ?? "").getTime() -
+            new Date(a.createdAt ?? "").getTime()
         )
-        .slice(0, 5)
-    : [];
+        .slice(0, 5),
 
-  const oldestProducts = products
-    ? [...products]
-        .filter((p) => p.quantity > 0) // stock disponible
+      oldestProducts: [...products]
+        .filter((p) => p.quantity > 0)
         .sort(
           (a, b) =>
-            new Date(a?.createdAt ?? "").getTime() -
-            new Date(b?.createdAt ?? "").getTime()
+            new Date(a.createdAt ?? "").getTime() -
+            new Date(b.createdAt ?? "").getTime()
         )
-        .slice(0, 5)
-    : [];
+        .slice(0, 5),
 
-  const outStockProducts = products
-    ? [...products]
-        .filter((p) => p.quantity >= 3) // Produit en rupture de stock
+      outStockProducts: [...products]
+        .filter((p) => p.quantity >= 3)
         .sort(
           (a, b) =>
-            new Date(a?.createdAt ?? "").getTime() -
-            new Date(b?.createdAt ?? "").getTime()
-        )
-    : [];
+            new Date(a.createdAt ?? "").getTime() -
+            new Date(b.createdAt ?? "").getTime()
+        ),
+    };
+  }, [products, sales]);
 
+  // ---------- Détection du moment où tout est OK ----------
   useEffect(() => {
     if (!products || !sales) return;
 
     changeFinanceStatus();
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, sales, selectedReference]);
 
   return {
     data,
+    loading, // === important ===
     changeFinanceStatus,
-    topSoldProducts,
-    leastSoldProducts,
-    mostExpensiveProducts,
-    leastExpensiveProducts,
-    newestProducts,
-    oldestProducts,
-    outStockProducts,
     selectedReference,
     setSelectedReference,
+    ...(summaryLists ?? {}),
   };
 };

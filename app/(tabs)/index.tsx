@@ -10,6 +10,7 @@ import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 
 const Dashboard = () => {
   const { selectedReference, setSelectedReference } = useFinance();
+
   return (
     <View style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />

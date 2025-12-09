@@ -1,7 +1,7 @@
 import { getSales, saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export type FilteredParamsType = {
   search?: string;
@@ -15,30 +15,56 @@ export const useSale = () => {
   const { products } = useProductsStore();
   const { sales, setSales } = useSalesStore();
 
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Charger ventes
+  const loadSales = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const storedSales = await getSales();
+
+      if (storedSales) {
+        setSales(storedSales);
+      } else {
+        setSales([]);
+        await saveSales([]);
+      }
+    } catch (e: any) {
+      console.log("Erreur de chargement :", e);
+      setError("Erreur de chargement des ventes");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadSales();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const getTodaySaleList = () => {
     if (!sales) return [];
-
     const date = new Date();
     return sales.filter((sale) => {
       const saleDate = new Date(sale.saleDate);
-
-      const isSameDay =
+      return (
         saleDate.getFullYear() === date.getFullYear() &&
         saleDate.getMonth() === date.getMonth() &&
-        saleDate.getDate() === date.getDate();
-
-      return isSameDay;
+        saleDate.getDate() === date.getDate()
+      );
     });
   };
 
   const getTodaySaleListGroupedByReferences = (referenceId: string) => {
     if (!sales) return [];
-
     const date = new Date();
-    return sales.filter((sale) => {
-      const saleDate = new Date(sale.saleDate);
 
-      if (!Array.isArray(sales) || !Array.isArray(products)) return [];
+    return sales.filter((sale) => {
+      if (!Array.isArray(sales) || !Array.isArray(products)) return false;
+
       const product = products.find((p) => p.id === sale.productId);
 
       let matchesReference = true;
@@ -54,6 +80,7 @@ export const useSale = () => {
         }
       }
 
+      const saleDate = new Date(sale.saleDate);
       const isSameDay =
         saleDate.getFullYear() === date.getFullYear() &&
         saleDate.getMonth() === date.getMonth() &&
@@ -75,20 +102,16 @@ export const useSale = () => {
     return sales.filter((sale) => {
       const product = products.find((p) => p.id === sale.productId);
 
-      // search
       const nameMatch =
         product?.name?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
-      // search by clientName
       const clientNameMatch =
         sale?.clientName?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
-      // filter by reference of product
       const matchesReference = referenceProduct
         ? product?.referenceId === referenceProduct
         : true;
 
-      // filter by date
       const saleDate = new Date(sale.saleDate);
       const saleDay = new Date(
         saleDate.getFullYear(),
@@ -99,24 +122,23 @@ export const useSale = () => {
       let dateMatch = true;
 
       if (startDate) {
-        const startDay = new Date(
+        const start = new Date(
           startDate.getFullYear(),
           startDate.getMonth(),
           startDate.getDate()
         );
-        dateMatch = saleDay >= startDay;
+        dateMatch = saleDay >= start;
       }
 
       if (endDate) {
-        const endDay = new Date(
+        const end = new Date(
           endDate.getFullYear(),
           endDate.getMonth(),
           endDate.getDate()
         );
-        dateMatch = dateMatch && saleDay <= endDay;
+        dateMatch = dateMatch && saleDay <= end;
       }
 
-      // 🔥 Filtre ventes à crédit
       const creditMatch = creditOnly ? sale.isCredit === true : true;
 
       return (
@@ -128,31 +150,13 @@ export const useSale = () => {
     });
   };
 
-  const loadSales = async () => {
-    try {
-      const storedSales = await getSales();
-
-      if (storedSales) {
-        setSales(storedSales);
-      } else {
-        setSales([]);
-        await saveSales([]);
-      }
-    } catch (e) {
-      console.log("Erreur de chargement :", e);
-    }
-  };
-
-  useEffect(() => {
-    loadSales();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return {
     sales,
+    loading,
+    error,
+    loadSales,
     handleFilterSale,
     getTodaySaleList,
-    loadSales,
     getTodaySaleListGroupedByReferences,
   };
 };
