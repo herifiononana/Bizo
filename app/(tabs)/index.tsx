@@ -1,3 +1,4 @@
+import ActivationModal from "@/components/activation-modal";
 import CsvButtons from "@/components/csv-button";
 import { Colors } from "@/constants/theme";
 import GlobalDashboard from "@/features/finance/global-dashboard";
@@ -13,6 +14,7 @@ const Dashboard = () => {
 
   return (
     <View style={styles.screen}>
+      <ActivationModal />
       <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
       <CsvButtons />
       <AddReferenceButton />
