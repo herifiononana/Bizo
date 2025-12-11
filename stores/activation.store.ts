@@ -7,7 +7,7 @@ interface ActivationState {
 }
 
 export const useActivationStore = create<ActivationState>((set) => ({
-  activation: { activationDate: 0, nextResetDate: 0 },
+  activation: { activationDate: 0, daysUsed: 0, lastRunTimestamp: 0 },
   setActivation: (activation: Activation) => {
     set({ activation });
   },
