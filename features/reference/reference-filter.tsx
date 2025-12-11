@@ -1,3 +1,4 @@
+import { OTHER_REFERENCE } from "@/constants/constants";
 import { Colors } from "@/constants/theme";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Ionicons } from "@expo/vector-icons";
@@ -97,14 +98,15 @@ export default function ReferenceFilterModal({
               <TouchableOpacity
                 style={[
                   styles.chip,
-                  selectedReference === "OTHER" && styles.chipActive,
+                  selectedReference === OTHER_REFERENCE && styles.chipActive,
                 ]}
-                onPress={() => selectRef("OTHER")}
+                onPress={() => selectRef(OTHER_REFERENCE)}
               >
                 <Text
                   style={[
                     styles.chipText,
-                    selectedReference === "OTHER" && styles.chipTextActive,
+                    selectedReference === OTHER_REFERENCE &&
+                      styles.chipTextActive,
                   ]}
                 >
                   Autres

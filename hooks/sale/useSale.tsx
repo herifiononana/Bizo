@@ -1,3 +1,4 @@
+import { OTHER_REFERENCE } from "@/constants/constants";
 import { getSales, saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
@@ -70,7 +71,7 @@ export const useSale = () => {
       let matchesReference = true;
 
       if (referenceId && product) {
-        if (referenceId === "OTHER") {
+        if (referenceId === OTHER_REFERENCE) {
           matchesReference =
             product.referenceId === null ||
             product.referenceId === undefined ||

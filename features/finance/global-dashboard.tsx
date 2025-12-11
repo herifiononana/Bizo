@@ -68,7 +68,6 @@ const data = (financeSummary: FinanceSummary): StatProps[] => {
 function GlobalDashboard() {
   const { data: finance, loading } = useFinance();
 
-  //   todo : ajouter un skeleton
   if (!finance || loading) return <DashboardSkeleton />;
 
   return (

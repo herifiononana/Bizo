@@ -1,3 +1,4 @@
+import { OTHER_REFERENCE } from "@/constants/constants";
 import { Colors } from "@/constants/theme";
 import AddProductButton from "@/features/product/add-product-button";
 import ProductListItem from "@/features/product/product-list-item";
@@ -34,7 +35,7 @@ const ProductsScreen: React.FC = () => {
       if (s && !p.name.toLowerCase().includes(s)) return false;
 
       if (selectedReference) {
-        if (selectedReference === "OTHER") {
+        if (selectedReference === OTHER_REFERENCE) {
           if (p.referenceId) return false;
         } else {
           if (p.referenceId !== selectedReference) return false;

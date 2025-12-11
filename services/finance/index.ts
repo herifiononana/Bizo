@@ -1,3 +1,4 @@
+import { OTHER_REFERENCE } from "@/constants/constants";
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
@@ -12,7 +13,9 @@ export const getFinance = ({
   reference?: string | null;
 }): FinanceSummary => {
   const currentProduct = reference
-    ? products.filter((p) => p.referenceId === reference)
+    ? reference === OTHER_REFERENCE
+      ? products.filter((p) => !p.referenceId)
+      : products.filter((p) => p.referenceId === reference)
     : products;
   // total de produits
   const totalProducts = currentProduct.length;
