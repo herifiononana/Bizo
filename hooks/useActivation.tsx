@@ -1,10 +1,12 @@
+import { MAX_VALIDATION_DAY } from "@/constants/constants";
 import { Activation } from "@/interface/Activation";
 import { getActivation, saveActivation } from "@/services/activation";
 import { useActivationStore } from "@/stores/activation.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useActivation = () => {
   const { activation, setActivation } = useActivationStore();
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const now = Date.now();
 
@@ -20,9 +22,11 @@ export const useActivation = () => {
     await saveActivation(newData);
   };
 
-  let updatedDays = !activation?.lastRunTimestamp
-    ? 50
-    : activation?.daysUsed ?? 0;
+  // let updatedDays =
+  //   !activation?.lastRunTimestamp && isMounted
+  //     ? MAX_VALIDATION_DAY + 1
+  //     : activation?.daysUsed ?? 0;
+  let updatedDays = activation?.daysUsed ?? 0;
 
   // --------- 1) charger activation au démarrage ----------
   useEffect(() => {
@@ -43,36 +47,37 @@ export const useActivation = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // --------- 2) calcul du delta ----------
-  if (activation?.lastRunTimestamp) {
-    const delta = (now - activation.lastRunTimestamp) / (1000 * 60 * 60 * 24);
+  useEffect(() => {
+    if (!activation?.lastRunTimestamp) return;
 
-    // changement d'heure en arrière => fraude
-    if (delta < 0) {
-      return { isValid: false, showAlert: false, activate };
-    }
+    const delta =
+      (Date.now() - activation.lastRunTimestamp) / (1000 * 60 * 60 * 24);
 
-    // augmenter le compteur seulement si delta >= 1 minute
+    if (delta < 0) return;
+
     if (delta > 1 / (24 * 60)) {
-      updatedDays = activation.daysUsed + delta;
+      const updated = activation.daysUsed + delta;
 
       const newData: Activation = {
-        activationDate: activation.activationDate,
-        lastRunTimestamp: now,
-        daysUsed: updatedDays,
+        ...activation,
+        daysUsed: updated,
+        lastRunTimestamp: Date.now(),
       };
 
       setActivation(newData);
       saveActivation(newData);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activation?.lastRunTimestamp]);
 
   // --------- 3) validité ----------
-  // const isValid = updatedDays < 30;
-  const isValid = updatedDays < 2; // pour test
+  const isValid = updatedDays <= MAX_VALIDATION_DAY;
 
   // --------- 4) showAlert si bloqué ----------
-  const showAlert = updatedDays >= 2 || updatedDays === 1;
+  const showAlert = activation?.daysUsed
+    ? activation.daysUsed >= MAX_VALIDATION_DAY - 2 &&
+      activation.daysUsed < MAX_VALIDATION_DAY
+    : false;
 
   return {
     isValid,

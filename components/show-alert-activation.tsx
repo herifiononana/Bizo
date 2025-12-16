@@ -1,3 +1,4 @@
+import { CONTACT_INFO } from "@/constants/constants";
 import { Colors } from "@/constants/theme";
 import { useActivation } from "@/hooks/useActivation";
 import React, { useState } from "react";
@@ -7,13 +8,6 @@ export default function ShowAlertActivation() {
   const { showAlert } = useActivation();
 
   const [open, setOpen] = useState<boolean>(showAlert);
-
-  const CONTACT_INFO = {
-    phone: "+261 33 28 454 04",
-    whatsapp: "+261 33 28 454 04",
-    email: "heryfiononana19@gmail.com",
-    appName: "Bizo",
-  };
 
   if (!open) return <></>;
 
@@ -41,7 +35,7 @@ export default function ShowAlertActivation() {
           </Text>
 
           <Text style={{ color: Colors.dark.info, marginBottom: 8 }}>
-            Votre activation Bizo a expiré.
+            {`L'activation expire bientôt.`}
           </Text>
 
           <Text style={{ color: "white", marginBottom: 4 }}>

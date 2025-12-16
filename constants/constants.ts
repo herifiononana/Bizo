@@ -8,3 +8,5 @@ export const CONTACT_INFO = {
   email: "heryfiononana19@gmail.com",
   appName: "Bizo",
 };
+
+export const MAX_VALIDATION_DAY = 30;
