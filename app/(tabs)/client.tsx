@@ -1,11 +1,13 @@
 import { Colors } from "@/constants/theme";
 import AddClientButton from "@/features/client/add-client-button";
+import SkeletonClientListItem from "@/features/client/client-item-skeleton";
+import ClientListItem from "@/features/client/client-list-item";
 import { useClients } from "@/hooks/clients/useClient";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
 const ClientsScreen = () => {
-  const { clients } = useClients();
+  const { clients, loading } = useClients();
   const [search, setSearch] = useState<string>("");
 
   return (
@@ -27,21 +29,9 @@ const ClientsScreen = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucun client trouvé</Text>
         }
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.name}>
-              {item.civility} {item.name}
-            </Text>
-
-            <Text style={styles.info}>📞 {item.phone}</Text>
-
-            {item.email ? (
-              <Text style={styles.info}>✉️ {item.email}</Text>
-            ) : null}
-
-            <Text style={styles.address}>📍 {item.address}</Text>
-          </View>
-        )}
+        renderItem={({ item }) =>
+          loading ? <SkeletonClientListItem /> : <ClientListItem item={item} />
+        }
         initialNumToRender={15}
         maxToRenderPerBatch={15}
         windowSize={10}
