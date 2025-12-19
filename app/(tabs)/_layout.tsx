@@ -3,7 +3,7 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/theme";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme() ?? "dark";
@@ -52,7 +52,24 @@ export default function TabLayout() {
           ),
         }}
       />
-
+      <Tabs.Screen
+        name="client"
+        options={{
+          title: "Client",
+          tabBarIcon: ({ color }) => (
+            <Entypo name="users" size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="order"
+        options={{
+          title: "Commande",
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="ordered-list" size={20} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="dailyFinance"
         options={{
