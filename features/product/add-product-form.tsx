@@ -1,178 +1,227 @@
+import { Picker } from "@react-native-picker/picker";
+import React, { useState } from "react";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
 import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
-import { useReferencesStore } from "@/stores/reference.store";
-import { Picker } from "@react-native-picker/picker";
-import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
-import { z } from "zod";
+import { ProductSchema } from "@/interface/product/schema";
 
-const productSchema = z.object({
-  name: z.string().min(2, "Le nom du produit est trop court"),
-  quantity: z
-    .string()
-    .refine(
-      (val) => !isNaN(Number(val)) && Number(val) >= 0,
-      "Quantité invalide"
-    ),
-  purchasePrice: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide"),
-  salePrice: z
-    .string()
-    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
-    .optional(),
-  referenceId: z.string().optional(),
-});
+/* =======================
+ * Types
+ * ======================= */
+
+type UnitFormData = {
+  type: string;
+  conversion: number;
+  salePrice: number;
+};
+
+type FormData = {
+  name: string;
+  quantity: string;
+  purchasePrice: string;
+  units: UnitFormData[];
+};
 
 interface AddProductFormProps {
   onAddProduct: (product: Product) => void;
   onCancel: () => void;
 }
 
+/* =======================
+ * Constantes
+ * ======================= */
+
+const DEFAULT_UNIT: UnitFormData = {
+  type: "piece",
+  conversion: 1,
+  salePrice: 0,
+};
+
+const EMPTY_FORM: FormData = {
+  name: "",
+  quantity: "",
+  purchasePrice: "",
+  units: [],
+};
+
+/* =======================
+ * Composant
+ * ======================= */
+
 const AddProductForm: React.FC<AddProductFormProps> = ({
   onAddProduct,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    quantity: "",
-    purchasePrice: "",
-    salePrice: "",
-    referenceId: "",
-  });
-  const { references } = useReferencesStore();
-
+  const [formData, setFormData] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (field: string, value: string) => {
-    setFormData({ ...formData, [field]: value });
-    setErrors({ ...errors, [field]: "" });
+  /* =======================
+   * Handlers
+   * ======================= */
+
+  const handleChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+  };
+
+  const addUnit = () => {
+    setFormData((prev) => ({
+      ...prev,
+      units: [...prev.units, DEFAULT_UNIT],
+    }));
+  };
+
+  const updateUnit = (
+    index: number,
+    field: keyof UnitFormData,
+    value: string
+  ) => {
+    setFormData((prev) => {
+      const units = [...prev.units];
+      units[index] = {
+        ...units[index],
+        [field]: field === "type" ? value : Number(value),
+      };
+      return { ...prev, units };
+    });
+  };
+
+  const removeUnit = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      units: prev.units.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = () => {
-    const result = productSchema.safeParse(formData);
+    const result = ProductSchema.safeParse(formData);
 
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
-        if (err.path[0]) fieldErrors[err.path[0]] = err.message;
+        if (err.path[0]) fieldErrors[String(err.path[0])] = err.message;
       });
       setErrors(fieldErrors);
       return;
     }
 
-    const selectedReference =
-      references?.find((r) => r.id === result.data.referenceId)?.id ?? "";
-
     const newProduct: Product = {
       id: String(Date.now()),
       name: result.data.name,
       quantity: Number(result.data.quantity),
-      purchasePrice: Number(result.data.purchasePrice),
-      salePrice: Number(result.data.salePrice),
-      referenceId: selectedReference,
+      units: result.data.units,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     onAddProduct(newProduct);
     Alert.alert("✅ Succès", "Produit ajouté avec succès !");
-    setFormData({
-      name: "",
-      quantity: "",
-      purchasePrice: "",
-      salePrice: "",
-      referenceId: "",
-    });
+    setFormData(EMPTY_FORM);
   };
+
+  /* =======================
+   * Rendu
+   * ======================= */
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>➕ Ajouter un produit</Text>
 
-      <View style={styles.form}>
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Nom du produit</Text>
-          <TextInput
-            style={[styles.input, errors.name && styles.errorInput]}
-            placeholder="Ex : Riz, Sucre..."
-            placeholderTextColor="#9CA3AF"
-            value={formData.name}
-            onChangeText={(text) => handleChange("name", text)}
-          />
-          {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
-        </View>
+      {/* Nom */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Nom du produit</Text>
+        <TextInput
+          style={[styles.input, errors.name && styles.errorInput]}
+          placeholder="Ex : Riz, Sucre..."
+          placeholderTextColor="#9CA3AF"
+          value={formData.name}
+          onChangeText={(v) => handleChange("name", v)}
+        />
+        {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
+      </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Quantité</Text>
-          <TextInput
-            style={[styles.input, errors.quantity && styles.errorInput]}
-            placeholder="Ex : 10"
-            placeholderTextColor="#9CA3AF"
-            keyboardType="numeric"
-            value={formData.quantity}
-            onChangeText={(text) => handleChange("quantity", text)}
-          />
-          {errors.quantity && (
-            <Text style={styles.errorText}>{errors.quantity}</Text>
-          )}
-        </View>
+      {/* Quantité */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Quantité</Text>
+        <TextInput
+          style={[styles.input, errors.quantity && styles.errorInput]}
+          keyboardType="numeric"
+          placeholder="ex : 10"
+          value={formData.quantity}
+          onChangeText={(v) => handleChange("quantity", v)}
+        />
+      </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Prix d’achat (Ar)</Text>
-          <TextInput
-            style={[styles.input, errors.purchasePrice && styles.errorInput]}
-            placeholder="Ex : 2500"
-            placeholderTextColor="#9CA3AF"
-            keyboardType="numeric"
-            value={formData.purchasePrice}
-            onChangeText={(text) => handleChange("purchasePrice", text)}
-          />
-          {errors.purchasePrice && (
-            <Text style={styles.errorText}>{errors.purchasePrice}</Text>
-          )}
-        </View>
+      {/* Prix achat */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Prix d’achat (Ar)</Text>
+        <TextInput
+          style={[styles.input, errors.purchasePrice && styles.errorInput]}
+          keyboardType="numeric"
+          placeholder="ex : 5000"
+          value={formData.purchasePrice}
+          onChangeText={(v) => handleChange("purchasePrice", v)}
+        />
+      </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Prix de vente (Ar)</Text>
-          <TextInput
-            style={[styles.input, errors.salePrice && styles.errorInput]}
-            placeholder="Ex : 2500"
-            placeholderTextColor="#9CA3AF"
-            keyboardType="numeric"
-            value={formData.salePrice}
-            onChangeText={(text) => handleChange("salePrice", text)}
-          />
-          {errors.salePrice && (
-            <Text style={styles.errorText}>{errors.salePrice}</Text>
-          )}
-        </View>
-        {references?.length ? (
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Référence</Text>
-            <View style={styles.selectContainer}>
-              <Picker
-                selectedValue={formData.referenceId}
-                onValueChange={(val) => handleChange("referenceId", val)}
-                style={styles.pickerContainer}
-              >
-                <Picker.Item label="Sélectionner une référence..." value="" />
-                {references.map((ref) => (
-                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} />
-                ))}
-              </Picker>
-            </View>
+      {/* Unités */}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Unités de vente</Text>
+
+        {formData.units.map((unit, index) => (
+          <View key={index} style={styles.unitRow}>
+            <Picker
+              selectedValue={unit.type}
+              onValueChange={(v) => updateUnit(index, "type", v)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Pièce" value="piece" />
+              <Picker.Item label="Paquet" value="paquet" />
+              <Picker.Item label="Carton" value="carton" />
+            </Picker>
+
+            <TextInput
+              style={[styles.input, styles.smallInput]}
+              keyboardType="numeric"
+              value={String(unit.conversion)}
+              onChangeText={(v) => updateUnit(index, "conversion", v)}
+            />
+
+            <TextInput
+              style={[styles.input, styles.mediumInput]}
+              keyboardType="numeric"
+              value={String(unit.salePrice)}
+              onChangeText={(v) => updateUnit(index, "salePrice", v)}
+            />
+
+            <TouchableOpacity
+              onPress={() => removeUnit(index)}
+              style={styles.removeBtn}
+            >
+              <Text style={styles.removeText}>✕</Text>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <></>
-        )}
+        ))}
 
-        <View style={styles.actions}>
-          <CancelButton onPress={onCancel} />
-          <SaveButton onPress={handleSubmit} />
-        </View>
+        <TouchableOpacity style={styles.addUnitBtn} onPress={addUnit}>
+          <Text style={styles.addUnitText}>➕ Ajouter une unité</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Actions */}
+      <View style={styles.actions}>
+        <CancelButton onPress={onCancel} />
+        <SaveButton onPress={handleSubmit} />
       </View>
     </View>
   );
@@ -186,6 +235,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 20,
     marginVertical: 12,
+    maxHeight: 700,
+    overflowY: "scroll",
   },
   title: {
     fontSize: 22,
@@ -241,5 +292,72 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 16,
+  },
+
+  unitRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    gap: 8,
+    marginBottom: 8,
+  },
+
+  unitPicker: {
+    height: 38,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    borderRadius: 10,
+  },
+
+  picker: {
+    height: 38,
+    color: Colors.dark.text,
+    backgroundColor: "transparent",
+    borderRadius: 10,
+    borderWidth: 0,
+  },
+
+  smallInput: {
+    marginTop: 8,
+    height: 38,
+    width: 80,
+    paddingVertical: 6,
+  },
+
+  mediumInput: {
+    marginTop: 8,
+    width: 120,
+    height: 38,
+    paddingVertical: 6,
+  },
+
+  removeBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: Colors.dark.danger + "22",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  removeText: {
+    color: Colors.dark.danger,
+    fontSize: 16,
+    fontWeight: "700",
+  },
+
+  addUnitBtn: {
+    marginTop: 6,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    alignItems: "center",
+  },
+  addUnitText: {
+    color: Colors.dark.icon,
+    fontWeight: "600",
+    fontSize: 14,
   },
 });
