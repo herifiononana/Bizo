@@ -1,7 +1,194 @@
-import React from "react";
+import { Colors } from "@/constants/theme";
+import CreateOrderButton from "@/features/order/create-order-button";
+import { useOrders } from "@/hooks/orders/useOrder";
+import React, { useMemo, useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-function Order() {
-  return <div>Gestion de commande</div>;
-}
+const OrdersScreen = () => {
+  const { loading, orders } = useOrders();
+  const [search, setSearch] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-export default Order;
+  const [startPickerVisible, setStartPickerVisible] = useState(false);
+  const [endPickerVisible, setEndPickerVisible] = useState(false);
+
+  const filteredOrders = useMemo(() => {
+    return orders?.filter((order) => {
+      const matchesClient = order.clientName
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      const orderDate = order.createdAt ? new Date(order.createdAt) : null;
+
+      const matchesStart = !startDate || (orderDate && orderDate >= startDate);
+
+      const matchesEnd = !endDate || (orderDate && orderDate <= endDate);
+
+      return matchesClient && matchesStart && matchesEnd;
+    });
+  }, [search, startDate, endDate, orders]);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>📦 Commandes</Text>
+
+      {/* Recherche client */}
+      <TextInput
+        placeholder="🔍 Rechercher par client"
+        value={search}
+        onChangeText={setSearch}
+        style={styles.searchInput}
+      />
+
+      {/* Filtres date */}
+      <View style={styles.filterRow}>
+        <TouchableOpacity
+          style={styles.dateButton}
+          onPress={() => setStartPickerVisible(true)}
+        >
+          <Text style={styles.dateText}>
+            {startDate
+              ? `Début: ${startDate.toLocaleDateString()}`
+              : "📅 Date début"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.dateButton}
+          onPress={() => setEndPickerVisible(true)}
+        >
+          <Text style={styles.dateText}>
+            {endDate ? `Fin: ${endDate.toLocaleDateString()}` : "📅 Date fin"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Date pickers */}
+      <DateTimePickerModal
+        isVisible={startPickerVisible}
+        mode="date"
+        onConfirm={(date) => {
+          setStartPickerVisible(false);
+          setStartDate(date);
+        }}
+        onCancel={() => setStartPickerVisible(false)}
+      />
+
+      <DateTimePickerModal
+        isVisible={endPickerVisible}
+        mode="date"
+        onConfirm={(date) => {
+          setEndPickerVisible(false);
+          setEndDate(date);
+        }}
+        onCancel={() => setEndPickerVisible(false)}
+      />
+
+      {/* Liste des commandes */}
+      <FlatList
+        data={filteredOrders}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>Aucune commande trouvée</Text>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <View>
+              <Text style={styles.client}>{item.clientName}</Text>
+              <Text style={styles.date}>
+                {item.createdAt
+                  ? new Date(item.createdAt).toLocaleDateString()
+                  : "-"}
+              </Text>
+            </View>
+            <Text style={styles.total}>{item.total.toLocaleString()} Ar</Text>
+          </View>
+        )}
+      />
+      <CreateOrderButton />
+    </View>
+  );
+};
+
+export default OrdersScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.dark.background,
+    padding: 16,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: Colors.dark.text,
+    textAlign: "center",
+    marginBottom: 12,
+  },
+  searchInput: {
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    padding: 10,
+    color: Colors.dark.text,
+    marginBottom: 10,
+  },
+  filterRow: {
+    flexDirection: "row",
+    gap: 6,
+    marginBottom: 12,
+  },
+  dateButton: {
+    flex: 1,
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    paddingVertical: 8,
+    alignItems: "center",
+  },
+  dateText: {
+    color: Colors.dark.text,
+    fontSize: 14,
+  },
+  card: {
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    padding: 12,
+    marginBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  client: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.dark.text,
+  },
+  date: {
+    fontSize: 13,
+    color: Colors.dark.icon,
+  },
+  total: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: Colors.dark.accent,
+  },
+  emptyText: {
+    marginTop: 40,
+    textAlign: "center",
+    color: Colors.dark.icon,
+  },
+});
