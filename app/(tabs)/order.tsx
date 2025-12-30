@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/theme";
 import CreateOrderButton from "@/features/order/create-order-button";
+import OrderListItem from "@/features/order/order-list-item";
+import OrderListItemSkeleton from "@/features/order/order-list-item-skeleton";
 import { useOrders } from "@/hooks/orders/useOrder";
 import React, { useMemo, useState } from "react";
 import {
@@ -100,19 +102,10 @@ const OrdersScreen = () => {
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucune commande trouvée</Text>
         }
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <View>
-              <Text style={styles.client}>{item.clientName}</Text>
-              <Text style={styles.date}>
-                {item.createdAt
-                  ? new Date(item.createdAt).toLocaleDateString()
-                  : "-"}
-              </Text>
-            </View>
-            <Text style={styles.total}>{item.total.toLocaleString()} Ar</Text>
-          </View>
-        )}
+        renderItem={({ item }) => {
+          if (loading) return <OrderListItemSkeleton />;
+          return <OrderListItem item={item} />;
+        }}
       />
       <CreateOrderButton />
     </View>
@@ -160,31 +153,6 @@ const styles = StyleSheet.create({
   dateText: {
     color: Colors.dark.text,
     fontSize: 14,
-  },
-  card: {
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-    padding: 12,
-    marginBottom: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  client: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: Colors.dark.text,
-  },
-  date: {
-    fontSize: 13,
-    color: Colors.dark.icon,
-  },
-  total: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: Colors.dark.accent,
   },
   emptyText: {
     marginTop: 40,

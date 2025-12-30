@@ -2,6 +2,7 @@ import { AddButton } from "@/components/add-button";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Order } from "@/interface/order";
 import { saveOrders } from "@/services/order";
+import { saveProducts } from "@/services/product";
 import { useOrdersStore } from "@/stores/order.store";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
@@ -14,30 +15,6 @@ function CreateOrderButton() {
 
   const { products, setProducts } = useProductsStore((state) => state);
   const { orders, setOrders } = useOrdersStore((state) => state);
-
-  // const handleNewOrder = async (orderClient: Order) => {
-  //   if (!products || !orders) return;
-
-  //   // 1. Mettre à jour les ventes
-  //   const updatedOrders = [orderClient, ...orders];
-  //   setOrders(updatedOrders);
-
-  //   // 2. Mettre à jour le stock
-
-  //   // 3. Sauvegarder dans AsyncStorage
-  //   try {
-  //     await saveOrders(updatedOrders);
-
-  //     // todo : save and set updated product
-  //     // await saveProducts(updatedProducts);
-  //     // setProducts(updatedProducts);
-  //   } catch (e) {
-  //     console.log("Erreur de sauvegarde :", e);
-  //   }
-
-  //   // Mettre a jour l'etat de la finance
-  //   changeFinanceStatus();
-  // };
 
   const handleNewOrder = async (orderClient: Order) => {
     if (!products || !orders) return;
@@ -68,13 +45,11 @@ function CreateOrderButton() {
       };
     });
 
-    setProducts(updatedProducts);
-
     /* 3️⃣ Sauvegarde persistante */
     try {
       await saveOrders(updatedOrders);
-      // ⚠️ À activer quand le service existe
-      // await saveProducts(updatedProducts);
+      await saveProducts(updatedProducts);
+      setProducts(updatedProducts);
     } catch (e) {
       console.log("Erreur de sauvegarde :", e);
     }

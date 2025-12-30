@@ -84,12 +84,22 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
   /* =======================
    * Order helpers
    * ======================= */
-
   const addProductToOrder = (productId: string) => {
+    const product = products?.find((p) => p.id === productId);
+    if (!product || !product.units || product.units.length === 0) return;
+
     setFormData((prev) => ({
       ...prev,
-      order: [...prev.order, { productId, unit: "piece", quantity: "1" }],
+      order: [
+        ...prev.order,
+        {
+          productId,
+          unit: product.units[0].type,
+          quantity: "1",
+        },
+      ],
     }));
+
     setProductSearch("");
   };
 
@@ -255,31 +265,33 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
       )}
 
       {/* PRODUITS */}
-      <Text style={styles.label}>Produit</Text>
-      <TextInput
-        placeholder="Rechercher un produit..."
-        value={productSearch}
-        onChangeText={setProductSearch}
-        style={styles.input}
-      />
-
-      {productSearch.length > 0 && (
-        <FlatList
-          data={filteredProducts}
-          keyExtractor={(i) => i.id}
-          style={styles.dropdown}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.dropdownItem}
-              onPress={() => addProductToOrder(item.id)}
-            >
-              <Text style={styles.dropdownText}>
-                {item.name} — Stock {item.quantity}
-              </Text>
-            </TouchableOpacity>
-          )}
+      <View style={styles.productSearchWrapper}>
+        <Text style={styles.label}>Produit</Text>
+        <TextInput
+          placeholder="Rechercher un produit..."
+          value={productSearch}
+          onChangeText={setProductSearch}
+          style={styles.input}
         />
-      )}
+
+        {productSearch.length > 0 && (
+          <FlatList
+            data={filteredProducts}
+            keyExtractor={(i) => i.id}
+            style={styles.productDropdown}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => addProductToOrder(item.id)}
+              >
+                <Text style={styles.dropdownText}>
+                  {item.name} — Stock {item.quantity}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
+      </View>
 
       {/* LIGNES */}
       {formData.order.map((line, index) => {
@@ -340,14 +352,213 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
 
 export default CreateOrderForm;
 
+// const styles = StyleSheet.create({
+//   container: {
+//     backgroundColor: Colors.dark.surface,
+//     padding: 20,
+//     borderRadius: 16,
+//     maxHeight: "90%",
+//     overflowY: "scroll",
+//     paddingVertical: 10,
+//   },
+//   title: {
+//     fontSize: 20,
+//     fontWeight: "700",
+//     textAlign: "center",
+//     marginBottom: 16,
+//     color: Colors.dark.text,
+//   },
+
+//   label: {
+//     fontWeight: "600",
+//     marginBottom: 6,
+//     color: Colors.dark.text,
+//   },
+
+//   input: {
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 10,
+//     padding: 10,
+//     marginBottom: 10,
+//     backgroundColor: Colors.dark.surface,
+//     color: Colors.dark.text,
+//   },
+
+//   errorInput: {
+//     borderColor: Colors.dark.danger,
+//   },
+
+//   errorText: {
+//     color: Colors.dark.danger,
+//     fontSize: 13,
+//     marginBottom: 6,
+//   },
+
+//   dropdown: {
+//     backgroundColor: Colors.dark.surface,
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 10,
+//     maxHeight: 160,
+//     marginTop: 4,
+//     marginBottom: 10,
+//   },
+
+//   dropdownItem: {
+//     padding: 10,
+//     borderBottomWidth: 1,
+//     borderBottomColor: Colors.dark.border,
+//   },
+
+//   dropdownText: {
+//     fontSize: 15,
+//     color: Colors.dark.text,
+//   },
+
+//   lineBox: {
+//     backgroundColor: Colors.dark.surface,
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 12,
+//     padding: 12,
+//     marginBottom: 10,
+//   },
+
+//   total: {
+//     textAlign: "right",
+//     fontSize: 18,
+//     fontWeight: "700",
+//     color: Colors.dark.success,
+//     marginVertical: 12,
+//   },
+
+//   actions: {
+//     flexDirection: "row",
+//     justifyContent: "space-around",
+//     marginTop: 12,
+//   },
+
+//   // select client
+//   selectedBox: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     backgroundColor: Colors.dark.success + "33", // vert clair transparent
+//     borderColor: Colors.dark.success,
+//     borderWidth: 1,
+//     borderRadius: 10,
+//     padding: 10,
+//     marginBottom: 10,
+//   },
+//   selectedText: {
+//     color: Colors.dark.success,
+//     fontWeight: "600",
+//   },
+//   clearText: {
+//     color: Colors.dark.success,
+//     fontWeight: "600",
+//   },
+
+//   // selectedProduct
+//   productHeader: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     marginBottom: 6,
+//   },
+
+//   // error
+//   errorBox: {
+//     borderColor: Colors.dark.danger,
+//   },
+
+//   // product
+//   lineBoxCompact: {
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 10,
+//     padding: 10,
+//     marginBottom: 8,
+//     backgroundColor: Colors.dark.surface,
+//   },
+
+//   productHeaderCompact: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     alignItems: "center",
+//   },
+
+//   headerRight: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     gap: 10,
+//   },
+
+//   productName: {
+//     fontSize: 15,
+//     fontWeight: "600",
+//     color: Colors.dark.text,
+//   },
+
+//   stockText: {
+//     fontSize: 13,
+//     color: Colors.dark.icon,
+//   },
+
+//   removeText: {
+//     fontSize: 18,
+//     color: Colors.dark.danger,
+//     fontWeight: "700",
+//   },
+
+//   controlsRow: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginTop: 6,
+//     gap: 8,
+//   },
+
+//   unitWrapper: {
+//     flex: 1,
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 8,
+//     overflow: "hidden",
+//   },
+
+//   pickerCompact: {
+//     height: 36,
+//     backgroundColor: "transparent",
+//     borderWidth: 0,
+//     borderRadius: 5,
+//     color: Colors.dark.text,
+//   },
+
+//   qtyInput: {
+//     width: 70,
+//     height: 36,
+//     borderWidth: 1,
+//     borderColor: Colors.dark.border,
+//     borderRadius: 8,
+//     textAlign: "center",
+//     color: Colors.dark.text,
+//     backgroundColor: Colors.dark.surface,
+//   },
+
+//   errorTextCompact: {
+//     fontSize: 12,
+//     color: Colors.dark.danger,
+//     marginTop: 4,
+//   },
+// });
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.dark.surface,
     padding: 20,
     borderRadius: 16,
     maxHeight: "90%",
+    overflowY: "scroll",
+    paddingVertical: 10,
   },
-
   title: {
     fontSize: 20,
     fontWeight: "700",
@@ -355,13 +566,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: Colors.dark.text,
   },
-
   label: {
     fontWeight: "600",
     marginBottom: 6,
     color: Colors.dark.text,
   },
-
   input: {
     borderWidth: 1,
     borderColor: Colors.dark.border,
@@ -371,66 +580,27 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.surface,
     color: Colors.dark.text,
   },
-
-  errorInput: {
-    borderColor: Colors.dark.danger,
-  },
-
-  errorText: {
-    color: Colors.dark.danger,
-    fontSize: 13,
-    marginBottom: 6,
-  },
-
   dropdown: {
     backgroundColor: Colors.dark.surface,
     borderWidth: 1,
     borderColor: Colors.dark.border,
     borderRadius: 10,
     maxHeight: 160,
-    marginTop: 4,
     marginBottom: 10,
   },
-
   dropdownItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: Colors.dark.border,
   },
-
   dropdownText: {
     fontSize: 15,
     color: Colors.dark.text,
   },
-
-  lineBox: {
-    backgroundColor: Colors.dark.surface,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
-  },
-
-  total: {
-    textAlign: "right",
-    fontSize: 18,
-    fontWeight: "700",
-    color: Colors.dark.success,
-    marginVertical: 12,
-  },
-
-  actions: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 12,
-  },
-
-  // select client
   selectedBox: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: Colors.dark.success + "33", // vert clair transparent
+    backgroundColor: Colors.dark.success + "33",
     borderColor: Colors.dark.success,
     borderWidth: 1,
     borderRadius: 10,
@@ -445,20 +615,6 @@ const styles = StyleSheet.create({
     color: Colors.dark.success,
     fontWeight: "600",
   },
-
-  // selectedProduct
-  productHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 6,
-  },
-
-  // error
-  errorBox: {
-    borderColor: Colors.dark.danger,
-  },
-
-  // product
   lineBoxCompact: {
     borderWidth: 1,
     borderColor: Colors.dark.border,
@@ -467,59 +623,38 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: Colors.dark.surface,
   },
-
+  errorBox: {
+    borderColor: Colors.dark.danger,
+  },
   productHeaderCompact: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
-  headerRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-
   productName: {
     fontSize: 15,
     fontWeight: "600",
     color: Colors.dark.text,
   },
-
-  stockText: {
-    fontSize: 13,
-    color: Colors.dark.icon,
-  },
-
   removeText: {
     fontSize: 18,
     color: Colors.dark.danger,
     fontWeight: "700",
   },
-
   controlsRow: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 6,
     gap: 8,
   },
-
-  unitWrapper: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-
   pickerCompact: {
     height: 36,
-    backgroundColor: "transparent",
-    borderWidth: 0,
+    flex: 1,
     borderRadius: 5,
+    borderWidth: 0.5,
+    backgroundColor: "transparent",
     color: Colors.dark.text,
   },
-
   qtyInput: {
     width: 70,
     height: 36,
@@ -530,10 +665,41 @@ const styles = StyleSheet.create({
     color: Colors.dark.text,
     backgroundColor: Colors.dark.surface,
   },
-
   errorTextCompact: {
     fontSize: 12,
     color: Colors.dark.danger,
     marginTop: 4,
+  },
+  total: {
+    textAlign: "right",
+    fontSize: 18,
+    fontWeight: "700",
+    color: Colors.dark.success,
+    marginVertical: 12,
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 12,
+  },
+
+  // product dropdown
+  productSearchWrapper: {
+    position: "relative",
+    zIndex: 100, // très important
+  },
+
+  productDropdown: {
+    position: "absolute",
+    top: 50, // juste sous l’input
+    left: 0,
+    right: 0,
+    maxHeight: 180,
+    backgroundColor: Colors.dark.surface,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    borderRadius: 10,
+    zIndex: 1000,
+    elevation: 10, // ANDROID
   },
 });
