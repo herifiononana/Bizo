@@ -311,23 +311,26 @@ const styles = StyleSheet.create({
   },
 
   picker: {
-    height: 38,
+    padding: 0,
+    flex: 1,
+    minHeight: 38,
     color: Colors.dark.text,
     backgroundColor: "transparent",
     borderRadius: 10,
-    borderWidth: 0,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
   },
 
   smallInput: {
     marginTop: 8,
     height: 38,
-    width: 80,
+    minWidth: 40,
     paddingVertical: 6,
   },
 
   mediumInput: {
     marginTop: 8,
-    width: 120,
+    minWidth: 60,
     height: 38,
     paddingVertical: 6,
   },

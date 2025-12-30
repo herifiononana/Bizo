@@ -1,7 +1,16 @@
 import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import DeleteOrderButton from "./delete-order-button";
+import OrderDetailsCard from "./order-details-card";
 import UpdateOrderButton from "./update-order-button";
 
 interface OrderListItemProps {
@@ -9,44 +18,68 @@ interface OrderListItemProps {
 }
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ item }) => {
-  const onSend = () => {};
+  const [openDetail, setOpenDetail] = useState<boolean>(false);
+  const onSend = () => {
+    Alert.alert("📤 Envoi", "Fonction d’envoi à implémenter");
+  };
+
   return (
-    <View style={styles.card}>
-      {/* HEADER */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.client}>{item.clientName}</Text>
-          <Text style={styles.date}>
-            {item.createdAt
-              ? new Date(item.createdAt).toLocaleDateString()
-              : "-"}
-          </Text>
-        </View>
-
-        <Text style={styles.total}>{item.total.toLocaleString()} Ar</Text>
-      </View>
-
-      {/* PRODUITS */}
-      <View style={styles.products}>
-        {item.order.map((p, index) => (
-          <Text key={index} style={styles.productLine}>
-            • {p.productName} × {p.quantity} ({p.unit})
-          </Text>
-        ))}
-      </View>
-
-      {/* ACTIONS */}
-      <View style={styles.actions}>
-        <UpdateOrderButton order={item} />
-
+    <>
+      {" "}
+      <View style={styles.card}>
+        {/* HEADER */}
         <TouchableOpacity
-          style={[styles.actionBtn, styles.sendBtn]}
-          onPress={onSend}
+          onPress={() => setOpenDetail(true)}
+          activeOpacity={0.8}
         >
-          <Text style={[styles.actionText, styles.sendText]}>📤 Envoyer</Text>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.client}>{item.clientName}</Text>
+              <Text style={styles.date}>
+                {item.createdAt
+                  ? new Date(item.createdAt).toLocaleDateString()
+                  : "-"}
+              </Text>
+            </View>
+
+            <Text style={styles.total}>{item.total.toLocaleString()} Ar</Text>
+          </View>
+
+          {/* PRODUITS */}
+          <View style={styles.products}>
+            {item.order.map((p, index) => (
+              <Text key={index} style={styles.productLine}>
+                • {p.productName} × {p.quantity} ({p.unit})
+              </Text>
+            ))}
+          </View>
         </TouchableOpacity>
+
+        {/* ACTIONS */}
+        <View style={styles.actions}>
+          <UpdateOrderButton order={item} />
+
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.sendBtn]}
+            onPress={onSend}
+          >
+            <Text style={[styles.actionText, styles.sendText]}>📤 Envoyer</Text>
+          </TouchableOpacity>
+
+          <DeleteOrderButton order={item} />
+        </View>
       </View>
-    </View>
+      <Modal
+        visible={openDetail}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setOpenDetail(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <OrderDetailsCard order={item} onClose={() => setOpenDetail(false)} />
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -127,5 +160,12 @@ const styles = StyleSheet.create({
 
   sendText: {
     color: "#fff",
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    justifyContent: "center",
+    padding: 20,
   },
 });

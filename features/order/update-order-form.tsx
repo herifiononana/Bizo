@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   pickerCompact: {
-    height: 36,
+    minHeight: 36,
     flex: 1,
     borderRadius: 5,
     borderWidth: 0.5,
