@@ -1,7 +1,9 @@
 import { Colors } from "@/constants/theme";
 import { Client } from "@/interface/client/client";
 import { saveClients } from "@/services/client";
+import { saveOrders } from "@/services/order";
 import { useClientsStore } from "@/stores/client.store";
+import { useOrdersStore } from "@/stores/order.store";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
 
@@ -13,6 +15,7 @@ function DeleteClientButton({
   callback: () => void;
 }) {
   const { clients, setClients } = useClientsStore();
+  const { orders, setOrders } = useOrdersStore();
 
   const handleDeleteClient = () => {
     Alert.alert(
@@ -27,12 +30,18 @@ function DeleteClientButton({
             if (!clients) return;
 
             const updatedClients = clients.filter((c) => c.id !== item.id);
+            const updatedOrders =
+              orders?.filter((o) => o.clientId !== item.id) ?? [];
 
             setClients(updatedClients);
-            callback();
 
             try {
               await saveClients(updatedClients);
+              if (orders) {
+                await saveOrders(updatedOrders);
+                setOrders(updatedOrders);
+              }
+              callback();
             } catch (error) {
               console.error("Erreur suppression client", error);
             }

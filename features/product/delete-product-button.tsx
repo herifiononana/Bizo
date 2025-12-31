@@ -1,9 +1,9 @@
 import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
+import { saveOrders } from "@/services/order";
 import { saveProducts } from "@/services/product";
-import { saveSales } from "@/services/sale";
+import { useOrdersStore } from "@/stores/order.store";
 import { useProductsStore } from "@/stores/product.store";
-import { useSalesStore } from "@/stores/sales.store";
 import { Entypo } from "@expo/vector-icons";
 import React from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
@@ -15,7 +15,7 @@ function DeleteProductButton({
   callback: () => void;
 }) {
   const { products, setProducts } = useProductsStore();
-  const { sales, setSales } = useSalesStore();
+  const { orders, setOrders } = useOrdersStore();
 
   //   Supprimer un produit
   const handleDeleteProduct = () => {
@@ -30,14 +30,18 @@ function DeleteProductButton({
           onPress: async () => {
             if (!products) return;
             const updatedProducts = products.filter((p) => p.id !== item.id);
-            const updatedSales = sales
-              ? sales.filter((s) => s.productId !== item.id)
-              : [];
+
+            const updatedOrders =
+              orders?.filter((o) => {
+                o.order.filter((orderItem) => orderItem.productId !== item.id);
+              }) ?? [];
             setProducts(updatedProducts);
-            setSales(updatedSales);
             try {
               await saveProducts(updatedProducts);
-              await saveSales(updatedSales);
+              if (orders) {
+                await saveOrders(updatedOrders);
+                setOrders(updatedOrders);
+              }
             } catch (error) {
               console.error("Erreur suppression produit", error);
             }
