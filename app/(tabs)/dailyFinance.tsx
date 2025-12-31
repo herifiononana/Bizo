@@ -10,14 +10,15 @@ import {
 
 import { Colors } from "@/constants/theme";
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
+import { useHistory } from "@/hooks/history/useHistory";
 import { getFinance } from "@/services/finance";
 import { useProductsStore } from "@/stores/product.store";
-import { useSalesStore } from "@/stores/sales.store";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const DailyFinanceScreen = () => {
-  const { sales } = useSalesStore();
+  // const { sales } = useSalesStore();
+  const { history: sales } = useHistory();
   const { products } = useProductsStore((state) => state);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);

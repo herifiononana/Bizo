@@ -1,12 +1,15 @@
 import { Colors } from "@/constants/theme";
 import { saveSales } from "@/services/sale";
+import { saveHistory } from "@/services/sale/history";
+import { useHistoryStore } from "@/stores/history.store";
 import { useSalesStore } from "@/stores/sales.store";
 import Entypo from "@expo/vector-icons/Entypo";
 import React from "react";
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export function ClearSaleButton() {
-  const { setSales } = useSalesStore();
+  const { sales, setSales } = useSalesStore();
+  const { history, setHistory } = useHistoryStore();
 
   const handleClear = () => {
     Alert.alert(
@@ -18,9 +21,18 @@ export function ClearSaleButton() {
           text: "Supprimer",
           style: "destructive",
           onPress: async () => {
-            setSales([]);
+            if (!sales) return;
             try {
+              if (history) {
+                const data = [...sales, ...history];
+                await saveHistory(data);
+                setHistory(data);
+              } else {
+                setHistory(sales);
+                await saveHistory(sales);
+              }
               await saveSales([]);
+              setSales([]);
             } catch (error) {
               console.error("Erreur suppression produit", error);
             }
