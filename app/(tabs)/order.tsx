@@ -2,6 +2,7 @@ import { Colors } from "@/constants/theme";
 import CreateOrderButton from "@/features/order/create-order-button";
 import OrderListItem from "@/features/order/order-list-item";
 import OrderListItemSkeleton from "@/features/order/order-list-item-skeleton";
+import SendOrdersButton from "@/features/order/send-order-button";
 import { useClients } from "@/hooks/clients/useClient";
 import { useOrders } from "@/hooks/orders/useOrder";
 import React, { useMemo, useState } from "react";
@@ -109,6 +110,9 @@ const OrdersScreen = () => {
           return <OrderListItem item={item} />;
         }}
       />
+      <View style={styles.addButtonContainer}>
+        <SendOrdersButton />
+      </View>
       <CreateOrderButton />
     </View>
   );
@@ -160,5 +164,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
     textAlign: "center",
     color: Colors.dark.icon,
+  },
+
+  addButtonContainer: {
+    position: "absolute",
+    bottom: 80,
+    right: 15,
   },
 });

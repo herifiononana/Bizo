@@ -1,5 +1,7 @@
 import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
+import { exportSingleOrderToCSV } from "@/libs/export-to-csv";
+import { useClientsStore } from "@/stores/client.store";
 import React, { useState } from "react";
 import {
   Alert,
@@ -19,8 +21,17 @@ interface OrderListItemProps {
 
 const OrderListItem: React.FC<OrderListItemProps> = ({ item }) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  const onSend = () => {
-    Alert.alert("📤 Envoi", "Fonction d’envoi à implémenter");
+  const { clients } = useClientsStore();
+  const onSend = async () => {
+    try {
+      const client = clients?.find((c) => c.id === item.clientId);
+      const fileName = `Commande de ${client?.civility ?? ""} ${client?.name}`;
+      const path = await exportSingleOrderToCSV(fileName, item);
+      if (path) Alert.alert("Export terminée", "Le fichier a été partagé.");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
+      Alert.alert("Erreur", "Export impossible.");
+    }
   };
 
   return (

@@ -4,6 +4,8 @@ import {
   REFERENCE_KEY,
   SALES_KEY,
 } from "@/constants/key-storage";
+import { Order } from "@/interface/order";
+import { getOrders } from "@/services/order";
 import { getData, saveData } from "@/storage";
 import * as FileSystem from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
@@ -93,5 +95,95 @@ export const importAllDataFromCSV = async (uri: string) => {
   } catch (err) {
     console.error("Erreur importAllDataFromCSV :", err);
     return false;
+  }
+};
+
+export const exportAllOrdersDataToCSV = async (fileName: string) => {
+  try {
+    const orders = await getOrders();
+
+    const rows = orders.flatMap((order) => {
+      const orderRows = order.order.map((item) => ({
+        client: order.clientName,
+        produit: item.productName,
+        quantite: item.quantity,
+        unite: item.unit,
+        prix_unitaire: item.unitPrice,
+        sous_total: item.subTotal,
+        impact_stock: item.stockImpact,
+        total_commande: order.total,
+        date: order.createdAt
+          ? new Date(order.createdAt).toLocaleDateString()
+          : "",
+      }));
+
+      // ✅ ligne vide (séparateur visuel)
+      const emptyRow = {
+        client: "",
+        produit: "",
+        quantite: "",
+        unite: "",
+        prix_unitaire: "",
+        sous_total: "",
+        impact_stock: "",
+        total_commande: "",
+        date: "",
+      };
+
+      return [...orderRows, emptyRow];
+    });
+
+    const csv = Papa.unparse(rows);
+
+    const fileUri = FileSystem.documentDirectory + `${fileName}.csv`;
+
+    await FileSystem.writeAsStringAsync(fileUri, csv, {
+      encoding: FileSystem.EncodingType.UTF8,
+    });
+
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(fileUri);
+    }
+
+    return fileUri;
+  } catch (err) {
+    console.error("Erreur exportAllOrdersDataToCSV :", err);
+    return null;
+  }
+};
+
+export const exportSingleOrderToCSV = async (
+  fileName: string,
+  order: Order
+) => {
+  try {
+    const rows = order.order.map((item) => ({
+      client: order.clientName,
+      produit: item.productName,
+      quantite: item.quantity,
+      unite: item.unit,
+      prix_unitaire: item.unitPrice,
+      sous_total: item.subTotal,
+
+      total_commande: order.total,
+      impact_stock: item.stockImpact,
+      date: new Date(order?.createdAt ?? "").toLocaleDateString(),
+    }));
+    const csv = Papa.unparse(rows);
+
+    const fileUri = FileSystem.documentDirectory + `${fileName}.csv`;
+
+    await FileSystem.writeAsStringAsync(fileUri, csv, {
+      encoding: FileSystem.EncodingType.UTF8,
+    });
+
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(fileUri);
+    }
+
+    return fileUri;
+  } catch (err) {
+    console.error("Erreur exportSingleOrderToCSV :", err);
+    return null;
   }
 };
