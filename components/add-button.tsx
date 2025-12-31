@@ -1,27 +1,32 @@
 import { Colors } from "@/constants/theme";
-import { Ionicons } from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export function AddButton({ onPress }: { onPress: () => void }) {
   return (
-    <TouchableOpacity style={styles.addBtn} onPress={onPress}>
-      <Ionicons name="add-circle" size={60} color={Colors.dark.accent} />
-    </TouchableOpacity>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.iconButton} onPress={onPress}>
+        <MaterialIcons name="add-circle" size={32} color={Colors.dark.accent} />
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  addBtn: {
-    width: 60,
-    height: 60,
+  container: {
+    position: "absolute",
+    bottom: 10,
+    right: 0,
+  },
+
+  iconButton: {
+    padding: 10,
+    backgroundColor: Colors.dark.primary,
     borderRadius: 50,
-    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: Colors.dark.primary,
     alignItems: "center",
-    shadowColor: Colors.dark.accent,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 4, // pour Android
+    justifyContent: "center",
   },
 });

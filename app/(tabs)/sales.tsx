@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import ReferenceFilter from "@/features/reference/reference-filter";
+import { ClearSaleButton } from "@/features/sales/clear-sale-button";
 import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleListItem from "@/features/sales/sale-list-item";
 import SaleListItemSkeleton from "@/features/sales/sale-skeleton";
@@ -137,6 +138,7 @@ const SalesScreen = () => {
           return product ? <SaleListItem {...{ product, item }} /> : <></>;
         }}
       />
+      <ClearSaleButton />
       <CreateSaleButton />
     </View>
   );
