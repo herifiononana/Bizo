@@ -1,4 +1,5 @@
 import { AddButton } from "@/components/add-button";
+import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Order } from "@/interface/order";
 import { saveOrders } from "@/services/order";
@@ -6,7 +7,14 @@ import { saveProducts } from "@/services/product";
 import { useOrdersStore } from "@/stores/order.store";
 import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
-import { Modal, StyleSheet, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import CreateOrderForm from "./create-order-form";
 
 function CreateOrderButton() {
@@ -68,20 +76,26 @@ function CreateOrderButton() {
       </View>
 
       {/* Modal Nouvelle vente */}
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <CreateOrderForm
-            onSubmit={handleNewOrder}
-            onCancel={() => {
-              setModalVisible(false);
-            }}
-          />
-        </View>
+      <Modal visible={modalVisible} transparent animationType="slide">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.modalWrapper}
+        >
+          <View style={styles.modalBox}>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <CreateOrderForm
+                onSubmit={handleNewOrder}
+                onCancel={() => {
+                  setModalVisible(false);
+                }}
+              />
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
     </>
   );
@@ -95,21 +109,28 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
-  },
-  modalBox: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 20,
-  },
   modalTitle: {
     fontSize: 20,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 14,
+  },
+
+  modalWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+
+  modalBox: {
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 16,
+    maxHeight: "90%", // 🔥 clé
+  },
+
+  scrollContent: {
+    padding: 0,
+    paddingBottom: 40, // pour boutons
   },
 });

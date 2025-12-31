@@ -2,6 +2,7 @@ import { Colors } from "@/constants/theme";
 import CreateOrderButton from "@/features/order/create-order-button";
 import OrderListItem from "@/features/order/order-list-item";
 import OrderListItemSkeleton from "@/features/order/order-list-item-skeleton";
+import { useClients } from "@/hooks/clients/useClient";
 import { useOrders } from "@/hooks/orders/useOrder";
 import React, { useMemo, useState } from "react";
 import {
@@ -15,6 +16,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const OrdersScreen = () => {
+  useClients();
   const { loading, orders } = useOrders();
   const [search, setSearch] = useState<string>("");
   const [startDate, setStartDate] = useState<Date | null>(null);

@@ -2,9 +2,9 @@ import { Picker } from "@react-native-picker/picker";
 import React, { useMemo, useState } from "react";
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -91,12 +91,12 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
     setFormData((prev) => ({
       ...prev,
       order: [
-        ...prev.order,
         {
           productId,
           unit: product.units[0].type,
           quantity: "1",
         },
+        ...prev.order,
       ],
     }));
 
@@ -241,25 +241,25 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
             style={styles.input}
           />
           {clientSearch.length > 0 && (
-            <FlatList
-              data={filteredClients}
-              keyExtractor={(i) => i.id}
-              style={styles.dropdown}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.dropdownItem}
-                  onPress={() =>
-                    setFormData({
-                      ...formData,
-                      clientId: item.id,
-                      clientName: item.name,
-                    })
-                  }
-                >
-                  <Text style={styles.dropdownText}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            <View style={styles.productDropdown}>
+              <ScrollView>
+                {filteredClients?.map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={styles.dropdownItem}
+                    onPress={() =>
+                      setFormData({
+                        ...formData,
+                        clientId: item.id,
+                        clientName: item.name,
+                      })
+                    }
+                  >
+                    <Text style={styles.dropdownText}>{item.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           )}
         </>
       )}
@@ -275,21 +275,21 @@ const CreateOrderForm = ({ onSubmit, onCancel }: CreateOrderFormProps) => {
         />
 
         {productSearch.length > 0 && (
-          <FlatList
-            data={filteredProducts}
-            keyExtractor={(i) => i.id}
-            style={styles.productDropdown}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => addProductToOrder(item.id)}
-              >
-                <Text style={styles.dropdownText}>
-                  {item.name} — Stock {item.quantity}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
+          <View style={styles.productDropdown}>
+            <ScrollView>
+              {filteredProducts?.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.dropdownItem}
+                  onPress={() => addProductToOrder(item.id)}
+                >
+                  <Text style={styles.dropdownText}>
+                    {item.name} — Stock {item.quantity}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         )}
       </View>
 
@@ -493,10 +493,6 @@ const styles = StyleSheet.create({
   },
 
   productDropdown: {
-    position: "absolute",
-    top: 50, // juste sous l’input
-    left: 0,
-    right: 0,
     maxHeight: 180,
     backgroundColor: Colors.dark.surface,
     borderWidth: 1,

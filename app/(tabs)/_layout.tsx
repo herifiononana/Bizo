@@ -32,32 +32,12 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="sales"
-        options={{
-          title: "Ventes",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="card-outline" size={24} color={color} />
-          ),
-        }}
-      />
-
       <Tabs.Screen
         name="product"
         options={{
           title: "Produits",
           tabBarIcon: ({ color }) => (
             <Ionicons name="albums-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="client"
-        options={{
-          title: "Client",
-          tabBarIcon: ({ color }) => (
-            <Entypo name="users" size={20} color={color} />
           ),
         }}
       />
@@ -69,13 +49,13 @@ export default function TabLayout() {
             <AntDesign name="ordered-list" size={20} color={color} />
           ),
         }}
-      />
+      />{" "}
       <Tabs.Screen
-        name="dailyFinance"
+        name="client"
         options={{
-          title: "Historique",
+          title: "Client",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="list-outline" size={24} color={color} />
+            <Entypo name="users" size={20} color={color} />
           ),
         }}
       />

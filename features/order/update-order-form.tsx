@@ -2,9 +2,9 @@ import { Picker } from "@react-native-picker/picker";
 import React, { useMemo, useState } from "react";
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -306,56 +306,59 @@ const UpdateOrderForm = ({ order, onCancel }: UpdateOrderFormProps) => {
             onChangeText={setClientSearch}
             style={styles.input}
           />
+
           {clientSearch.length > 0 && (
-            <FlatList
-              data={filteredClients}
-              keyExtractor={(i) => i.id}
-              style={styles.dropdown}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.dropdownItem}
-                  onPress={() =>
-                    setFormData({
-                      ...formData,
-                      clientId: item.id,
-                      clientName: item.name,
-                    })
-                  }
-                >
-                  <Text style={styles.dropdownText}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            <View style={styles.productDropdown}>
+              <ScrollView>
+                {filteredClients?.map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={styles.dropdownItem}
+                    onPress={() =>
+                      setFormData({
+                        ...formData,
+                        clientId: item.id,
+                        clientName: item.name,
+                      })
+                    }
+                  >
+                    <Text style={styles.dropdownText}>{item.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
           )}
         </>
       )}
 
       {/* PRODUITS */}
-      <Text style={styles.label}>Produit</Text>
-      <TextInput
-        placeholder="Rechercher un produit..."
-        value={productSearch}
-        onChangeText={setProductSearch}
-        style={styles.input}
-      />
-
-      {productSearch.length > 0 && (
-        <FlatList
-          data={filteredProducts}
-          keyExtractor={(i) => i.id}
-          style={styles.dropdown}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.dropdownItem}
-              onPress={() => addProduct(item.id)}
-            >
-              <Text style={styles.dropdownText}>
-                {item.name} — Stock {item.quantity}
-              </Text>
-            </TouchableOpacity>
-          )}
+      <View style={styles.productSearchWrapper}>
+        <Text style={styles.label}>Produit</Text>
+        <TextInput
+          placeholder="Rechercher un produit..."
+          value={productSearch}
+          onChangeText={setProductSearch}
+          style={styles.input}
         />
-      )}
+
+        {productSearch.length > 0 && (
+          <View style={styles.productDropdown}>
+            <ScrollView>
+              {filteredProducts?.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.dropdownItem}
+                  onPress={() => addProduct(item.id)}
+                >
+                  <Text style={styles.dropdownText}>
+                    {item.name} — Stock {item.quantity}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        )}
+      </View>
 
       {/* LIGNES */}
       {formData.order.map((line, index) => {
@@ -551,5 +554,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 12,
+  },
+
+  // product dropdown
+  productSearchWrapper: {
+    position: "relative",
+    zIndex: 100, // très important
+  },
+
+  productDropdown: {
+    maxHeight: 180,
+    backgroundColor: Colors.dark.surface,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    borderRadius: 10,
+    zIndex: 1000,
+    elevation: 10, // ANDROID
   },
 });

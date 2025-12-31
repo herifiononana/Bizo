@@ -27,7 +27,7 @@ const OrderDetailsCard: React.FC<OrderDetailsCardProps> = ({
           {order.createdAt
             ? new Date(order.createdAt).toLocaleDateString()
             : "-"}
-        </Text>{" "}
+        </Text>
       </View>
       <TouchableOpacity onPress={onClose} style={styles.closeContainer}>
         <Text style={styles.close}>✕</Text>

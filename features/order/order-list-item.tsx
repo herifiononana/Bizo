@@ -25,7 +25,6 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ item }) => {
 
   return (
     <>
-      {" "}
       <View style={styles.card}>
         {/* HEADER */}
         <TouchableOpacity
@@ -47,11 +46,11 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ item }) => {
 
           {/* PRODUITS */}
           <View style={styles.products}>
-            {item.order.map((p, index) => (
-              <Text key={index} style={styles.productLine}>
-                • {p.productName} × {p.quantity} ({p.unit})
-              </Text>
-            ))}
+            <Text style={styles.productLine}>
+              • {item.order[0].productName} × {item.order[0].quantity} (
+              {item.order[0].unit})
+            </Text>
+            <Text style={styles.productLine}>• • •</Text>
           </View>
         </TouchableOpacity>
 

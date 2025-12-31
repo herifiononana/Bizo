@@ -1,7 +1,16 @@
 import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
 import React, { useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import UpdateOrderForm from "./update-order-form";
 
 function UpdateOrderButton({ order }: { order: Order }) {
@@ -18,18 +27,24 @@ function UpdateOrderButton({ order }: { order: Order }) {
         </TouchableOpacity>
       </View>
 
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <UpdateOrderForm
-            order={order}
-            onCancel={() => setModalVisible(false)}
-          />
-        </View>
+      <Modal visible={modalVisible} transparent animationType="slide">
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.modalWrapper}
+        >
+          <View style={styles.modalBox}>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              <UpdateOrderForm
+                order={order}
+                onCancel={() => setModalVisible(false)}
+              />
+            </ScrollView>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
     </>
   );
@@ -38,13 +53,6 @@ function UpdateOrderButton({ order }: { order: Order }) {
 export default UpdateOrderButton;
 
 const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
-  },
-
   actionBtn: {
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -60,5 +68,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: Colors.dark.text,
+  },
+
+  modalWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 16,
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+
+  modalBox: {
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 16,
+    maxHeight: "90%", // 🔥 clé
+  },
+
+  scrollContent: {
+    padding: 0,
+    paddingBottom: 40, // pour boutons
   },
 });
