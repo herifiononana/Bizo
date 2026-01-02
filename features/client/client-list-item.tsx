@@ -57,17 +57,15 @@ export default ClientListItem;
 const styles = StyleSheet.create({
   clientWrapper: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginBottom: 10,
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 10,
+    padding: 14,
   },
 
   clientCard: {
     flex: 1,
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 12,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
   },
 
   name: {

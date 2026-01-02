@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
+import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import {
   ScrollView,
@@ -30,7 +31,7 @@ const OrderDetailsCard: React.FC<OrderDetailsCardProps> = ({
         </Text>
       </View>
       <TouchableOpacity onPress={onClose} style={styles.closeContainer}>
-        <Text style={styles.close}>✕</Text>
+        <AntDesign name="close" size={18} color={Colors.dark.danger} />
       </TouchableOpacity>
       {/* LISTE DES PRODUITS */}
       <ScrollView style={styles.lines}>
@@ -165,6 +166,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
+    borderWidth: 1,
+    borderColor: Colors.dark.danger + "33",
+    borderRadius: 5,
+    padding: 1,
   },
   close: {
     fontSize: 18,

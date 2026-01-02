@@ -2,6 +2,7 @@ import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
 import { exportSingleOrderToCSV } from "@/libs/export-to-csv";
 import { useClientsStore } from "@/stores/client.store";
+import { FontAwesome } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Alert,
@@ -73,7 +74,8 @@ const OrderListItem: React.FC<OrderListItemProps> = ({ item }) => {
             style={[styles.actionBtn, styles.sendBtn]}
             onPress={onSend}
           >
-            <Text style={[styles.actionText, styles.sendText]}>📤 Envoyer</Text>
+            {/* <Text style={[styles.actionText, styles.sendText]}>📤 Envoyer</Text> */}
+            <FontAwesome name="send" size={18} color={Colors.dark.accent} />
           </TouchableOpacity>
 
           <DeleteOrderButton order={item} />
@@ -101,7 +103,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
-    borderWidth: 1,
     borderColor: Colors.dark.border,
   },
 
@@ -158,8 +159,8 @@ const styles = StyleSheet.create({
   },
 
   sendBtn: {
-    backgroundColor: Colors.dark.accent,
-    borderColor: Colors.dark.accent,
+    backgroundColor: Colors.dark.primary,
+    borderColor: Colors.dark.accent + "33",
   },
 
   actionText: {

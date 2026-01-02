@@ -4,8 +4,9 @@ import { saveClients } from "@/services/client";
 import { saveOrders } from "@/services/order";
 import { useClientsStore } from "@/stores/client.store";
 import { useOrdersStore } from "@/stores/order.store";
+import { Entypo } from "@expo/vector-icons";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 function DeleteClientButton({
   item,
@@ -52,8 +53,11 @@ function DeleteClientButton({
   };
 
   return (
-    <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteClient}>
-      <Text style={styles.deleteIcon}>🗑️</Text>
+    <TouchableOpacity
+      style={[styles.actionBtn, styles.deleteBtn]}
+      onPress={handleDeleteClient}
+    >
+      <Entypo name="trash" size={18} color={Colors.dark.danger} />
     </TouchableOpacity>
   );
 }
@@ -61,12 +65,22 @@ function DeleteClientButton({
 export default DeleteClientButton;
 const styles = StyleSheet.create({
   deleteButton: {
-    marginLeft: 8,
     padding: 6,
     backgroundColor: Colors.dark.danger + "33",
     borderRadius: 8,
   },
   deleteIcon: {
     fontSize: 16,
+  },
+  actionBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginLeft: 8,
+  },
+  deleteBtn: {
+    backgroundColor: Colors.dark.primary,
+    borderColor: Colors.dark.danger + "33",
   },
 });

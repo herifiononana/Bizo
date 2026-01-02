@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { exportAllOrdersDataToCSV } from "@/libs/export-to-csv";
-import Feather from "@expo/vector-icons/Feather";
+import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -18,7 +18,7 @@ const SendOrdersButton = () => {
 
   return (
     <TouchableOpacity style={styles.addBtn} onPress={onSend}>
-      <Feather name="send" size={24} color={Colors.dark.background} />
+      <FontAwesome name="send" size={24} color={Colors.dark.accent} />
     </TouchableOpacity>
   );
 };
@@ -32,11 +32,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.dark.accent,
-    shadowColor: Colors.dark.accent,
-    shadowOffset: { width: 0, height: 2 },
+    backgroundColor: Colors.dark.primary,
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 4, // pour Android
+    elevation: 4,
   },
 });

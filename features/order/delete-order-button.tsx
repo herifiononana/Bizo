@@ -4,8 +4,9 @@ import { saveOrders } from "@/services/order";
 import { saveProducts } from "@/services/product";
 import { useOrdersStore } from "@/stores/order.store";
 import { useProductsStore } from "@/stores/product.store";
+import { Entypo } from "@expo/vector-icons";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
 function DeleteOrderButton({ order }: { order: Order }) {
   const { orders, setOrders } = useOrdersStore();
@@ -69,7 +70,7 @@ function DeleteOrderButton({ order }: { order: Order }) {
       style={[styles.actionBtn, styles.deleteBtn]}
       onPress={onDelete}
     >
-      <Text style={[styles.actionText, styles.deleteText]}>🗑️</Text>
+      <Entypo name="trash" size={18} color={Colors.dark.danger} />
     </TouchableOpacity>
   );
 }
@@ -90,8 +91,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   deleteBtn: {
-    backgroundColor: Colors.dark.danger,
-    borderColor: Colors.dark.danger,
+    backgroundColor: Colors.dark.primary,
+    borderColor: Colors.dark.danger + "33",
   },
 
   deleteText: {

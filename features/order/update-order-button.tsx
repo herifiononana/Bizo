@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { Order } from "@/interface/order";
+import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -7,7 +8,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -23,7 +23,7 @@ function UpdateOrderButton({ order }: { order: Order }) {
           style={[styles.actionBtn, styles.editBtn]}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.actionText}>✏️ Modifier</Text>
+          <Entypo name="edit" size={18} color={Colors.dark.text} />
         </TouchableOpacity>
       </View>
 
