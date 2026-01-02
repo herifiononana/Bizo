@@ -4,8 +4,9 @@ import { saveProducts } from "@/services/product";
 import { saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
+import { Entypo } from "@expo/vector-icons";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 function DeleteProductButton({
   item,
   callback,
@@ -47,7 +48,7 @@ function DeleteProductButton({
   };
   return (
     <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteProduct}>
-      <Text style={styles.deleteIcon}>🗑️</Text>
+      <Entypo name="trash" size={18} color={Colors.dark.danger} />
     </TouchableOpacity>
   );
 }
@@ -56,8 +57,9 @@ const styles = StyleSheet.create({
   deleteButton: {
     marginLeft: 8,
     padding: 6,
-    backgroundColor: Colors.dark.danger + "33", // rouge léger pour fond
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.dark.danger + "33",
   },
   deleteIcon: {
     fontSize: 16,

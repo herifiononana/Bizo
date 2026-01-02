@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
+import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
@@ -33,11 +34,19 @@ function ProductListItem({ item }: { item: Product }) {
           )}
         </TouchableOpacity>
 
-        {/* Bouton supprimer */}
-        <DeleteProductButton
-          callback={() => setModalVisible(false)}
-          item={item}
-        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Entypo name="edit" size={18} color={Colors.dark.text} />
+          </TouchableOpacity>
+          {/* Bouton supprimer */}
+          <DeleteProductButton
+            callback={() => setModalVisible(false)}
+            item={item}
+          />
+        </View>
       </View>
 
       <Modal
@@ -59,17 +68,13 @@ function ProductListItem({ item }: { item: Product }) {
 
 const styles = StyleSheet.create({
   productWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
     marginBottom: 10,
+    backgroundColor: Colors.dark.surface, // surface sombre
+    borderRadius: 8,
+    padding: 10,
   },
   productCard: {
     flex: 1,
-    backgroundColor: Colors.dark.surface, // surface sombre
-    borderRadius: 8,
-    padding: 14,
-    // borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
   },
   productName: {
     fontSize: 16,
@@ -98,14 +103,18 @@ const styles = StyleSheet.create({
     color: Colors.dark.success,
     fontWeight: "700",
   },
-  deleteButton: {
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 1,
+  },
+  editButton: {
     marginLeft: 8,
     padding: 6,
-    backgroundColor: Colors.dark.danger + "33", // rouge léger pour fond
     borderRadius: 8,
-  },
-  deleteIcon: {
-    fontSize: 16,
+    borderWidth: 1,
+    borderColor: Colors.dark.text + "33",
   },
   modalOverlay: {
     flex: 1,

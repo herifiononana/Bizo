@@ -22,6 +22,7 @@ export const SkeletonProductListItem = () => {
       </View>
 
       <View style={styles.deleteBtnSkeleton} />
+      <View style={styles.deleteBtnSkeleton} />
     </View>
   );
 };
@@ -29,16 +30,15 @@ export const SkeletonProductListItem = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginBottom: 10,
+    backgroundColor: Colors.dark.surface,
+    borderRadius: 8,
+    padding: 14,
   },
   card: {
     flex: 1,
     backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
   },
 
   skeletonBlock: {

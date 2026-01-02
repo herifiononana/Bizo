@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.surface,
     padding: 14,
     borderRadius: 12,
-    // borderWidth: 1,
     borderColor: Colors.dark.border,
     marginBottom: 10,
   },
@@ -118,9 +117,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 8,
     borderRadius: 8,
-    backgroundColor: Colors.dark.accent + "33", // accent translucide
-    borderWidth: 1,
-    borderColor: Colors.dark.accent,
+    backgroundColor: Colors.dark.accent + "33",
   },
 
   creditRow: {
