@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
+import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
@@ -45,10 +46,18 @@ function ProductListItem({ item }: { item: Product }) {
           )}
         </TouchableOpacity>
 
-        <DeleteProductButton
-          callback={() => setModalVisible(false)}
-          item={item}
-        />
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Entypo name="edit" size={18} color={Colors.dark.text} />
+          </TouchableOpacity>
+          <DeleteProductButton
+            callback={() => setModalVisible(false)}
+            item={item}
+          />
+        </View>
       </View>
 
       <Modal
@@ -71,6 +80,7 @@ function ProductListItem({ item }: { item: Product }) {
 export default ProductListItem;
 const styles = StyleSheet.create({
   productWrapper: {
+    display: "flex",
     marginBottom: 10,
     backgroundColor: Colors.dark.surface, // surface sombre
     borderRadius: 8,
@@ -78,11 +88,7 @@ const styles = StyleSheet.create({
   },
   productCard: {
     flex: 1,
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
-    padding: 14,
-    // borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
+    padding: 4,
   },
   productName: {
     fontSize: 16,
@@ -101,6 +107,18 @@ const styles = StyleSheet.create({
   purchase: {
     color: Colors.dark.danger,
     fontWeight: "600",
+  },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  editButton: {
+    marginLeft: 8,
+    padding: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.dark.text + "33",
   },
 
   /* unités */
