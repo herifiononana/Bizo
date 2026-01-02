@@ -14,9 +14,7 @@ export function CancelButton({ onPress }: { onPress: () => void }) {
 
 const styles = StyleSheet.create({
   cancelBtn: {
-    backgroundColor: Colors.dark.surface, // surface sombre
-    borderWidth: 1,
-    borderColor: Colors.dark.danger, // bordure rouge
+    backgroundColor: Colors.dark.card, // surface sombre
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 8,

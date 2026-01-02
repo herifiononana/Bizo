@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 export function SaveButton({ onPress }: { onPress: () => void }) {
   return (
     <TouchableOpacity style={styles.saveBtn} onPress={onPress}>
-      <Ionicons name="save" size={20} color={Colors.dark.info} />
+      <Ionicons name="save" size={20} color={Colors.dark.text} />
       <Text style={styles.saveText}>Enregistrer</Text>
     </TouchableOpacity>
   );
@@ -14,9 +14,7 @@ export function SaveButton({ onPress }: { onPress: () => void }) {
 
 const styles = StyleSheet.create({
   saveBtn: {
-    backgroundColor: Colors.dark.primary, // couleur principale sombre
-    borderWidth: 1,
-    borderColor: Colors.dark.accent, // accent orange pour la bordure
+    backgroundColor: Colors.dark.card,
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 8,

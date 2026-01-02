@@ -57,51 +57,48 @@ export default DailyFinanceItem;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.dark.card, // carte sombre
-    padding: 8,
-    borderRadius: 12,
-    marginBottom: 6,
-    shadowColor: Colors.dark.primary,
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 2,
+    backgroundColor: Colors.dark.primary,
+    padding: 12,
+    borderRadius: 14,
+    marginBottom: 8,
+    elevation: 3,
   },
+
   date: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "700",
     color: Colors.dark.text,
-    marginBottom: 8,
+    marginBottom: 10,
   },
+
   statsRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    rowGap: 8,
   },
+
   statItem: {
     width: "48%",
-    marginBottom: 4,
-    backgroundColor: Colors.dark.surface, // bloc des stats sombre
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-    borderRadius: 6,
+    backgroundColor: Colors.dark.tint,
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    shadowColor: Colors.dark.success,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 2,
   },
+
   label: {
     fontSize: 12,
-    color: Colors.dark.icon, // texte secondaire
+    color: Colors.dark.icon,
+    marginBottom: 2,
   },
+
   value: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: Colors.dark.text, // texte principal
-  },
-  valueCash: {
-    color: Colors.dark.success, // vert
-  },
-  valueCredit: {
-    color: Colors.dark.accent, // orange
-  },
-  valueProfit: {
-    color: Colors.dark.success, // vert
+    fontSize: 16,
+    fontWeight: "800",
+    color: Colors.dark.text,
   },
 });

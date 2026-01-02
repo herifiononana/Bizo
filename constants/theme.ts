@@ -8,7 +8,7 @@ import { Platform } from "react-native";
 const primaryColor = "#1F2937"; // Couleur principale
 const orangeAccent = "#F97316"; // Accent orange
 const blueAccent = "#3B82F6";
-const greenAccent = "#10B981";
+const greenAccent = "#22C55E";
 const redAccent = "#EF4444";
 
 export const Colors = {

@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 2,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: Colors.dark.border,
   },
 

@@ -185,9 +185,8 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
         )}
 
         <View style={styles.actions}>
-          <SaveButton onPress={handleSubmit} />
-
           <CancelButton onPress={onCancel} />
+          <SaveButton onPress={handleSubmit} />
         </View>
       </View>
     </View>

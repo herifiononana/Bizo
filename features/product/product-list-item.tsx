@@ -23,11 +23,13 @@ function ProductListItem({ item }: { item: Product }) {
             achat : <Text style={styles.purchase}>{item.purchasePrice} Ar</Text>
           </Text>
 
-          {item.salePrice && (
+          {item.salePrice ? (
             <Text style={styles.salePrice}>
               💰 Prix de vente :{" "}
               <Text style={styles.sale}>{item.salePrice} Ar</Text>
             </Text>
+          ) : (
+            <></>
           )}
         </TouchableOpacity>
 
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.surface, // surface sombre
     borderRadius: 8,
     padding: 14,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: Colors.dark.border, // bordure neutre
   },
   productName: {
