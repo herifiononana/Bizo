@@ -25,3 +25,7 @@ export const getSales = async () => {
 export const saveSales = async (data: Sale[]) => {
   await saveData(SALES_KEY, data);
 };
+
+export const updateLocalSales = async (data: Sale[], updatedSale: Sale) => {
+  return data.map((sale) => (sale.id === updatedSale.id ? updatedSale : sale));
+};

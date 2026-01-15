@@ -1,3 +1,4 @@
+import { Sale } from "@/interface/sale/sale";
 import { z } from "zod";
 
 export const saleSchema = z.object({
@@ -17,3 +18,5 @@ export const saleSchema = z.object({
 });
 
 export type CreateSaleDTO = z.infer<typeof saleSchema>;
+
+export type UpdateSaleDTO = Omit<Sale, "id">;

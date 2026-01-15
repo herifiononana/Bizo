@@ -5,6 +5,7 @@ import { saveSales } from "@/services/sale";
 import { useSalesStore } from "@/stores/sales.store";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import EditSaleButton from "./edit-sale-button";
 
 type SaleListItemProps = {
   product: Product;
@@ -29,24 +30,36 @@ function SaleListItem({ product, item }: SaleListItemProps) {
     }
   };
 
+  // todo : refactor inline style
   return (
     <View style={styles.saleCard}>
-      <View style={styles.saleHeader}>
-        <Text style={styles.saleProduct}>{product?.name}</Text>
-        <Text style={styles.saleDate}>
-          {new Date(item.saleDate).toLocaleDateString()}
-        </Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <View>
+          <View style={styles.saleHeader}>
+            <Text style={styles.saleProduct}>{product?.name}</Text>
+          </View>
+          <Text style={styles.saleDetails}>
+            Qté : {item.quantity} | Prix unitaire :{" "}
+            {item.salePrice.toFixed(2).toLocaleString()} Ar
+          </Text>
+          <Text style={styles.saleTotal}>
+            💰 Total : {item.totalAmount.toFixed(2).toLocaleString()} Ar
+          </Text>
+        </View>
+
+        <View style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Text style={styles.saleDate}>
+            {new Date(item.saleDate).toLocaleDateString()}
+          </Text>
+          <EditSaleButton sale={item} />
+        </View>
       </View>
-
-      <Text style={styles.saleDetails}>
-        Qté : {item.quantity} | Prix unitaire :{" "}
-        {item.salePrice.toFixed(2).toLocaleString()} Ar
-      </Text>
-
-      <Text style={styles.saleTotal}>
-        💰 Total : {item.totalAmount.toFixed(2).toLocaleString()} Ar
-      </Text>
-
       {/* Affichage si vente à crédit */}
       {item.isCredit && (
         <View style={styles.creditContainer}>
