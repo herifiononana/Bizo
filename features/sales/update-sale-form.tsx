@@ -330,33 +330,36 @@ export default UpdateSaleForm;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.dark.surface, // surface sombre
+    backgroundColor: "#0F1535",
     padding: 20,
-    borderRadius: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
   },
   title: {
     fontSize: 20,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 16,
-    color: Colors.dark.text, // texte principal
+    color: "#FFFFFF",
   },
   label: {
     fontWeight: "600",
     marginBottom: 6,
-    color: Colors.dark.text, // texte principal
+    color: "#FFFFFF",
+    fontSize: 15,
   },
   input: {
     borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "rgba(255,255,255,0.10)",
+    borderRadius: 12,
+    padding: 11,
     marginBottom: 10,
-    backgroundColor: Colors.dark.surface,
-    color: Colors.dark.text,
+    backgroundColor: "#172049",
+    color: "#FFFFFF",
   },
   errorInput: {
-    borderColor: Colors.dark.danger, // rouge pour erreur
+    borderColor: Colors.dark.danger,
   },
   errorText: {
     color: Colors.dark.danger,
@@ -364,30 +367,30 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   dropdown: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "#172049",
     borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 10,
+    borderColor: "rgba(255,255,255,0.10)",
+    borderRadius: 12,
     maxHeight: 150,
     marginTop: 4,
   },
   dropdownItem: {
-    padding: 10,
+    padding: 11,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.dark.border,
+    borderBottomColor: "rgba(255,255,255,0.08)",
   },
   dropdownText: {
     fontSize: 15,
-    color: Colors.dark.text,
+    color: "#FFFFFF",
   },
   selectedBox: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: Colors.dark.success + "33", // vert clair transparent
+    backgroundColor: "rgba(34,197,94,0.12)",
     borderColor: Colors.dark.success,
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 12,
+    padding: 11,
     marginBottom: 10,
   },
   selectedText: {

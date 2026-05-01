@@ -55,14 +55,11 @@ function DeleteProductButton({
 
 const styles = StyleSheet.create({
   deleteButton: {
-    marginLeft: 8,
-    padding: 6,
-    borderRadius: 8,
+    marginLeft: 4,
+    padding: 7,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.dark.danger + "33",
-  },
-  deleteIcon: {
-    fontSize: 16,
+    borderColor: "rgba(239,68,68,0.25)",
   },
 });
 

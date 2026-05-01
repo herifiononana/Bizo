@@ -165,59 +165,50 @@ export default OtherInfo;
 --------------------*/
 
 const styles = StyleSheet.create({
-  /* TITRE DES SECTIONS */
   sectionTitle: {
     fontSize: 17,
     fontWeight: "700",
     marginTop: 25,
     marginBottom: 10,
-    color: Colors.dark.text,
+    color: "#FFFFFF",
   },
 
-  /* CONTAINER */
   blockContainer: {
     width: "100%",
   },
 
-  /* BLOC PRINCIPAL */
   miniBlock: {
     flexDirection: "row",
     alignItems: "center",
-
-    padding: 8,
-    marginBottom: 6,
-
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 14,
-
-    shadowColor: Colors.dark.shadow,
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 2,
-    // borderWidth: 1,
-    borderColor: Colors.dark.border,
+    padding: 10,
+    marginBottom: 8,
+    backgroundColor: "#0F1535",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+    shadowColor: "rgba(0,212,255,0.06)",
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
   },
 
-  /* ICÔNE */
   iconCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 50,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
   },
 
-  /* NOM DU PRODUIT */
   blockTitle: {
     fontSize: 15,
     fontWeight: "600",
-    color: Colors.dark.text,
+    color: "#FFFFFF",
   },
 
-  /* VALEURS (prix, nombre, date…) */
   blockValue: {
     fontSize: 13,
-    color: Colors.dark.accent,
+    color: "#00D4FF",
   },
 });

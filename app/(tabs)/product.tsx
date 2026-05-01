@@ -132,34 +132,34 @@ const styles = StyleSheet.create({
 
   searchInput: {
     flex: 1,
-    backgroundColor: Colors.dark.surface, // surface sombre pour input
-    borderRadius: 8,
+    backgroundColor: "#0F1535",
+    borderRadius: 12,
     padding: 10,
-    fontSize: 16,
+    fontSize: 15,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "rgba(255,255,255,0.10)",
     marginLeft: 8,
+    color: "#FFFFFF",
   },
 
-  // --- Chip / Tag style ---
   filterChip: {
     marginLeft: 8,
     paddingVertical: 6,
     paddingHorizontal: 10,
-    backgroundColor: Colors.dark.primary,
+    backgroundColor: "#0F1535",
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: Colors.dark.border,
+    borderColor: "rgba(255,255,255,0.10)",
   },
 
   filterChipActive: {
-    backgroundColor: Colors.dark.danger, // rouge accent
+    backgroundColor: Colors.dark.danger,
     borderColor: Colors.dark.danger,
   },
 
   filterChipText: {
     fontSize: 16,
-    color: Colors.dark.text, // texte clair
+    color: Colors.dark.text,
   },
 
   filterChipTextActive: {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     marginTop: 40,
-    color: Colors.dark.icon, // texte secondaire clair
+    color: "#8891B3",
   },
 
   referenceRow: {
@@ -179,23 +179,23 @@ const styles = StyleSheet.create({
   },
 
   refChip: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: "#0F1535",
     paddingVertical: 2,
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
+    borderColor: "rgba(255,255,255,0.10)",
     marginRight: 8,
     marginBottom: 6,
   },
 
   refChipActive: {
-    backgroundColor: "#2563EB",
-    borderColor: "#1E40AF",
+    backgroundColor: "#F97316",
+    borderColor: "#F97316",
   },
 
   refChipText: {
-    color: "#374151",
+    color: "#8891B3",
     fontSize: 14,
   },
 

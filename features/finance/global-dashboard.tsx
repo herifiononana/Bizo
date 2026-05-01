@@ -8,8 +8,10 @@ import DashboardSkeleton from "./skeleton-dashboard";
 
 type StatProps = { label: string; value: any; color: string; icon: string };
 const StatCard = ({ label, value, color, icon }: StatProps) => (
-  <View style={[styles.statCard, { backgroundColor: color }]}>
-    <MaterialIcons name={icon as any} size={26} color={Colors.dark.primary} />
+  <View style={styles.statCard}>
+    <View style={[styles.iconCircle, { backgroundColor: color + "26" }]}>
+      <MaterialIcons name={icon as any} size={22} color={color} />
+    </View>
     <Text style={styles.statLabel}>{label}</Text>
     <Text style={styles.statValue}>{value}</Text>
   </View>
@@ -29,37 +31,37 @@ const data = (financeSummary: FinanceSummary): StatProps[] => {
     {
       label: "Produits",
       value: totalProducts,
-      color: "#E0F2FE",
+      color: "#3B82F6",
       icon: "inventory",
     },
     {
       label: "Valeur du stock",
       value: totalStockValue?.toFixed(2) ?? 0 + "Ar",
-      color: "#DCFCE7",
+      color: "#22C55E",
       icon: "monetization-on",
     },
     {
       label: "Ventes totales",
       value: totalSalesValue?.toFixed(2) ?? 0 + "Ar",
-      color: "#FEF9C3",
+      color: "#F97316",
       icon: "show-chart",
     },
     {
       label: "Ventes Cash",
       value: totalCashSales?.toFixed(2) ?? 0 + " Ar",
-      color: "#D1FAE5",
+      color: "#00D4FF",
       icon: "payments",
     },
     {
       label: "Crédit",
       value: totalCreditSales?.toFixed(2) ?? 0 + " Ar",
-      color: "#FEE2E2",
+      color: "#EF4444",
       icon: "credit-card",
     },
     {
       label: "Bénéfice",
       value: (totalProfit.toFixed(2) ?? 0) + "Ar",
-      color: "#BBF7D0",
+      color: "#16A34A",
       icon: "trending-up",
     },
   ];
@@ -93,26 +95,39 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  /* SINGLE CARD */
   statCard: {
     width: "48%",
-    borderRadius: 16,
-    padding: 18,
+    borderRadius: 18,
+    padding: 16,
     marginVertical: 8,
+    backgroundColor: "#172049",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
+    shadowColor: "rgba(0,212,255,0.08)",
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 4,
+  },
 
-    // theme (fond gris très léger)
-    backgroundColor: Colors.dark.card,
+  iconCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
   },
 
   statLabel: {
-    fontSize: 14,
-    color: Colors.dark.primary, // texte secondaire
-    marginTop: 8,
+    fontSize: 13,
+    color: "#8891B3",
+    marginTop: 4,
   },
 
   statValue: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "700",
-    color: Colors.dark.primary, // texte principal
+    color: "#FFFFFF",
+    marginTop: 2,
   },
 });

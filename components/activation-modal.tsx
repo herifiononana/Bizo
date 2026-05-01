@@ -34,29 +34,34 @@ export default function ActivationModal() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: "rgba(0,0,0,0.6)",
+          backgroundColor: "rgba(0,0,0,0.75)",
         }}
       >
         <View
           style={{
-            backgroundColor: "#1F2937",
-            padding: 18,
-            borderRadius: 10,
-            width: "80%",
+            backgroundColor: "#0F1535",
+            padding: 22,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: "rgba(255,255,255,0.10)",
+            width: "85%",
           }}
         >
-          <Text style={{ color: "white", marginBottom: 12, fontSize: 18 }}>
+          <Text style={{ color: "#FFFFFF", marginBottom: 14, fontSize: 18, fontWeight: "700" }}>
             {`Entrez votre clé d'activation`}
           </Text>
 
           <TextInput
             placeholder="Clé"
-            placeholderTextColor="#999"
+            placeholderTextColor="#8891B3"
             style={{
-              backgroundColor: "#374151",
-              color: "white",
-              padding: 10,
-              borderRadius: 6,
+              backgroundColor: "#172049",
+              color: "#FFFFFF",
+              padding: 12,
+              borderRadius: 10,
+              borderWidth: 1,
+              borderColor: "rgba(255,255,255,0.10)",
+              fontSize: 15,
             }}
             value={key}
             onChangeText={setKey}
@@ -66,28 +71,28 @@ export default function ActivationModal() {
             style={{
               marginTop: 16,
               backgroundColor: Colors.dark.accent,
-              padding: 10,
-              borderRadius: 6,
+              paddingVertical: 12,
+              borderRadius: 12,
             }}
             onPress={handleValidate}
           >
-            <Text style={{ textAlign: "center", color: "white", fontSize: 16 }}>
+            <Text style={{ textAlign: "center", color: "#FFFFFF", fontSize: 16, fontWeight: "700" }}>
               Valider
             </Text>
           </TouchableOpacity>
 
-          <View style={{ marginTop: 20 }}>
-            <Text style={{ color: Colors.dark.info, marginBottom: 6 }}>
+          <View style={{ marginTop: 20, gap: 4 }}>
+            <Text style={{ color: "#8891B3", marginBottom: 6, fontSize: 13, fontWeight: "600" }}>
               Assistance Bizo :
             </Text>
-            <Text style={{ color: "white" }}>
-              📞 Téléphone : {CONTACT_INFO.phone}
+            <Text style={{ color: "#FFFFFF", fontSize: 13 }}>
+              Téléphone : {CONTACT_INFO.phone}
             </Text>
-            <Text style={{ color: "white" }}>
-              💬 WhatsApp : {CONTACT_INFO.whatsapp}
+            <Text style={{ color: "#FFFFFF", fontSize: 13 }}>
+              WhatsApp : {CONTACT_INFO.whatsapp}
             </Text>
-            <Text style={{ color: "white" }}>
-              📧 Mail : {CONTACT_INFO.email}
+            <Text style={{ color: "#FFFFFF", fontSize: 13 }}>
+              Mail : {CONTACT_INFO.email}
             </Text>
           </View>
         </View>

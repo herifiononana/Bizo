@@ -35,11 +35,11 @@ export default function SaleListItemSkeleton() {
 
 const styles = StyleSheet.create({
   saleCard: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "#0F1535",
     padding: 14,
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: Colors.dark.border,
+    borderColor: "rgba(255,255,255,0.10)",
     marginBottom: 10,
   },
 
@@ -52,34 +52,34 @@ const styles = StyleSheet.create({
     width: "40%",
     height: 14,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 
   skeletonBlockTiny: {
     width: "20%",
     height: 14,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 
   skeletonBlockFull: {
     width: "100%",
     height: 14,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 
   skeletonBlockHalf: {
     width: "60%",
     height: 14,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 
   creditSkeleton: {
     borderWidth: 1,
-    borderRadius: 8,
-    borderColor: Colors.dark.accent,
-    backgroundColor: Colors.dark.accent + "33",
+    borderRadius: 10,
+    borderColor: "rgba(249,115,22,0.25)",
+    backgroundColor: "rgba(249,115,22,0.10)",
   },
 });

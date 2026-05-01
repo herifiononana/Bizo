@@ -72,49 +72,51 @@ const styles = StyleSheet.create({
     right: 10,
     zIndex: 10,
   },
-  // Petit bouton icône paramètre
   iconButton: {
-    padding: 10,
-    backgroundColor: Colors.dark.primary,
+    padding: 11,
+    backgroundColor: Colors.dark.accent,
     borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.primary,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: Colors.dark.accent,
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 5,
   },
 
-  // Overlay du modal
   modalOverlay: {
     flex: 1,
-    backgroundColor: "#00000066", // semi-transparent
+    backgroundColor: "rgba(0,0,0,0.70)",
     justifyContent: "center",
     alignItems: "center",
   },
 
-  // Contenu du modal
   modalContent: {
-    backgroundColor: Colors.dark.surface, // surface sombre
-    padding: 20,
-    borderRadius: 12,
-    width: "80%",
+    backgroundColor: "#0F1535",
+    padding: 22,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+    width: "85%",
   },
 
   modalTitle: {
     fontSize: 18,
     fontWeight: "700",
-    marginBottom: 12,
-    color: Colors.dark.text, // texte clair
+    marginBottom: 14,
+    color: "#FFFFFF",
     textAlign: "center",
   },
 
   input: {
     borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
-    borderRadius: 8,
-    padding: 10,
+    borderColor: "rgba(255,255,255,0.10)",
+    borderRadius: 12,
+    padding: 11,
     marginBottom: 16,
-    color: Colors.dark.text, // texte saisi clair
-    backgroundColor: Colors.dark.background, // champ input sombre
+    color: "#FFFFFF",
+    backgroundColor: "#172049",
   },
 
   actions: {

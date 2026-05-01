@@ -5,51 +5,54 @@
 
 import { Platform } from "react-native";
 
-const primaryColor = "#1F2937"; // Couleur principale
-const orangeAccent = "#F97316"; // Accent orange
+const orangeAccent = "#F97316";
 const blueAccent = "#3B82F6";
 const greenAccent = "#22C55E";
 const redAccent = "#EF4444";
+const cyanAccent = "#00D4FF";
 
 export const Colors = {
   light: {
     text: "#11181C",
     background: "#FFFFFF",
-    tint: primaryColor,
+    tint: "#F97316",
     icon: "#6B7280",
     tabIconDefault: "#6B7280",
     tabIconSelected: orangeAccent,
 
-    primary: primaryColor,
+    primary: "#F3F4F6",
     accent: orangeAccent,
     success: greenAccent,
     danger: redAccent,
     info: blueAccent,
+    cyan: cyanAccent,
 
-    surface: "#F3F4F6", // gris très clair
-    border: "#E5E7EB", // gris clair neutre
-    shadow: "rgba(0,0,0,0.08)", // ombre discrète
+    surface: "#F3F4F6",
+    border: "#E5E7EB",
+    shadow: "rgba(0,0,0,0.08)",
+    card: "#FFFFFF",
   },
 
   dark: {
-    text: "#ECEDEE",
-    background: "#111827",
-    tint: primaryColor,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
+    text: "#FFFFFF",
+    background: "#080C1F",
+    tint: "#172049",
+    icon: "#8891B3",
+    tabIconDefault: "#8891B3",
     tabIconSelected: orangeAccent,
 
-    primary: primaryColor,
+    primary: "#0F1535",
     accent: orangeAccent,
     success: greenAccent,
     danger: redAccent,
     info: blueAccent,
+    cyan: cyanAccent,
 
-    surface: "#1F2937", // surface sombre
-    border: "#374151", // gris foncé neutre
-    shadow: "rgba(0,0,0,0.5)", // ombre plus prononcée
+    surface: "#0F1535",
+    border: "rgba(255,255,255,0.10)",
+    shadow: "rgba(0,212,255,0.08)",
 
-    card: "#000", // carte sombre
+    card: "#172049",
   },
 };
 

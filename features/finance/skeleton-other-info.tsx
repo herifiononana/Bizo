@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 18,
     borderRadius: 8,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
     marginTop: 25,
     marginBottom: 12,
   },
@@ -39,17 +39,19 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 8,
-    marginBottom: 6,
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 14,
+    padding: 10,
+    marginBottom: 8,
+    backgroundColor: "#0F1535",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
   },
 
   circle: {
-    width: 32,
-    height: 32,
-    borderRadius: 50,
-    backgroundColor: Colors.dark.border,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: "#172049",
     marginRight: 12,
   },
 
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     width: "45%",
     height: 10,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
     marginBottom: 6,
   },
 
@@ -65,6 +67,6 @@ const styles = StyleSheet.create({
     width: "75%",
     height: 10,
     borderRadius: 6,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 });

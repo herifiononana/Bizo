@@ -14,17 +14,19 @@ export function CancelButton({ onPress }: { onPress: () => void }) {
 
 const styles = StyleSheet.create({
   cancelBtn: {
-    backgroundColor: Colors.dark.card, // surface sombre
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderRadius: 8,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    paddingVertical: 11,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
   },
   cancelText: {
-    color: Colors.dark.danger, // texte rouge
+    color: Colors.dark.danger,
     fontSize: 15,
-    fontWeight: "800",
+    fontWeight: "700",
   },
 });

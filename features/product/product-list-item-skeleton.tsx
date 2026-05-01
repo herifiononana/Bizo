@@ -32,25 +32,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     marginBottom: 10,
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
+    backgroundColor: "#0F1535",
+    borderRadius: 16,
     padding: 14,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
   },
   card: {
     flex: 1,
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "#0F1535",
   },
 
   skeletonBlock: {
-    backgroundColor: Colors.dark.border, // gris doux
+    backgroundColor: "#172049",
     borderRadius: 6,
   },
 
   deleteBtnSkeleton: {
     marginLeft: 8,
-    width: 30,
-    height: 30,
-    backgroundColor: Colors.dark.border,
-    borderRadius: 8,
+    width: 32,
+    height: 32,
+    backgroundColor: "#172049",
+    borderRadius: 10,
   },
 });

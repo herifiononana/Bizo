@@ -88,11 +88,16 @@ export default SaleListItem;
 
 const styles = StyleSheet.create({
   saleCard: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "#0F1535",
     padding: 14,
-    borderRadius: 12,
-    borderColor: Colors.dark.border,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
     marginBottom: 10,
+    shadowColor: "rgba(0,212,255,0.06)",
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 3,
   },
 
   saleHeader: {
@@ -103,17 +108,17 @@ const styles = StyleSheet.create({
   saleProduct: {
     fontSize: 17,
     fontWeight: "600",
-    color: Colors.dark.text,
+    color: "#FFFFFF",
   },
 
   saleDate: {
     fontSize: 13,
-    color: Colors.dark.icon,
+    color: "#8891B3",
   },
 
   saleDetails: {
-    fontSize: 15,
-    color: Colors.dark.text,
+    fontSize: 14,
+    color: "#8891B3",
     marginTop: 6,
   },
 
@@ -124,13 +129,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  /* === Crédit === */
   creditContainer: {
-    marginTop: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    backgroundColor: Colors.dark.accent + "33",
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "rgba(249,115,22,0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(249,115,22,0.25)",
   },
 
   creditRow: {
@@ -151,18 +157,17 @@ const styles = StyleSheet.create({
     color: Colors.dark.danger,
   },
 
-  /* === Bouton Payé === */
   payButton: {
     backgroundColor: Colors.dark.success,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
+    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
   },
 
   payButtonText: {
-    color: Colors.dark.background,
+    color: "#FFFFFF",
     fontWeight: "600",
     fontSize: 13,
   },

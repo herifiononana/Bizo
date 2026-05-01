@@ -7,7 +7,7 @@ export function AddButton({ onPress }: { onPress: () => void }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconButton} onPress={onPress}>
-        <MaterialIcons name="add-circle" size={32} color={Colors.dark.accent} />
+        <MaterialIcons name="add-circle" size={28} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -21,12 +21,15 @@ const styles = StyleSheet.create({
   },
 
   iconButton: {
-    padding: 10,
-    backgroundColor: Colors.dark.primary,
+    padding: 12,
+    backgroundColor: Colors.dark.accent,
     borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.primary,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: Colors.dark.accent,
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
   },
 });

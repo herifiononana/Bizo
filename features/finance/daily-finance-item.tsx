@@ -57,17 +57,22 @@ export default DailyFinanceItem;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.dark.primary,
-    padding: 12,
-    borderRadius: 14,
-    marginBottom: 8,
-    elevation: 3,
+    backgroundColor: "#0F1535",
+    padding: 14,
+    borderRadius: 18,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+    shadowColor: "rgba(0,212,255,0.08)",
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 4,
   },
 
   date: {
     fontSize: 13,
     fontWeight: "700",
-    color: Colors.dark.text,
+    color: "#8891B3",
     marginBottom: 10,
   },
 
@@ -80,25 +85,23 @@ const styles = StyleSheet.create({
 
   statItem: {
     width: "48%",
-    backgroundColor: Colors.dark.tint,
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    shadowColor: Colors.dark.success,
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: "#172049",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
   },
 
   label: {
     fontSize: 12,
-    color: Colors.dark.icon,
+    color: "#8891B3",
     marginBottom: 2,
   },
 
   value: {
     fontSize: 16,
     fontWeight: "800",
-    color: Colors.dark.text,
+    color: "#FFFFFF",
   },
 });

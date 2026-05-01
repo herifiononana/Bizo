@@ -18,20 +18,21 @@ const styles = StyleSheet.create({
   card: {
     width: "48%",
     padding: 16,
-    borderRadius: 10,
-    backgroundColor: Colors.dark.surface,
+    borderRadius: 18,
+    backgroundColor: "#0F1535",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.08)",
   },
 
-  // animation pulsation
   pulse: {
-    opacity: 0.6,
+    opacity: 0.7,
   },
 
   circle: {
-    width: 28,
-    height: 28,
-    borderRadius: 50,
-    backgroundColor: Colors.dark.border,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: "#172049",
     marginBottom: 10,
   },
 
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     width: "45%",
     height: 12,
     borderRadius: 4,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
     marginBottom: 8,
   },
 
@@ -47,6 +48,6 @@ const styles = StyleSheet.create({
     width: "65%",
     height: 14,
     borderRadius: 4,
-    backgroundColor: Colors.dark.border,
+    backgroundColor: "#172049",
   },
 });

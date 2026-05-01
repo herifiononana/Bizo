@@ -15,7 +15,7 @@ const Dashboard = () => {
   return (
     <View style={styles.screen}>
       <ActivationModal />
-      <StatusBar barStyle="dark-content" backgroundColor="#F8FAFC" />
+      <StatusBar barStyle="light-content" backgroundColor="#080C1F" />
       <CsvButtons />
       <AddReferenceButton />
       <ReferenceFilterModal {...{ selectedReference, setSelectedReference }} />
@@ -62,23 +62,23 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "800",
-    color: Colors.dark.text,
+    color: "#FFFFFF",
     textAlign: "center",
   },
 
   subtitle: {
-    fontSize: 15,
-    color: Colors.dark.icon,
+    fontSize: 14,
+    color: "#8891B3",
     marginBottom: 22,
     textAlign: "center",
   },
 
   footerText: {
     marginTop: 25,
-    fontSize: 12,
-    color: Colors.dark.tabIconDefault,
+    fontSize: 11,
+    color: "#8891B3",
     textAlign: "center",
   },
 });

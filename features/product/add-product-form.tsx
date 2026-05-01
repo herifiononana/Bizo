@@ -98,7 +98,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           <TextInput
             style={[styles.input, errors.name && styles.errorInput]}
             placeholder="Ex : Riz, Sucre..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#8891B3"
             value={formData.name}
             onChangeText={(text) => handleChange("name", text)}
           />
@@ -110,7 +110,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           <TextInput
             style={[styles.input, errors.quantity && styles.errorInput]}
             placeholder="Ex : 10"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#8891B3"
             keyboardType="numeric"
             value={formData.quantity}
             onChangeText={(text) => handleChange("quantity", text)}
@@ -125,7 +125,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           <TextInput
             style={[styles.input, errors.purchasePrice && styles.errorInput]}
             placeholder="Ex : 2500"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#8891B3"
             keyboardType="numeric"
             value={formData.purchasePrice}
             onChangeText={(text) => handleChange("purchasePrice", text)}
@@ -140,7 +140,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
           <TextInput
             style={[styles.input, errors.salePrice && styles.errorInput]}
             placeholder="Ex : 2500"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#8891B3"
             keyboardType="numeric"
             value={formData.salePrice}
             onChangeText={(text) => handleChange("salePrice", text)}
@@ -182,17 +182,19 @@ export default AddProductForm;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.dark.surface, // fond sombre
-    borderRadius: 18,
+    backgroundColor: "#0F1535",
+    borderRadius: 20,
     padding: 20,
     marginVertical: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
   },
   title: {
     fontSize: 22,
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    color: Colors.dark.text, // couleur principale
+    color: "#FFFFFF",
   },
   form: {
     gap: 14,
@@ -202,21 +204,21 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "600",
-    color: Colors.dark.text, // texte clair
+    color: "#FFFFFF",
     marginBottom: 6,
     fontSize: 15,
   },
   input: {
     borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 10,
-    padding: 10,
+    borderColor: "rgba(255,255,255,0.10)",
+    borderRadius: 12,
+    padding: 11,
     marginBottom: 10,
-    backgroundColor: Colors.dark.surface,
-    color: Colors.dark.text,
+    backgroundColor: "#172049",
+    color: "#FFFFFF",
   },
   errorInput: {
-    borderColor: Colors.dark.danger, // rouge d’erreur
+    borderColor: Colors.dark.danger,
   },
   errorText: {
     color: Colors.dark.danger,
@@ -225,17 +227,17 @@ const styles = StyleSheet.create({
   },
   selectContainer: {
     borderWidth: 1,
-    borderColor: Colors.dark.border,
-    borderRadius: 10,
-    height: 42,
+    borderColor: "rgba(255,255,255,0.10)",
+    borderRadius: 12,
+    height: 44,
     overflow: "hidden",
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "#172049",
   },
   pickerContainer: {
-    backgroundColor: Colors.dark.surface,
-    borderColor: "#FFFFFF00",
-    height: 40,
-    color: Colors.dark.text,
+    backgroundColor: "#172049",
+    borderColor: "transparent",
+    height: 44,
+    color: "#FFFFFF",
   },
   actions: {
     flexDirection: "row",

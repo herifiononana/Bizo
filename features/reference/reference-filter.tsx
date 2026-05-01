@@ -135,33 +135,38 @@ const styles = StyleSheet.create({
   },
 
   iconButton: {
-    padding: 10,
-    backgroundColor: Colors.dark.primary,
+    padding: 11,
+    backgroundColor: Colors.dark.accent,
     borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.primary,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: Colors.dark.accent,
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 5,
   },
 
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
+    backgroundColor: "rgba(0,0,0,0.55)",
     justifyContent: "flex-end",
   },
 
   modalContent: {
-    backgroundColor: Colors.dark.surface, // surface sombre
+    backgroundColor: "#0F1535",
     padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
   },
 
   title: {
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 16,
-    color: Colors.dark.text, // texte clair
+    color: "#FFFFFF",
   },
 
   row: {
@@ -170,26 +175,27 @@ const styles = StyleSheet.create({
   },
 
   chip: {
-    backgroundColor: Colors.dark.surface, // fond sombre
+    backgroundColor: "#172049",
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 50,
     marginRight: 8,
     borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure thème
+    borderColor: "rgba(255,255,255,0.10)",
   },
 
   chipActive: {
-    backgroundColor: Colors.dark.accent, // accent orange
+    backgroundColor: Colors.dark.accent,
     borderColor: Colors.dark.accent,
     shadowColor: Colors.dark.accent,
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 3,
+    shadowRadius: 4,
+    elevation: 4,
   },
 
   chipText: {
-    color: Colors.dark.text, // texte clair
+    color: "#8891B3",
     fontSize: 14,
   },
 
@@ -200,9 +206,9 @@ const styles = StyleSheet.create({
 
   closeButton: {
     marginTop: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    backgroundColor: Colors.dark.primary, // bouton fermer thème sombre
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: Colors.dark.accent,
   },
 
   closeText: {

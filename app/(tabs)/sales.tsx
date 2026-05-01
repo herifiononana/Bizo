@@ -48,7 +48,7 @@ const SalesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>📊 Gestion des ventes</Text>
+      <Text style={styles.title}>Gestion des ventes</Text>
       <ReferenceFilter
         {...{
           top: 10,
@@ -155,19 +155,19 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "700",
-    color: Colors.dark.text, // texte clair
+    color: "#FFFFFF",
     textAlign: "center",
     marginBottom: 14,
   },
   searchInput: {
-    backgroundColor: Colors.dark.surface, // surface sombre
-    borderRadius: 10,
+    backgroundColor: "#0F1535",
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: Colors.dark.border, // bordure neutre
+    borderColor: "rgba(255,255,255,0.10)",
     padding: 12,
     flex: 1,
-    fontSize: 16,
-    color: Colors.dark.text, // texte clair
+    fontSize: 15,
+    color: "#FFFFFF",
     marginBottom: 12,
   },
   filterRow: {
@@ -177,30 +177,30 @@ const styles = StyleSheet.create({
   },
   dateButton: {
     flex: 1,
-    backgroundColor: Colors.dark.surface,
-    borderRadius: 8,
+    backgroundColor: "#0F1535",
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.dark.border,
+    borderColor: "rgba(255,255,255,0.10)",
     padding: 10,
     marginHorizontal: 4,
     alignItems: "center",
   },
   dateButtonText: {
-    fontSize: 15,
-    color: Colors.dark.text,
+    fontSize: 14,
+    color: "#FFFFFF",
   },
 
   creditButton: {
-    backgroundColor: Colors.dark.surface,
+    backgroundColor: "rgba(249,115,22,0.10)",
     borderWidth: 1,
-    borderColor: Colors.dark.accent, // accent orange
-    padding: 8,
-    borderRadius: 8,
+    borderColor: "#F97316",
+    padding: 10,
+    borderRadius: 10,
     marginBottom: 12,
     alignItems: "center",
   },
   creditButtonText: {
-    color: Colors.dark.accent,
+    color: "#F97316",
     fontSize: 15,
     fontWeight: "600",
   },
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: "center",
     marginTop: 40,
-    color: Colors.dark.icon, // texte secondaire clair
+    color: "#8891B3",
     fontSize: 15,
   },
 });

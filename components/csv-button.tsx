@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/theme";
 import { useProducts } from "@/hooks/product/useProduct";
 import { useSale } from "@/hooks/sale/useSale";
 import { exportAllDataToCSV, importAllDataFromCSV } from "@/libs/export-to-csv";
@@ -45,11 +44,11 @@ const CsvButtons = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconButton} onPress={handleExport}>
-        <Ionicons name="download-outline" size={22} color="#FFF" />
+        <Ionicons name="download-outline" size={22} color="#00D4FF" />
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.iconButton} onPress={handleImport}>
-        <Ionicons name="cloud-upload-outline" size={22} color="#FFF" />
+        <Ionicons name="cloud-upload-outline" size={22} color="#00D4FF" />
       </TouchableOpacity>
     </View>
   );
@@ -70,11 +69,11 @@ const styles = StyleSheet.create({
     zIndex: 999, // pour rester au dessus
   },
   iconButton: {
-    padding: 10,
-    backgroundColor: Colors.dark.primary,
+    padding: 11,
+    backgroundColor: "#172049",
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: Colors.dark.primary,
+    borderColor: "rgba(255,255,255,0.10)",
     alignItems: "center",
     justifyContent: "center",
   },
