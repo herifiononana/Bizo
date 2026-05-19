@@ -6,7 +6,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
 import EditProductForm from "./edit-product-form";
 
-function ProductListItem({ item }: { item: Product }) {
+const ProductListItem = React.memo(function ProductListItem({ item }: { item: Product }) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   return (
@@ -64,7 +64,7 @@ function ProductListItem({ item }: { item: Product }) {
       </Modal>
     </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   productWrapper: {
@@ -131,3 +131,4 @@ const styles = StyleSheet.create({
 });
 
 export default ProductListItem;
+

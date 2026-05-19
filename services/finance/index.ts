@@ -42,13 +42,13 @@ export const getFinance = ({
     .filter((sale) => sale.isCredit === false)
     .reduce((sum, sale) => sum + sale.totalAmount, 0);
 
-  // calcul du profit (bénéfice)
+  // calcul du profit (bénéfice) — O(n) avec Map au lieu de O(n × m)
+  const productMap = new Map(products.map((p) => [p.id, p]));
   let totalProfit = 0;
   for (const sale of sales) {
-    const product = products.find((p) => p.id === sale.productId);
+    const product = productMap.get(sale.productId);
     if (product) {
-      const cost = sale.quantity * product.purchasePrice;
-      totalProfit += sale.totalAmount - cost;
+      totalProfit += sale.totalAmount - sale.quantity * product.purchasePrice;
     }
   }
 

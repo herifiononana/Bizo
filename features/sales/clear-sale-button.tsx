@@ -9,7 +9,8 @@ import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export function ClearSaleButton() {
   const { sales, setSales } = useSalesStore();
-  const { history, setHistory } = useHistoryStore();
+  const storedHistory = useHistoryStore((state) => state.storedHistory);
+  const setStoredHistory = useHistoryStore((state) => state.setStoredHistory);
 
   const handleClear = () => {
     Alert.alert(
@@ -23,14 +24,9 @@ export function ClearSaleButton() {
           onPress: async () => {
             if (!sales) return;
             try {
-              if (history) {
-                const data = [...sales, ...history];
-                await saveHistory(data);
-                setHistory(data);
-              } else {
-                setHistory(sales);
-                await saveHistory(sales);
-              }
+              const data = [...sales, ...(storedHistory ?? [])];
+              await saveHistory(data);
+              setStoredHistory(data);
               await saveSales([]);
               setSales([]);
             } catch (error) {

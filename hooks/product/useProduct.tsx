@@ -4,10 +4,19 @@ import { useProductsStore } from "@/stores/product.store";
 import { useEffect, useState } from "react";
 
 export const useProducts = () => {
-  const { products, setProducts } = useProductsStore();
-  const [loading, setLoading] = useState(true);
+  const products = useProductsStore((state) => state.products);
+  const setProducts = useProductsStore((state) => state.setProducts);
+  const setIsLoaded = useProductsStore((state) => state.setIsLoaded);
+
+  const [loading, setLoading] = useState(
+    () => !useProductsStore.getState().isLoaded
+  );
 
   const loadProducts = async () => {
+    if (useProductsStore.getState().isLoaded) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const storedProducts = await getProduct();
@@ -17,9 +26,10 @@ export const useProducts = () => {
         setProducts([]);
         await saveProducts([]);
       }
+      setIsLoaded(true);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      setProducts([]); // fallback sécurisé
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -40,6 +50,6 @@ export const useProducts = () => {
     products,
     addProduct,
     loadProducts,
-    loading, // 👈 important !!
+    loading,
   };
 };

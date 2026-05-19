@@ -1,11 +1,10 @@
-import { Colors } from "@/constants/theme";
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-function DailyFinanceItem({
+const DailyFinanceItem = React.memo(function DailyFinanceItem({
   dateKey,
   finance,
 }: {
@@ -45,13 +44,13 @@ function DailyFinanceItem({
         <View style={styles.statItem}>
           <Text style={styles.label}>Profit</Text>
           <Text style={[styles.value, { color: "#16A34A" }]}>
-            +{finance.totalProfit.toLocaleString()} Ar
+            {finance.totalProfit.toLocaleString()} Ar
           </Text>
         </View>
       </View>
     </View>
   );
-}
+});
 
 export default DailyFinanceItem;
 

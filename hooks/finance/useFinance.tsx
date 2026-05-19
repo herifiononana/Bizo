@@ -1,6 +1,6 @@
 import { getFinance } from "@/services/finance";
 import { useFinanceSummaryStore } from "@/stores/finance.store";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
 
@@ -8,9 +8,8 @@ export const useFinance = () => {
   const { products } = useProducts();
   const { sales, getTodaySaleList, getTodaySaleListGroupedByReferences } =
     useSale();
-  const { finance: data, setFinance } = useFinanceSummaryStore(
-    (state) => state
-  );
+  const data = useFinanceSummaryStore((state) => state.finance);
+  const setFinance = useFinanceSummaryStore((state) => state.setFinance);
 
   const [loading, setLoading] = useState(true);
 
@@ -18,14 +17,11 @@ export const useFinance = () => {
     string | null | undefined
   >();
 
-  // ===== Actualisation du dashboard =====
-  const changeFinanceStatus = () => {
+  const changeFinanceStatus = useCallback(() => {
     if (!sales || !products) return;
-
     const filteredSales = !selectedReference
       ? getTodaySaleList()
       : getTodaySaleListGroupedByReferences(selectedReference);
-
     setFinance(
       getFinance({
         products,
@@ -33,28 +29,39 @@ export const useFinance = () => {
         reference: selectedReference,
       })
     );
-  };
+  }, [
+    sales,
+    products,
+    selectedReference,
+    getTodaySaleList,
+    getTodaySaleListGroupedByReferences,
+    setFinance,
+  ]);
 
-  // ---------- Données dérivées optimisées ----------
   const summaryLists = useMemo(() => {
     if (!products || !sales) return null;
 
-    const withSoldCount = products.map((p) => {
-      const qty =
-        sales
-          ?.filter((s) => s.productId === p.id)
-          .reduce((sum, s) => sum + s.quantity, 0) ?? 0;
+    // Build sold count map once: O(sales) instead of O(products × sales)
+    const soldCountMap = new Map<string, number>();
+    for (const sale of sales) {
+      soldCountMap.set(
+        sale.productId,
+        (soldCountMap.get(sale.productId) ?? 0) + sale.quantity
+      );
+    }
 
-      return { product: p, sold: qty };
-    });
+    const withSoldCount = products.map((p) => ({
+      product: p,
+      sold: soldCountMap.get(p.id) ?? 0,
+    }));
 
     return {
-      topSoldProducts: withSoldCount
+      topSoldProducts: [...withSoldCount]
         .filter((item) => item.sold > 0)
         .sort((a, b) => b.sold - a.sold)
         .slice(0, 5),
 
-      leastSoldProducts: withSoldCount
+      leastSoldProducts: [...withSoldCount]
         .sort((a, b) => a.sold - b.sold)
         .slice(0, 5),
 
@@ -93,10 +100,8 @@ export const useFinance = () => {
     };
   }, [products, sales]);
 
-  // ---------- Détection du moment où tout est OK ----------
   useEffect(() => {
     if (!products || !sales) return;
-
     changeFinanceStatus();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,7 +109,7 @@ export const useFinance = () => {
 
   return {
     data,
-    loading, // === important ===
+    loading,
     changeFinanceStatus,
     selectedReference,
     setSelectedReference,

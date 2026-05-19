@@ -1,7 +1,7 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useMemo, useState } from "react";
 import {
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,100 +17,101 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 const DailyFinanceScreen = () => {
-  // const { sales } = useSalesStore();
   const { history: sales } = useHistory();
-  const { products } = useProductsStore((state) => state);
+  const products = useProductsStore((state) => state.products);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);
 
-  // ---------------------------------------------------
   // Grouper les ventes par jour
-  // ---------------------------------------------------
   const groupedFinance = useMemo(() => {
     if (!sales) return {};
-
     const groups: Record<string, any[]> = {};
-
     sales.forEach((sale) => {
       const d = new Date(sale.saleDate);
-      const dateKey = format(d, "yyyy-MM-dd"); // clé unique par jour
-
+      const dateKey = format(d, "yyyy-MM-dd");
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(sale);
     });
-
     return groups;
   }, [sales]);
 
-  // ---------------------------------------------------
   // Filtrer selon la date choisie (ou tout)
-  // ---------------------------------------------------
   const filteredDates = useMemo(() => {
     if (!selectedDate) return Object.keys(groupedFinance);
-
     const target = format(selectedDate, "yyyy-MM-dd");
     return Object.keys(groupedFinance).filter((d) => d === target);
   }, [selectedDate, groupedFinance]);
 
+  // Pré-calculer les résumés financiers — évite getFinance() dans renderItem
+  const dailyFinanceData = useMemo(
+    () =>
+      filteredDates.map((dateKey) => ({
+        dateKey,
+        finance: getFinance({
+          products: products ?? [],
+          sales: groupedFinance[dateKey],
+        }),
+      })),
+    [filteredDates, groupedFinance, products]
+  );
+
+  const ListHeader = (
+    <>
+      <Text style={styles.title}>Résumé journalier</Text>
+      <Text style={styles.subtitle}>
+        {selectedDate
+          ? format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })
+          : "Toutes les dates"}
+      </Text>
+      <View style={styles.dateRow}>
+        <TouchableOpacity
+          style={styles.datePickerButton}
+          onPress={() => setShowPicker(true)}
+        >
+          <Text style={styles.datePickerText}>Filtrer par date</Text>
+        </TouchableOpacity>
+        {selectedDate && (
+          <TouchableOpacity
+            style={[styles.datePickerButton, styles.resetButton]}
+            onPress={() => setSelectedDate(null)}
+          >
+            <Text style={styles.datePickerText}>Réinitialiser</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      {showPicker && (
+        <DateTimePicker
+          value={selectedDate ?? new Date()}
+          mode="date"
+          display="calendar"
+          onChange={(event, date) => {
+            setShowPicker(false);
+            if (date) setSelectedDate(date);
+          }}
+        />
+      )}
+    </>
+  );
+
   return (
     <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Résumé journalier</Text>
-
-        {/* Date sélectionnée */}
-        <Text style={styles.subtitle}>
-          {selectedDate
-            ? format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })
-            : "Toutes les dates"}
-        </Text>
-
-        {/* Sélecteur de date */}
-        <View style={styles.dateRow}>
-          <TouchableOpacity
-            style={styles.datePickerButton}
-            onPress={() => setShowPicker(true)}
-          >
-            <Text style={styles.datePickerText}>Filtrer par date</Text>
-          </TouchableOpacity>
-
-          {selectedDate && (
-            <TouchableOpacity
-              style={[styles.datePickerButton, styles.resetButton]}
-              onPress={() => setSelectedDate(null)}
-            >
-              <Text style={styles.datePickerText}>Réinitialiser</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        {showPicker && (
-          <DateTimePicker
-            value={selectedDate ?? new Date()}
-            mode="date"
-            display="calendar"
-            onChange={(event, date) => {
-              setShowPicker(false);
-              if (date) setSelectedDate(date);
-            }}
-          />
+      <FlatList
+        data={dailyFinanceData}
+        keyExtractor={(item) => item.dateKey}
+        contentContainerStyle={styles.container}
+        renderItem={({ item }) => (
+          <DailyFinanceItem dateKey={item.dateKey} finance={item.finance} />
         )}
-
-        {/* LISTE DES RÉSUMÉS PAR JOUR */}
-        {filteredDates.length === 0 && (
+        ListHeaderComponent={ListHeader}
+        ListEmptyComponent={
           <Text style={styles.empty}>Aucun résultat</Text>
-        )}
-
-        {filteredDates.map((dateKey) => {
-          const daySales = groupedFinance[dateKey];
-          const finance = getFinance({
-            products: products ?? [],
-            sales: daySales,
-          });
-
-          return <DailyFinanceItem key={dateKey} {...{ dateKey, finance }} />;
-        })}
-      </ScrollView>
+        }
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
+      />
     </View>
   );
 };

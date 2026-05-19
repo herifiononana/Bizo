@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/theme";
+import { Sale } from "@/interface/sale/sale";
 import ReferenceFilter from "@/features/reference/reference-filter";
 import { ClearSaleButton } from "@/features/sales/clear-sale-button";
 import CreateSaleButton from "@/features/sales/create-sale-button";
@@ -6,7 +7,7 @@ import SaleListItem from "@/features/sales/sale-list-item";
 import SaleListItemSkeleton from "@/features/sales/sale-skeleton";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
 import { useProductsStore } from "@/stores/product.store";
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -18,7 +19,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const SalesScreen = () => {
-  const { products } = useProductsStore((state) => state);
+  const products = useProductsStore((state) => state.products);
   const { handleFilterSale, loading } = useSale();
 
   const [isStartPickerVisible, setStartPickerVisible] =
@@ -33,6 +34,12 @@ const SalesScreen = () => {
     creditOnly: false,
   });
 
+  // O(1) product lookup for renderItem
+  const productMap = useMemo(
+    () => new Map((products ?? []).map((p) => [p.id, p])),
+    [products]
+  );
+
   // Handlers Date Picker
   const handleConfirmStart = (date: Date) => {
     setStartPickerVisible(false);
@@ -43,8 +50,28 @@ const SalesScreen = () => {
     setParams({ ...params, endDate: date });
   };
 
-  // Filtrage ventes
-  const filteredSales = handleFilterSale({ ...params });
+  // Filtrage ventes — recalcule uniquement quand params ou données changent
+  const filteredSales = useMemo(
+    () => handleFilterSale(params),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      params.search,
+      params.startDate,
+      params.endDate,
+      params.creditOnly,
+      params.referenceProduct,
+      handleFilterSale,
+    ]
+  );
+
+  const renderSaleItem = useCallback(
+    ({ item }: { item: Sale }) => {
+      if (loading) return <SaleListItemSkeleton />;
+      const product = productMap.get(item.productId);
+      return product ? <SaleListItem product={product} item={item} /> : null;
+    },
+    [loading, productMap]
+  );
 
   return (
     <View style={styles.container}>
@@ -66,7 +93,6 @@ const SalesScreen = () => {
           value={params.search}
           onChangeText={(search) => setParams({ ...params, search })}
         />
-        {/* Filtres références */}
       </View>
       {/* Filtres de date */}
       <View style={styles.filterRow}>
@@ -127,16 +153,12 @@ const SalesScreen = () => {
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         windowSize={10}
+        removeClippedSubviews={true}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucune vente trouvée.</Text>
         }
-        renderItem={({ item }) => {
-          if (loading) return <SaleListItemSkeleton />;
-          if (!products) return <></>;
-          const product = products.find((p) => p.id === item.productId);
-          return product ? <SaleListItem {...{ product, item }} /> : <></>;
-        }}
+        renderItem={renderSaleItem}
       />
       <ClearSaleButton />
       <CreateSaleButton />
@@ -149,7 +171,7 @@ export default SalesScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.dark.background, // fond sombre
+    backgroundColor: Colors.dark.background,
     padding: 16,
   },
   title: {

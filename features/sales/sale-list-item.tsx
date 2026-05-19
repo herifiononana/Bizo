@@ -12,8 +12,9 @@ type SaleListItemProps = {
   item: Sale;
 };
 
-function SaleListItem({ product, item }: SaleListItemProps) {
-  const { sales, setSales } = useSalesStore();
+const SaleListItem = React.memo(function SaleListItem({ product, item }: SaleListItemProps) {
+  const sales = useSalesStore((state) => state.sales);
+  const setSales = useSalesStore((state) => state.setSales);
 
   const handlePayCredit = async () => {
     if (!sales) return;
@@ -82,7 +83,7 @@ function SaleListItem({ product, item }: SaleListItemProps) {
       )}
     </View>
   );
-}
+});
 
 export default SaleListItem;
 
