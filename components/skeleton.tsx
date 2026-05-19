@@ -18,7 +18,7 @@ export default Skeleton;
 
 const styles = StyleSheet.create({
   skeleton: {
-    backgroundColor: "#172049",
+    backgroundColor: "#1B2342",
     marginVertical: 6,
   },
 });

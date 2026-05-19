@@ -172,10 +172,12 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
                 selectedValue={formData.referenceId}
                 onValueChange={(val) => handleChange("referenceId", val)}
                 style={styles.pickerContainer}
+                dropdownIconColor="#B7BFD8"
+                mode="dropdown"
               >
-                <Picker.Item label="Sélectionner une référence..." value="" />
+                <Picker.Item label="Sélectionner une référence..." value="" color="#545C7A" />
                 {references.map((ref) => (
-                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} />
+                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} color="#F4F6FF" />
                 ))}
               </Picker>
             </View>
@@ -197,19 +199,21 @@ export default EditProductForm;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0F1535",
-    borderRadius: 20,
-    padding: 20,
-    marginVertical: 12,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
+    backgroundColor: "#141B33",
+    padding: 22,
+    paddingTop: 14,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderTopWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
   },
   title: {
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 20,
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#F4F6FF",
+    marginBottom: 18,
     textAlign: "center",
-    color: "#FFFFFF",
+    letterSpacing: -0.5,
   },
   form: {
     gap: 14,
@@ -219,44 +223,50 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: "#B7BFD8",
+    fontSize: 13,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
     marginBottom: 6,
-    fontSize: 15,
   },
   input: {
+    backgroundColor: "#1B2342",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 12,
-    padding: 11,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 14,
+    padding: 14,
+    height: 50,
     marginBottom: 10,
-    backgroundColor: "#172049",
-    color: "#FFFFFF",
+    color: "#F4F6FF",
+    fontSize: 15,
   },
   errorInput: {
-    borderColor: Colors.dark.danger,
+    borderColor: "#F43F5E",
+    backgroundColor: "rgba(244,63,94,0.06)",
   },
   errorText: {
-    color: Colors.dark.danger,
+    color: "#F43F5E",
     fontSize: 13,
-    marginTop: 4,
+    marginBottom: 6,
   },
   selectContainer: {
+    backgroundColor: "#1B2342",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 12,
-    height: 44,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 14,
+    marginBottom: 10,
     overflow: "hidden",
-    backgroundColor: "#172049",
   },
   pickerContainer: {
-    backgroundColor: "#172049",
+    backgroundColor: "#1B2342",
     borderColor: "transparent",
-    color: "#FFFFFF",
-    height: 44,
+    color: "#F4F6FF",
+    height: 50,
   },
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 16,
+    marginTop: 14,
+    gap: 10,
   },
 });

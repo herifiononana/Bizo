@@ -71,24 +71,24 @@ export default CreateSaleButton;
 const styles = StyleSheet.create({
   addButtonContainer: {
     position: "absolute",
-    bottom: 10,
-    right: 10,
+    bottom: 90,
+    right: 18,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
+    backgroundColor: "rgba(5,8,18,0.75)",
+    justifyContent: "flex-end",
   },
   modalBox: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
+    backgroundColor: "#141B33",
+    borderRadius: 28,
     padding: 20,
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: "800",
     textAlign: "center",
     marginBottom: 14,
+    color: "#F4F6FF",
   },
 });

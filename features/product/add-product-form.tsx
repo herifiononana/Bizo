@@ -1,11 +1,19 @@
-import { CancelButton } from "@/components/cancel-button";
-import { SaveButton } from "@/components/save-button";
-import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
 import { useReferencesStore } from "@/stores/reference.store";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -88,160 +96,294 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     });
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>➕ Ajouter un produit</Text>
+  const margin =
+    formData.purchasePrice && formData.salePrice
+      ? (Number(formData.salePrice) - Number(formData.purchasePrice)).toLocaleString()
+      : null;
 
-      <View style={styles.form}>
-        <View style={styles.formGroup}>
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <View style={styles.sheet}>
+        {/* Drag handle */}
+        <View style={styles.handle} />
+
+        {/* Header */}
+        <View style={styles.sheetHeader}>
+          <View style={styles.sheetIconWrap}>
+            <MaterialIcons name="add" size={18} color="#FB923C" />
+          </View>
+          <Text style={styles.sheetTitle}>Ajouter un produit</Text>
+          <TouchableOpacity style={styles.closeBtn} onPress={onCancel}>
+            <MaterialIcons name="close" size={20} color="#B7BFD8" />
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Nom du produit */}
           <Text style={styles.label}>Nom du produit</Text>
           <TextInput
             style={[styles.input, errors.name && styles.errorInput]}
-            placeholder="Ex : Riz, Sucre..."
-            placeholderTextColor="#8891B3"
+            placeholder="Ex : Riz, Sucre…"
+            placeholderTextColor="#545C7A"
             value={formData.name}
             onChangeText={(text) => handleChange("name", text)}
           />
           {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
-        </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Quantité</Text>
-          <TextInput
-            style={[styles.input, errors.quantity && styles.errorInput]}
-            placeholder="Ex : 10"
-            placeholderTextColor="#8891B3"
-            keyboardType="numeric"
-            value={formData.quantity}
-            onChangeText={(text) => handleChange("quantity", text)}
-          />
-          {errors.quantity && (
-            <Text style={styles.errorText}>{errors.quantity}</Text>
-          )}
-        </View>
+          {/* Quantité + Référence side by side */}
+          <View style={styles.row2col}>
+            <View style={styles.col2}>
+              <Text style={styles.label}>Quantité</Text>
+              <TextInput
+                style={[styles.input, errors.quantity && styles.errorInput]}
+                placeholder="Ex : 10"
+                placeholderTextColor="#545C7A"
+                keyboardType="numeric"
+                value={formData.quantity}
+                onChangeText={(text) => handleChange("quantity", text)}
+              />
+              {errors.quantity && (
+                <Text style={styles.errorText}>{errors.quantity}</Text>
+              )}
+            </View>
+            {references?.length ? (
+              <View style={styles.col2}>
+                <Text style={styles.label}>Référence</Text>
+                <View style={styles.selectContainer}>
+                  <Picker
+                    selectedValue={formData.referenceId}
+                    onValueChange={(val) => handleChange("referenceId", val)}
+                    style={styles.pickerContainer}
+                    dropdownIconColor="#B7BFD8"
+                    mode="dropdown"
+                  >
+                    <Picker.Item label="Catégorie…" value="" color="#545C7A" />
+                    {references.map((ref) => (
+                      <Picker.Item
+                        key={ref.id}
+                        label={ref.name}
+                        value={ref.id}
+                        color="#F4F6FF"
+                      />
+                    ))}
+                  </Picker>
+                </View>
+              </View>
+            ) : null}
+          </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Prix d’achat (Ar)</Text>
-          <TextInput
-            style={[styles.input, errors.purchasePrice && styles.errorInput]}
-            placeholder="Ex : 2500"
-            placeholderTextColor="#8891B3"
-            keyboardType="numeric"
-            value={formData.purchasePrice}
-            onChangeText={(text) => handleChange("purchasePrice", text)}
-          />
-          {errors.purchasePrice && (
-            <Text style={styles.errorText}>{errors.purchasePrice}</Text>
-          )}
-        </View>
-
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Prix de vente (Ar)</Text>
-          <TextInput
-            style={[styles.input, errors.salePrice && styles.errorInput]}
-            placeholder="Ex : 2500"
-            placeholderTextColor="#8891B3"
-            keyboardType="numeric"
-            value={formData.salePrice}
-            onChangeText={(text) => handleChange("salePrice", text)}
-          />
-          {errors.salePrice && (
-            <Text style={styles.errorText}>{errors.salePrice}</Text>
-          )}
-        </View>
-        {references?.length ? (
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Référence</Text>
-            <View style={styles.selectContainer}>
-              <Picker
-                selectedValue={formData.referenceId}
-                onValueChange={(val) => handleChange("referenceId", val)}
-                style={styles.pickerContainer}
-              >
-                <Picker.Item label="Sélectionner une référence..." value="" />
-                {references.map((ref) => (
-                  <Picker.Item key={ref.id} label={ref.name} value={ref.id} />
-                ))}
-              </Picker>
+          {/* Prix d'achat + Prix de vente side by side */}
+          <View style={styles.row2col}>
+            <View style={styles.col2}>
+              <Text style={styles.label}>Prix d'achat (Ar)</Text>
+              <TextInput
+                style={[styles.input, errors.purchasePrice && styles.errorInput]}
+                placeholder="Ex : 2 500"
+                placeholderTextColor="#545C7A"
+                keyboardType="numeric"
+                value={formData.purchasePrice}
+                onChangeText={(text) => handleChange("purchasePrice", text)}
+              />
+              {errors.purchasePrice && (
+                <Text style={styles.errorText}>{errors.purchasePrice}</Text>
+              )}
+            </View>
+            <View style={styles.col2}>
+              <Text style={styles.label}>Prix de vente (Ar)</Text>
+              <TextInput
+                style={[styles.input, errors.salePrice && styles.errorInput]}
+                placeholder="Ex : 2 500"
+                placeholderTextColor="#545C7A"
+                keyboardType="numeric"
+                value={formData.salePrice}
+                onChangeText={(text) => handleChange("salePrice", text)}
+              />
+              {errors.salePrice && (
+                <Text style={styles.errorText}>{errors.salePrice}</Text>
+              )}
             </View>
           </View>
-        ) : (
-          <></>
-        )}
 
-        <View style={styles.actions}>
-          <CancelButton onPress={onCancel} />
-          <SaveButton onPress={handleSubmit} />
-        </View>
+          {/* Marge estimée helper */}
+          <View style={styles.marginHelper}>
+            <MaterialIcons name="flash-on" size={14} color={margin ? "#2ECC71" : "#545C7A"} />
+            <Text style={[styles.marginHelperText, margin && styles.marginHelperActive]}>
+              {margin
+                ? `Marge estimée : ${margin} Ar`
+                : "Marge estimée · Saisir les prix"}
+            </Text>
+          </View>
+
+          {/* Actions */}
+          <View style={styles.actions}>
+            <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
+              <MaterialIcons name="close" size={18} color="#B7BFD8" />
+              <Text style={styles.cancelBtnText}>Annuler</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.saveBtn} onPress={handleSubmit}>
+              <MaterialIcons name="save" size={18} color="#fff" />
+              <Text style={styles.saveBtnText}>Enregistrer</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 export default AddProductForm;
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#0F1535",
-    borderRadius: 20,
-    padding: 20,
-    marginVertical: 12,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
+  sheet: {
+    backgroundColor: "#141B33",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    maxHeight: "95%",
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
+  handle: {
+    width: 40,
+    height: 4,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    borderRadius: 2,
+    alignSelf: "center",
+    marginBottom: 16,
+  },
+  sheetHeader: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
-    textAlign: "center",
-    color: "#FFFFFF",
+    gap: 10,
   },
-  form: {
-    gap: 14,
+  sheetIconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: "rgba(249,115,22,0.14)",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  formGroup: {
-    marginBottom: 6,
+  sheetTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#F4F6FF",
+    letterSpacing: -0.4,
+  },
+  closeBtn: {
+    padding: 6,
+    borderRadius: 8,
+    backgroundColor: "rgba(255,255,255,0.06)",
   },
   label: {
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: "700",
+    color: "#B7BFD8",
+    fontSize: 13,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
     marginBottom: 6,
-    fontSize: 15,
   },
   input: {
+    backgroundColor: "#1B2342",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 12,
-    padding: 11,
-    marginBottom: 10,
-    backgroundColor: "#172049",
-    color: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.08)",
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    height: 50,
+    marginBottom: 12,
+    color: "#F4F6FF",
+    fontSize: 15,
   },
   errorInput: {
-    borderColor: Colors.dark.danger,
+    borderColor: "#F43F5E",
+    backgroundColor: "rgba(244,63,94,0.06)",
   },
   errorText: {
-    color: Colors.dark.danger,
-    fontSize: 13,
-    marginTop: 4,
+    color: "#F43F5E",
+    fontSize: 12,
+    marginBottom: 6,
+    marginTop: -8,
+  },
+  row2col: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  col2: {
+    flex: 1,
   },
   selectContainer: {
+    backgroundColor: "#1B2342",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 12,
-    height: 44,
+    borderColor: "rgba(255,255,255,0.08)",
+    borderRadius: 14,
+    marginBottom: 12,
     overflow: "hidden",
-    backgroundColor: "#172049",
   },
   pickerContainer: {
-    backgroundColor: "#172049",
-    borderColor: "transparent",
-    height: 44,
-    color: "#FFFFFF",
+    backgroundColor: "#1B2342",
+    color: "#F4F6FF",
+    height: 50,
+  },
+  marginHelper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginBottom: 20,
+    paddingHorizontal: 4,
+  },
+  marginHelperText: {
+    fontSize: 13,
+    color: "#545C7A",
+    fontWeight: "500",
+  },
+  marginHelperActive: {
+    color: "#2ECC71",
+    fontWeight: "600",
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 16,
+    gap: 10,
+  },
+  cancelBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderRadius: 14,
+    height: 50,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+  },
+  cancelBtnText: {
+    color: "#B7BFD8",
+    fontWeight: "700",
+    fontSize: 15,
+  },
+  saveBtn: {
+    flex: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F97316",
+    borderRadius: 14,
+    height: 50,
+    gap: 8,
+    shadowColor: "rgba(249,115,22,0.45)",
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  saveBtnText: {
+    color: "#fff",
+    fontWeight: "800",
+    fontSize: 15,
   },
 });

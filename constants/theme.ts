@@ -1,15 +1,4 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from "react-native";
-
-const orangeAccent = "#F97316";
-const blueAccent = "#3B82F6";
-const greenAccent = "#22C55E";
-const redAccent = "#EF4444";
-const cyanAccent = "#00D4FF";
 
 export const Colors = {
   light: {
@@ -18,15 +7,13 @@ export const Colors = {
     tint: "#F97316",
     icon: "#6B7280",
     tabIconDefault: "#6B7280",
-    tabIconSelected: orangeAccent,
-
+    tabIconSelected: "#F97316",
     primary: "#F3F4F6",
-    accent: orangeAccent,
-    success: greenAccent,
-    danger: redAccent,
-    info: blueAccent,
-    cyan: cyanAccent,
-
+    accent: "#F97316",
+    success: "#2ECC71",
+    danger: "#F43F5E",
+    info: "#3B82F6",
+    cyan: "#22D3EE",
     surface: "#F3F4F6",
     border: "#E5E7EB",
     shadow: "rgba(0,0,0,0.08)",
@@ -34,37 +21,59 @@ export const Colors = {
   },
 
   dark: {
-    text: "#FFFFFF",
-    background: "#080C1F",
-    tint: "#172049",
-    icon: "#8891B3",
-    tabIconDefault: "#8891B3",
-    tabIconSelected: orangeAccent,
+    // Legacy keys — kept for compatibility
+    text: "#F4F6FF",
+    background: "#0C1224",
+    tint: "#1B2342",
+    icon: "#7A83A2",
+    tabIconDefault: "#7A83A2",
+    tabIconSelected: "#F97316",
+    primary: "#141B33",
+    accent: "#F97316",
+    success: "#2ECC71",
+    danger: "#F43F5E",
+    info: "#3B82F6",
+    cyan: "#22D3EE",
+    surface: "#1B2342",
+    border: "rgba(255,255,255,0.06)",
+    shadow: "rgba(0,0,0,0.25)",
+    card: "#141B33",
 
-    primary: "#0F1535",
-    accent: orangeAccent,
-    success: greenAccent,
-    danger: redAccent,
-    info: blueAccent,
-    cyan: cyanAccent,
-
-    surface: "#0F1535",
-    border: "rgba(255,255,255,0.10)",
-    shadow: "rgba(0,212,255,0.08)",
-
-    card: "#172049",
+    // New design tokens
+    bg0: "#070B18",
+    bg1: "#0C1224",
+    bg2: "#141B33",
+    bg3: "#1B2342",
+    bg4: "#232C50",
+    t1: "#F4F6FF",
+    t2: "#B7BFD8",
+    t3: "#7A83A2",
+    t4: "#545C7A",
+    orange: "#F97316",
+    orange2: "#FB923C",
+    orangeSoft: "rgba(249,115,22,0.14)",
+    orangeRing: "rgba(249,115,22,0.32)",
+    green: "#2ECC71",
+    greenSoft: "rgba(46,204,113,0.14)",
+    red: "#F43F5E",
+    redSoft: "rgba(244,63,94,0.14)",
+    blue: "#3B82F6",
+    blueSoft: "rgba(59,130,246,0.14)",
+    yellow: "#F5B544",
+    yellowSoft: "rgba(245,181,68,0.14)",
+    violet: "#8B5CF6",
+    violetSoft: "rgba(139,92,246,0.14)",
+    hair: "rgba(255,255,255,0.06)",
+    hairStrong: "rgba(255,255,255,0.10)",
+    hairSoft: "rgba(255,255,255,0.04)",
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: "system-ui",
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace",
   },
   default: {
@@ -76,8 +85,7 @@ export const Fonts = Platform.select({
   web: {
     sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
-    rounded:
-      "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
+    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

@@ -10,7 +10,7 @@ export const unstable_settings = {
 export default function RootLayout() {
   return (
     <ThemeProvider value={DarkTheme}>
-      <Stack>
+      <Stack screenOptions={{ contentStyle: { backgroundColor: "#0C1224" } }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />

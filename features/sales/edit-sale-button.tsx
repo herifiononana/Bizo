@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/theme";
 import { Sale } from "@/interface/sale/sale";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -13,7 +12,7 @@ function EditSaleButton({ sale }: { sale: Sale }) {
         style={styles.editButton}
         onPress={() => setModalVisible(true)}
       >
-        <Entypo name="edit" size={18} color={Colors.dark.text} />
+        <Entypo name="edit" size={16} color="#B7BFD8" />
       </TouchableOpacity>
 
       <Modal
@@ -34,22 +33,20 @@ export default EditSaleButton;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end",
-    gap: 1,
   },
   editButton: {
-    marginLeft: 8,
-    padding: 6,
-    borderRadius: 8,
+    padding: 8,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.dark.text + "33",
+    borderColor: "rgba(255,255,255,0.10)",
+    backgroundColor: "rgba(255,255,255,0.04)",
+    marginTop: 4,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)", // overlay plus visible en dark mode
-    justifyContent: "center",
-    padding: 20,
+    backgroundColor: "rgba(5,8,18,0.75)",
+    justifyContent: "flex-end",
   },
 });

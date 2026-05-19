@@ -1,51 +1,118 @@
-import { Colors } from "@/constants/theme";
 import { Product } from "@/interface/product/product";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
 import EditProductForm from "./edit-product-form";
 
-const ProductListItem = React.memo(function ProductListItem({ item }: { item: Product }) {
+function getStockBadge(qty: number): { label: string; color: string; bg: string } {
+  if (qty === 0) return { label: "Rupture", color: "#F43F5E", bg: "rgba(244,63,94,0.12)" };
+  if (qty <= 3) return { label: "Faible", color: "#F5B544", bg: "rgba(245,181,68,0.12)" };
+  return { label: `${qty} en stock`, color: "#3B82F6", bg: "rgba(59,130,246,0.12)" };
+}
+
+const ProductListItem = React.memo(function ProductListItem({
+  item,
+}: {
+  item: Product;
+}) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  const stockBadge = getStockBadge(item.quantity);
+
+  const marginPct =
+    item.purchasePrice > 0 && item.salePrice
+      ? (((item.salePrice - item.purchasePrice) / item.purchasePrice) * 100).toFixed(1)
+      : null;
+
+  const marginPositive = marginPct !== null && Number(marginPct) >= 0;
+
+  const marginUnit =
+    item.salePrice && item.purchasePrice
+      ? item.salePrice - item.purchasePrice
+      : null;
 
   return (
     <>
-      <View style={styles.productWrapper}>
-        <TouchableOpacity
-          style={styles.productCard}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.productName}>{item.name}</Text>
+      <View style={styles.card}>
+        {/* Top row: icon + name + badges | edit + delete */}
+        <View style={styles.topRow}>
+          <View style={styles.iconWrap}>
+            <Ionicons name="cube-outline" size={20} color="#3B82F6" />
+          </View>
+          <View style={styles.nameCol}>
+            <Text style={styles.productName}>{item.name}</Text>
+            <View style={styles.badgesRow}>
+              <View style={[styles.stockBadge, { backgroundColor: stockBadge.bg }]}>
+                <Text style={[styles.stockBadgeText, { color: stockBadge.color }]}>
+                  {stockBadge.label}
+                </Text>
+              </View>
+              {marginPct !== null && (
+                <View
+                  style={[
+                    styles.marginBadge,
+                    {
+                      backgroundColor: marginPositive
+                        ? "rgba(46,204,113,0.10)"
+                        : "rgba(244,63,94,0.10)",
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.marginBadgeText,
+                      { color: marginPositive ? "#2ECC71" : "#F43F5E" },
+                    ]}
+                  >
+                    {marginPositive ? "+" : ""}
+                    {marginPct} %
+                  </Text>
+                </View>
+              )}
+            </View>
+          </View>
+          <View style={styles.actions}>
+            <TouchableOpacity
+              style={styles.actionBtn}
+              onPress={() => setModalVisible(true)}
+            >
+              <Entypo name="edit" size={15} color="#B7BFD8" />
+            </TouchableOpacity>
+            <DeleteProductButton
+              callback={() => setModalVisible(false)}
+              item={item}
+            />
+          </View>
+        </View>
 
-          <Text style={styles.productDetails}>
-            Quantité :{" "}
-            <Text style={styles.qty}>{item.quantity.toFixed(3)}</Text> | Prix
-            achat : <Text style={styles.purchase}>{item.purchasePrice} Ar</Text>
-          </Text>
-
-          {item.salePrice ? (
-            <Text style={styles.salePrice}>
-              💰 Prix de vente :{" "}
-              <Text style={styles.sale}>{item.salePrice} Ar</Text>
+        {/* Prices row */}
+        <View style={styles.pricesRow}>
+          <View style={styles.priceBlock}>
+            <Text style={styles.priceLabel}>PRIX D'ACHAT</Text>
+            <Text style={[styles.priceValue, { color: "#F43F5E" }]}>
+              {item.purchasePrice.toLocaleString()} Ar
             </Text>
-          ) : (
-            <></>
-          )}
-        </TouchableOpacity>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={() => setModalVisible(true)}
-          >
-            <Entypo name="edit" size={18} color={Colors.dark.text} />
-          </TouchableOpacity>
-          {/* Bouton supprimer */}
-          <DeleteProductButton
-            callback={() => setModalVisible(false)}
-            item={item}
-          />
+          </View>
+          <View style={styles.priceDivider} />
+          <View style={styles.priceBlock}>
+            <Text style={styles.priceLabel}>PRIX DE VENTE</Text>
+            <Text style={[styles.priceValue, { color: "#2ECC71" }]}>
+              {item.salePrice ? item.salePrice.toLocaleString() : "—"} Ar
+            </Text>
+          </View>
+          <View style={styles.priceDivider} />
+          <View style={styles.priceBlock}>
+            <Text style={styles.priceLabel}>MARGE UNIT.</Text>
+            <Text
+              style={[
+                styles.priceValue,
+                { color: marginUnit && marginUnit >= 0 ? "#2ECC71" : "#F43F5E" },
+              ]}
+            >
+              {marginUnit !== null ? marginUnit.toLocaleString() : "—"} Ar
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -67,68 +134,112 @@ const ProductListItem = React.memo(function ProductListItem({ item }: { item: Pr
 });
 
 const styles = StyleSheet.create({
-  productWrapper: {
+  card: {
+    backgroundColor: "#141B33",
+    borderRadius: 22,
+    padding: 16,
     marginBottom: 10,
-    backgroundColor: "#0F1535",
-    borderRadius: 16,
-    padding: 14,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    shadowColor: "rgba(0,212,255,0.06)",
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 3,
+    borderColor: "rgba(255,255,255,0.06)",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 4,
   },
-  productCard: {
+  topRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 14,
+    gap: 10,
+  },
+  iconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "rgba(59,130,246,0.12)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  nameCol: {
     flex: 1,
   },
   productName: {
     fontSize: 16,
-    color: "#FFFFFF",
-    fontWeight: "600",
+    color: "#F4F6FF",
+    fontWeight: "700",
+    letterSpacing: -0.3,
+    marginBottom: 6,
   },
-  productDetails: {
-    fontSize: 14,
-    color: "#8891B3",
-    marginTop: 4,
+  badgesRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
   },
-  qty: {
-    color: Colors.dark.info,
-    fontWeight: "600",
+  stockBadge: {
+    borderRadius: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-  purchase: {
-    color: Colors.dark.danger,
-    fontWeight: "600",
-  },
-  salePrice: {
-    marginTop: 6,
-    fontSize: 14,
-    color: Colors.dark.success,
-  },
-  sale: {
-    color: Colors.dark.success,
+  stockBadgeText: {
+    fontSize: 12,
     fontWeight: "700",
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    gap: 6,
-    marginTop: 8,
+  marginBadge: {
+    borderRadius: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-  editButton: {
-    marginLeft: 4,
-    padding: 7,
+  marginBadgeText: {
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 6,
+  },
+  actionBtn: {
+    padding: 8,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
+    borderColor: "rgba(255,255,255,0.10)",
+    backgroundColor: "rgba(255,255,255,0.04)",
+  },
+  pricesRow: {
+    flexDirection: "row",
+    backgroundColor: "#1B2342",
+    borderRadius: 14,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.04)",
+  },
+  priceBlock: {
+    flex: 1,
+    alignItems: "center",
+  },
+  priceDivider: {
+    width: 1,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    marginVertical: 2,
+  },
+  priceLabel: {
+    fontSize: 10,
+    color: "#545C7A",
+    fontWeight: "700",
+    letterSpacing: 0.3,
+    textTransform: "uppercase",
+    marginBottom: 4,
+  },
+  priceValue: {
+    fontSize: 14,
+    fontWeight: "700",
+    letterSpacing: -0.2,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.7)",
-    justifyContent: "center",
-    padding: 20,
+    backgroundColor: "rgba(5,8,18,0.75)",
+    justifyContent: "flex-end",
   },
 });
 
 export default ProductListItem;
-

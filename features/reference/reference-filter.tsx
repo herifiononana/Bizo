@@ -51,6 +51,7 @@ export default function ReferenceFilterModal({
       >
         <View style={styles.overlay}>
           <View style={styles.modalContent}>
+            <View style={styles.grabHandle} />
             <Text style={styles.title}>Filtrer par référence</Text>
 
             <ScrollView
@@ -135,38 +136,45 @@ const styles = StyleSheet.create({
   },
 
   iconButton: {
-    padding: 11,
-    backgroundColor: Colors.dark.accent,
-    borderRadius: 50,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: "#1B2342",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: Colors.dark.accent,
-    shadowOpacity: 0.35,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 5,
   },
 
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.55)",
+    backgroundColor: "rgba(5,8,18,0.75)",
     justifyContent: "flex-end",
   },
 
   modalContent: {
-    backgroundColor: "#0F1535",
-    padding: 20,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderTopWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
+    backgroundColor: "#141B33",
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 22,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+  },
+
+  grabHandle: {
+    width: 40,
+    height: 4,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    borderRadius: 999,
+    alignSelf: "center",
+    marginBottom: 16,
   },
 
   title: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "800",
+    color: "#F4F6FF",
     marginBottom: 16,
-    color: "#FFFFFF",
   },
 
   row: {
@@ -175,40 +183,35 @@ const styles = StyleSheet.create({
   },
 
   chip: {
-    backgroundColor: "#172049",
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderRadius: 50,
-    marginRight: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 999,
+    backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
+    margin: 4,
   },
 
   chipActive: {
-    backgroundColor: Colors.dark.accent,
-    borderColor: Colors.dark.accent,
-    shadowColor: Colors.dark.accent,
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 4,
+    backgroundColor: "rgba(249,115,22,0.14)",
+    borderColor: "rgba(249,115,22,0.32)",
   },
 
   chipText: {
-    color: "#8891B3",
-    fontSize: 14,
+    color: "#B7BFD8",
+    fontWeight: "600",
+    fontSize: 13,
   },
 
   chipTextActive: {
-    color: "#fff",
-    fontWeight: "600",
+    color: "#FB923C",
   },
 
   closeButton: {
     marginTop: 20,
     paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: Colors.dark.accent,
+    borderRadius: 14,
+    backgroundColor: "#F97316",
   },
 
   closeText: {

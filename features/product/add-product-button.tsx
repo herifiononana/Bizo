@@ -49,16 +49,15 @@ export default AddProductButton;
 const styles = StyleSheet.create({
   addButtonContainer: {
     position: "absolute",
-    bottom: 10,
-    right: 10,
+    bottom: 90,
+    right: 18,
   },
 
   // -------- Modal --------
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    padding: 20,
+    backgroundColor: "rgba(5,8,18,0.75)",
+    justifyContent: "flex-end",
   },
   modalActions: {
     flexDirection: "row",

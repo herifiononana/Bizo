@@ -61,19 +61,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 40,
     right: 10,
-
     flexDirection: "column",
-    gap: 12,
-
-    backgroundColor: "transparent",
-    zIndex: 999, // pour rester au dessus
+    gap: 10,
+    zIndex: 999,
   },
   iconButton: {
-    padding: 11,
-    backgroundColor: "#172049",
-    borderRadius: 50,
+    padding: 10,
+    backgroundColor: "#141B33",
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
+    width: 44,
+    height: 44,
     alignItems: "center",
     justifyContent: "center",
   },

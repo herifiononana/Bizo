@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/theme";
 import { saveSales } from "@/services/sale";
 import { saveHistory } from "@/services/sale/history";
 import { useHistoryStore } from "@/stores/history.store";
@@ -34,13 +33,14 @@ export function ClearSaleButton() {
             }
           },
         },
-      ]
+      ],
     );
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.iconButton} onPress={handleClear}>
-        <Entypo name="trash" size={26} color="#FFFFFF" />
+        <Entypo name="trash" size={24} color="#F43F5E" />
       </TouchableOpacity>
     </View>
   );
@@ -49,19 +49,20 @@ export function ClearSaleButton() {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 80,
-    right: 10,
+    bottom: 90,
+    left: 18,
   },
-
   iconButton: {
-    padding: 12,
-    backgroundColor: Colors.dark.accent,
-    borderRadius: 50,
+    width: 46,
+    height: 46,
+    backgroundColor: "rgba(244,63,94,0.12)",
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "rgba(244,63,94,0.30)",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: Colors.dark.accent,
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
     shadowOffset: { width: 0, height: 4 },
     elevation: 6,
   },

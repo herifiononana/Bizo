@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
 import { Feather } from "@expo/vector-icons";
@@ -21,17 +20,14 @@ const TopSodl = ({
   return (
     <>
       <Text style={styles.sectionTitle}>{title}</Text>
-
       <View style={styles.blockContainer}>
         {data.map((item, index) => (
           <View style={styles.miniBlock} key={item.product.id + index}>
-            <View style={[styles.iconCircle, { backgroundColor: color }]}>
-              <Feather name={icon} size={18} color="white" />
+            <View style={[styles.iconCircle, { backgroundColor: color + "26" }]}>
+              <Feather name={icon} size={18} color={color} />
             </View>
-
             <View style={{ flex: 1 }}>
               <Text style={styles.blockTitle}>{item.product.name}</Text>
-
               <Text style={styles.blockValue}>{`${item.sold}`}</Text>
             </View>
           </View>
@@ -60,17 +56,14 @@ const MiniBlockList = ({
   return (
     <>
       <Text style={styles.sectionTitle}>{title}</Text>
-
       <View style={styles.blockContainer}>
         {data.map((item: any, index) => (
           <View style={styles.miniBlock} key={index}>
-            <View style={[styles.iconCircle, { backgroundColor: color }]}>
-              <Feather name={icon as any} size={18} color="white" />
+            <View style={[styles.iconCircle, { backgroundColor: color + "26" }]}>
+              <Feather name={icon as any} size={18} color={color} />
             </View>
-
             <View style={{ flex: 1 }}>
               <Text style={styles.blockTitle}>{item.name}</Text>
-
               <Text style={styles.blockValue}>
                 {isDate
                   ? new Date(item[valueKey]).toLocaleDateString()
@@ -98,15 +91,15 @@ function OtherInfo() {
 
   const topSoldConfig = [
     {
-      title: "Top 5 - Produits les plus vendus",
+      title: "Top 5 — Produits les plus vendus",
       icon: "arrow-up",
-      color: "#0EA5E9",
+      color: "#3B82F6",
       data: topSoldProducts,
     },
     {
-      title: "Top 5 - Produits les moins vendus",
+      title: "Top 5 — Produits les moins vendus",
       icon: "arrow-down",
-      color: "#EF4444",
+      color: "#F43F5E",
       data: leastSoldProducts,
     },
   ];
@@ -115,21 +108,21 @@ function OtherInfo() {
     {
       title: "Produits les plus chers",
       icon: "dollar-sign",
-      color: "#16A34A",
+      color: "#2ECC71",
       data: mostExpensiveProducts,
       valueKey: "purchasePrice",
     },
     {
       title: "Produits les moins chers",
       icon: "tag",
-      color: "#F59E0B",
+      color: "#F5B544",
       data: leastExpensiveProducts,
       valueKey: "purchasePrice",
     },
     {
       title: "Nouveaux produits",
       icon: "clock",
-      color: "#6366F1",
+      color: "#8B5CF6",
       data: newestProducts,
       valueKey: "createdAt",
       isDate: true,
@@ -137,7 +130,7 @@ function OtherInfo() {
     {
       title: "Produits anciens (stock)",
       icon: "archive",
-      color: "#475569",
+      color: "#7A83A2",
       data: oldestProducts,
       valueKey: "createdAt",
       isDate: true,
@@ -149,10 +142,10 @@ function OtherInfo() {
   return (
     <>
       {topSoldConfig.map((topSold) => (
-        <TopSodl key={topSold.title} {...{ ...topSold }} />
+        <TopSodl key={topSold.title} {...topSold} />
       ))}
       {otherInfoListsConfig.map((other, index) => (
-        <MiniBlockList key={other.valueKey + index} {...{ ...other }} />
+        <MiniBlockList key={other.valueKey + index} {...other} />
       ))}
     </>
   );
@@ -160,55 +153,50 @@ function OtherInfo() {
 
 export default OtherInfo;
 
-/* -------------------
-   STYLES
---------------------*/
-
 const styles = StyleSheet.create({
   sectionTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: "700",
-    marginTop: 25,
+    marginTop: 24,
     marginBottom: 10,
-    color: "#FFFFFF",
+    color: "#F4F6FF",
+    letterSpacing: -0.3,
   },
-
   blockContainer: {
     width: "100%",
   },
-
   miniBlock: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    marginBottom: 8,
-    backgroundColor: "#0F1535",
-    borderRadius: 16,
+    padding: 14,
+    marginBottom: 6,
+    backgroundColor: "#141B33",
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    shadowColor: "rgba(0,212,255,0.06)",
-    shadowOpacity: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
     shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
-
   iconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 12,
+    marginRight: 14,
   },
-
   blockTitle: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#FFFFFF",
+    color: "#F4F6FF",
   },
-
   blockValue: {
     fontSize: 13,
-    color: "#00D4FF",
+    color: "#22D3EE",
+    fontWeight: "500",
+    marginTop: 2,
   },
 });
