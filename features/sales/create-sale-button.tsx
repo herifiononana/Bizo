@@ -15,21 +15,21 @@ function CreateSaleButton() {
   const { products, setProducts } = useProductsStore((state) => state);
   const { sales, setSales } = useSalesStore((state) => state);
 
-  const handleAddSale = async (sale: Sale) => {
+  const handleAddSale = async (newSales: Sale[]) => {
     if (!products || !sales) return;
 
-    // 1. Mettre à jour les ventes
-    const updatedSales = [sale, ...sales];
+    const updatedSales = [...newSales, ...sales];
     setSales(updatedSales);
 
-    // 2. Mettre à jour le stock
-    const updatedProducts = products.map((p) =>
-      p.id === sale.productId
-        ? { ...p, quantity: p.quantity - sale.quantity }
-        : p
-    );
+    let updatedProducts = [...products];
+    for (const sale of newSales) {
+      updatedProducts = updatedProducts.map((p) =>
+        p.id === sale.productId
+          ? { ...p, quantity: p.quantity - sale.quantity }
+          : p
+      );
+    }
 
-    // 3. Sauvegarder dans AsyncStorage
     try {
       await saveSales(updatedSales);
       await saveProducts(updatedProducts);
@@ -38,7 +38,6 @@ function CreateSaleButton() {
       console.log("Erreur de sauvegarde :", e);
     }
 
-    // Mettre a jour l'etat de la finance
     changeFinanceStatus();
   };
 

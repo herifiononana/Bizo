@@ -5,7 +5,9 @@ import { useReference } from "@/hooks/reference/useRefecence";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -40,7 +42,10 @@ const AddReferenceButton = () => {
 
       {/* --- Modal ajout référence --- */}
       <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Nouvelle référence</Text>
 
@@ -57,7 +62,7 @@ const AddReferenceButton = () => {
               <CancelButton onPress={() => setModalVisible(false)} />
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

@@ -29,3 +29,13 @@ export const saveSales = async (data: Sale[]) => {
 export const updateLocalSales = async (data: Sale[], updatedSale: Sale) => {
   return data.map((sale) => (sale.id === updatedSale.id ? updatedSale : sale));
 };
+
+// Replaces all Sales belonging to groupId with newSales. Pure — no side effects.
+export const updateSaleGroup = (
+  groupId: string,
+  newSales: Sale[],
+  allSales: Sale[]
+): Sale[] => {
+  const withoutGroup = allSales.filter((s) => s.groupId !== groupId);
+  return [...newSales, ...withoutGroup];
+};

@@ -103,6 +103,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
 
   return (
     <KeyboardAvoidingView
+      style={{ flex: 1, justifyContent: "flex-end" }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.sheet}>

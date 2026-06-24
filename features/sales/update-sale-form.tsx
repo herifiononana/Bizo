@@ -154,6 +154,7 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
 
   return (
     <KeyboardAvoidingView
+      style={{ flex: 1, justifyContent: "flex-end" }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.sheet}>

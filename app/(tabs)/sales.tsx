@@ -2,6 +2,7 @@ import { Sale } from "@/interface/sale/sale";
 import ReferenceFilter from "@/features/reference/reference-filter";
 import { ClearSaleButton } from "@/features/sales/clear-sale-button";
 import CreateSaleButton from "@/features/sales/create-sale-button";
+import SaleGroupItem from "@/features/sales/sale-group-item";
 import SaleListItem from "@/features/sales/sale-list-item";
 import SaleListItemSkeleton from "@/features/sales/sale-skeleton";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
@@ -19,6 +20,36 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 type StatusFilter = "all" | "credit" | "paid" | "cash";
+
+type DisplayItem =
+  | { type: "single"; sale: Sale }
+  | { type: "group"; groupId: string; items: Sale[] };
+
+function groupSalesForDisplay(sales: Sale[]): DisplayItem[] {
+  const result: DisplayItem[] = [];
+  const groupMap = new Map<string, Sale[]>();
+
+  for (const sale of sales) {
+    if (!sale.groupId) {
+      result.push({ type: "single", sale });
+    } else {
+      const existing = groupMap.get(sale.groupId);
+      if (existing) {
+        existing.push(sale);
+      } else {
+        const group: Sale[] = [sale];
+        groupMap.set(sale.groupId, group);
+        result.push({ type: "group", groupId: sale.groupId, items: group });
+      }
+    }
+  }
+
+  return result.map((di) =>
+    di.type === "group" && di.items.length === 1
+      ? { type: "single" as const, sale: di.items[0] }
+      : di
+  );
+}
 
 const STATUS_CHIPS: { key: StatusFilter; label: string }[] = [
   { key: "all", label: "Tous" },
@@ -80,6 +111,11 @@ const SalesScreen = () => {
     return allFiltered;
   }, [allFiltered, statusFilter]);
 
+  const displayItems = useMemo(
+    () => groupSalesForDisplay(filteredSales),
+    [filteredSales]
+  );
+
   const todaySummary = useMemo(() => {
     const today = new Date();
     const todaySales = allFiltered.filter((s) => {
@@ -91,7 +127,8 @@ const SalesScreen = () => {
       );
     });
     const total = todaySales.reduce((acc, s) => acc + s.totalAmount, 0);
-    return { count: todaySales.length, total };
+    const count = groupSalesForDisplay(todaySales).length;
+    return { count, total };
   }, [allFiltered]);
 
   const startLabel = params.startDate
@@ -110,11 +147,14 @@ const SalesScreen = () => {
       })
     : "Date fin";
 
-  const renderSaleItem = useCallback(
-    ({ item }: { item: Sale }) => {
+  const renderDisplayItem = useCallback(
+    ({ item }: { item: DisplayItem }) => {
       if (loading) return <SaleListItemSkeleton />;
-      const product = productMap.get(item.productId);
-      return product ? <SaleListItem product={product} item={item} /> : null;
+      if (item.type === "group") {
+        return <SaleGroupItem items={item.items} productMap={productMap} />;
+      }
+      const product = productMap.get(item.sale.productId);
+      return product ? <SaleListItem product={product} item={item.sale} /> : null;
     },
     [loading, productMap]
   );
@@ -210,17 +250,19 @@ const SalesScreen = () => {
       />
 
       <FlatList
-        data={filteredSales}
+        data={displayItems}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
         windowSize={10}
         removeClippedSubviews={true}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) =>
+          item.type === "single" ? item.sale.id : item.groupId
+        }
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           <Text style={styles.emptyText}>Aucune vente trouvée.</Text>
         }
-        renderItem={renderSaleItem}
+        renderItem={renderDisplayItem}
       />
       <ClearSaleButton />
       <CreateSaleButton />

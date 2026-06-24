@@ -57,6 +57,11 @@ const DailyFinanceScreen = () => {
     [dailyFinanceData]
   );
 
+  const totalProfit = useMemo(
+    () => dailyFinanceData.reduce((acc, d) => acc + d.finance.totalProfit, 0),
+    [dailyFinanceData]
+  );
+
   const daysCount = filteredDates.length;
 
   const ListHeader = (
@@ -92,10 +97,22 @@ const DailyFinanceScreen = () => {
       {/* Period hero card */}
       {daysCount > 0 && (
         <View style={styles.periodCard}>
-          <Text style={styles.periodLabel}>PÉRIODE — TOTAL VENTES</Text>
-          <Text style={styles.periodValue}>
-            {totalVentes.toLocaleString()} Ar
-          </Text>
+          <Text style={styles.periodLabel}>PÉRIODE</Text>
+          <View style={styles.metricsRow}>
+            <View style={styles.metricCol}>
+              <Text style={styles.metricSubLabel}>TOTAL VENTES</Text>
+              <Text style={styles.periodValue}>
+                {totalVentes.toLocaleString()} Ar
+              </Text>
+            </View>
+            <View style={styles.metricDivider} />
+            <View style={styles.metricCol}>
+              <Text style={styles.metricSubLabel}>BÉNÉFICE</Text>
+              <Text style={styles.profitValue}>
+                {totalProfit.toLocaleString()} Ar
+              </Text>
+            </View>
+          </View>
           <View style={styles.periodBadgesRow}>
             <View style={styles.periodBadge}>
               <View style={styles.periodDot} />
@@ -203,11 +220,38 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   periodValue: {
-    fontSize: 32,
+    fontSize: 26,
     fontWeight: "800",
     color: "#F4F6FF",
-    letterSpacing: -1,
+    letterSpacing: -0.8,
+  },
+  metricsRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
     marginBottom: 12,
+  },
+  metricCol: {
+    flex: 1,
+  },
+  metricDivider: {
+    width: 1,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    marginHorizontal: 14,
+    alignSelf: "stretch",
+  },
+  metricSubLabel: {
+    fontSize: 10,
+    color: "#7A83A2",
+    fontWeight: "700",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+    marginBottom: 4,
+  },
+  profitValue: {
+    fontSize: 26,
+    fontWeight: "800",
+    color: "#2ECC71",
+    letterSpacing: -0.8,
   },
   periodBadgesRow: {
     flexDirection: "row",

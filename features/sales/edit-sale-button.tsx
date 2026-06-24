@@ -37,8 +37,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   editButton: {
-    padding: 8,
-    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
     backgroundColor: "rgba(255,255,255,0.04)",
