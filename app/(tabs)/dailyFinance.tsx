@@ -1,4 +1,3 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useMemo, useState } from "react";
 import {
   FlatList,
@@ -7,24 +6,33 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+import FinanceDetailModal from "@/features/finance/finance-detail-modal";
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
 import { useHistory } from "@/hooks/history/useHistory";
+import { Sale } from "@/interface/sale/sale";
 import { getFinance } from "@/services/finance";
 import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+
+type DetailTarget = { title: string; sales: Sale[] };
 
 const DailyFinanceScreen = () => {
   const { history: sales } = useHistory();
   const products = useProductsStore((state) => state.products);
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [showPicker, setShowPicker] = useState(false);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [isStartPickerVisible, setStartPickerVisible] = useState(false);
+  const [isEndPickerVisible, setEndPickerVisible] = useState(false);
+  const [detailTarget, setDetailTarget] = useState<DetailTarget | null>(null);
 
   const groupedFinance = useMemo(() => {
     if (!sales) return {};
-    const groups: Record<string, any[]> = {};
+    const groups: Record<string, Sale[]> = {};
     sales.forEach((sale) => {
       const d = new Date(sale.saleDate);
       const dateKey = format(d, "yyyy-MM-dd");
@@ -35,15 +43,22 @@ const DailyFinanceScreen = () => {
   }, [sales]);
 
   const filteredDates = useMemo(() => {
-    if (!selectedDate) return Object.keys(groupedFinance);
-    const target = format(selectedDate, "yyyy-MM-dd");
-    return Object.keys(groupedFinance).filter((d) => d === target);
-  }, [selectedDate, groupedFinance]);
+    const keys = Object.keys(groupedFinance);
+    if (!startDate && !endDate) return keys;
+    const startKey = startDate ? format(startDate, "yyyy-MM-dd") : null;
+    const endKey = endDate ? format(endDate, "yyyy-MM-dd") : null;
+    return keys.filter((key) => {
+      if (startKey && key < startKey) return false;
+      if (endKey && key > endKey) return false;
+      return true;
+    });
+  }, [startDate, endDate, groupedFinance]);
 
   const dailyFinanceData = useMemo(
     () =>
       filteredDates.map((dateKey) => ({
         dateKey,
+        sales: groupedFinance[dateKey],
         finance: getFinance({
           products: products ?? [],
           sales: groupedFinance[dateKey],
@@ -52,17 +67,34 @@ const DailyFinanceScreen = () => {
     [filteredDates, groupedFinance, products]
   );
 
-  const totalVentes = useMemo(
-    () => dailyFinanceData.reduce((acc, d) => acc + d.finance.totalSalesValue, 0),
-    [dailyFinanceData]
+  const periodSales = useMemo(
+    () => filteredDates.flatMap((dateKey) => groupedFinance[dateKey]),
+    [filteredDates, groupedFinance]
   );
 
-  const totalProfit = useMemo(
-    () => dailyFinanceData.reduce((acc, d) => acc + d.finance.totalProfit, 0),
-    [dailyFinanceData]
+  const periodFinance = useMemo(
+    () => getFinance({ products: products ?? [], sales: periodSales }),
+    [products, periodSales]
   );
+
+  const totalVentes = periodFinance.totalSalesValue;
+  const totalProfit = periodFinance.totalProfit;
 
   const daysCount = filteredDates.length;
+
+  const startLabel = startDate
+    ? format(startDate, "dd/MM/yyyy")
+    : "Date début";
+  const endLabel = endDate ? format(endDate, "dd/MM/yyyy") : "Date fin";
+
+  const handleConfirmStart = (date: Date) => {
+    setStartPickerVisible(false);
+    setStartDate(date);
+  };
+  const handleConfirmEnd = (date: Date) => {
+    setEndPickerVisible(false);
+    setEndDate(date);
+  };
 
   const ListHeader = (
     <>
@@ -74,20 +106,34 @@ const DailyFinanceScreen = () => {
             {"Résumé journalier · "}{daysCount}{" jour"}{daysCount !== 1 ? "s" : ""}{" d’activité"}
           </Text>
         </View>
+      </View>
+
+      {/* Date range filters */}
+      <View style={styles.dateRow}>
         <TouchableOpacity
-          style={styles.filterBtn}
-          onPress={() => setShowPicker(true)}
+          style={styles.dateButton}
+          onPress={() => setStartPickerVisible(true)}
         >
-          <MaterialIcons name="event" size={16} color="#FB923C" />
-          <Text style={styles.filterBtnText}>Filtrer</Text>
+          <MaterialIcons name="event" size={14} color="#7A83A2" />
+          <Text style={styles.dateButtonText}>{startLabel}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.dateButton}
+          onPress={() => setEndPickerVisible(true)}
+        >
+          <MaterialIcons name="event" size={14} color="#7A83A2" />
+          <Text style={styles.dateButtonText}>{endLabel}</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Reset filter — always visible when date selected */}
-      {selectedDate && (
+      {/* Reset filter — visible when a date bound is set */}
+      {(startDate || endDate) && (
         <TouchableOpacity
           style={styles.resetBtn}
-          onPress={() => setSelectedDate(null)}
+          onPress={() => {
+            setStartDate(null);
+            setEndDate(null);
+          }}
         >
           <MaterialIcons name="close" size={14} color="#FB923C" />
           <Text style={styles.resetBtnText}>Réinitialiser le filtre</Text>
@@ -96,7 +142,13 @@ const DailyFinanceScreen = () => {
 
       {/* Period hero card */}
       {daysCount > 0 && (
-        <View style={styles.periodCard}>
+        <TouchableOpacity
+          style={styles.periodCard}
+          activeOpacity={0.85}
+          onPress={() =>
+            setDetailTarget({ title: "Période", sales: periodSales })
+          }
+        >
           <Text style={styles.periodLabel}>PÉRIODE</Text>
           <View style={styles.metricsRow}>
             <View style={styles.metricCol}>
@@ -121,20 +173,23 @@ const DailyFinanceScreen = () => {
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
 
-      {showPicker && (
-        <DateTimePicker
-          value={selectedDate ?? new Date()}
-          mode="date"
-          display="calendar"
-          onChange={(event, date) => {
-            setShowPicker(false);
-            if (date) setSelectedDate(date);
-          }}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={isStartPickerVisible}
+        mode="date"
+        date={startDate ?? new Date()}
+        onConfirm={handleConfirmStart}
+        onCancel={() => setStartPickerVisible(false)}
+      />
+      <DateTimePickerModal
+        isVisible={isEndPickerVisible}
+        mode="date"
+        date={endDate ?? new Date()}
+        onConfirm={handleConfirmEnd}
+        onCancel={() => setEndPickerVisible(false)}
+      />
     </>
   );
 
@@ -145,7 +200,18 @@ const DailyFinanceScreen = () => {
         keyExtractor={(item) => item.dateKey}
         contentContainerStyle={styles.container}
         renderItem={({ item }) => (
-          <DailyFinanceItem dateKey={item.dateKey} finance={item.finance} />
+          <DailyFinanceItem
+            dateKey={item.dateKey}
+            finance={item.finance}
+            onPress={() =>
+              setDetailTarget({
+                title: format(new Date(item.dateKey), "EEEE d MMMM yyyy", {
+                  locale: fr,
+                }),
+                sales: item.sales,
+              })
+            }
+          />
         )}
         ListHeaderComponent={ListHeader}
         ListEmptyComponent={
@@ -155,6 +221,14 @@ const DailyFinanceScreen = () => {
         maxToRenderPerBatch={10}
         windowSize={5}
         removeClippedSubviews={true}
+      />
+
+      <FinanceDetailModal
+        visible={!!detailTarget}
+        onClose={() => setDetailTarget(null)}
+        title={detailTarget?.title ?? ""}
+        sales={detailTarget?.sales ?? []}
+        products={products ?? []}
       />
     </View>
   );
@@ -183,21 +257,28 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "500",
   },
-  filterBtn: {
+  dateRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+    gap: 8,
+  },
+  dateButton: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    backgroundColor: "rgba(249,115,22,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(249,115,22,0.28)",
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    backgroundColor: "#1B2342",
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    height: 44,
+    paddingHorizontal: 12,
+    gap: 6,
   },
-  filterBtnText: {
-    color: "#FB923C",
-    fontWeight: "700",
-    fontSize: 14,
+  dateButtonText: {
+    fontSize: 13,
+    color: "#B7BFD8",
+    fontWeight: "600",
   },
   periodCard: {
     backgroundColor: "#141B33",
@@ -276,17 +357,6 @@ const styles = StyleSheet.create({
   periodBadgeText: {
     fontSize: 12,
     color: "#2ECC71",
-    fontWeight: "700",
-  },
-  resetBadge: {
-    backgroundColor: "rgba(249,115,22,0.10)",
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  resetBadgeText: {
-    fontSize: 12,
-    color: "#FB923C",
     fontWeight: "700",
   },
   resetBtn: {

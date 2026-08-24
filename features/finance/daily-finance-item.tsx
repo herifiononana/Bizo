@@ -2,14 +2,16 @@ import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const DailyFinanceItem = React.memo(function DailyFinanceItem({
   dateKey,
   finance,
+  onPress,
 }: {
   dateKey: string;
   finance: FinanceSummary;
+  onPress?: () => void;
 }) {
   const prettyDate = format(new Date(dateKey), "EEEE d MMMM yyyy", {
     locale: fr,
@@ -18,7 +20,12 @@ const DailyFinanceItem = React.memo(function DailyFinanceItem({
   const isProfit = finance.totalProfit >= 0;
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={onPress}
+      disabled={!onPress}
+      activeOpacity={0.85}
+    >
       {/* Date header + Profit/Perte badge */}
       <View style={styles.cardHeader}>
         <View style={styles.dateRow}>
@@ -84,7 +91,7 @@ const DailyFinanceItem = React.memo(function DailyFinanceItem({
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 });
 

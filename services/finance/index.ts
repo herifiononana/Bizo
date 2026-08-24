@@ -77,6 +77,22 @@ const groupSalesByDay = (sales: Sale[]) => {
   return groups;
 };
 
+// --- Filtre les ventes dont le produit appartient à une référence donnée ---
+export const filterSalesByReference = (
+  sales: Sale[],
+  products: Product[],
+  reference: string
+): Sale[] => {
+  const productMap = new Map(products.map((p) => [p.id, p]));
+  return sales.filter((sale) => {
+    const product = productMap.get(sale.productId);
+    if (!product) return false;
+    return reference === OTHER_REFERENCE
+      ? !product.referenceId
+      : product.referenceId === reference;
+  });
+};
+
 export const getDailyFinanceList = ({
   products,
   sales,
