@@ -287,7 +287,7 @@ Always follow:
 
 ---
 
-# Testing
+<!-- # Testing
 
 Every new implementation should be testable.
 
@@ -300,7 +300,7 @@ Code should be easy to:
 
 Avoid tightly coupled code.
 
----
+--- -->
 
 # Before Finishing
 
