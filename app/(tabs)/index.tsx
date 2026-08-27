@@ -4,6 +4,7 @@ import GlobalDashboard from "@/features/finance/global-dashboard";
 import OtherInfo from "@/features/finance/other-info";
 import AddReferenceButton from "@/features/reference/add-reference-button";
 import ReferenceFilterModal from "@/features/reference/reference-filter";
+import AiSuggestionsButton from "@/features/suggestions/ai-suggestions-button";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -31,6 +32,7 @@ const Dashboard = () => {
         top={205}
         right={10}
       />
+      <AiSuggestionsButton />
 
       <ScrollView
         style={styles.container}
