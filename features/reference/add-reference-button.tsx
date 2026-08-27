@@ -1,13 +1,15 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
-import { Colors } from "@/constants/theme";
 import { useReference } from "@/hooks/reference/useRefecence";
-import { Ionicons } from "@expo/vector-icons";
+import { Reference } from "@/interface/reference";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,16 +20,54 @@ import {
 const AddReferenceButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [refName, setRefName] = useState("");
-  const { addReference } = useReference();
+  const [editingReference, setEditingReference] = useState<Reference | null>(
+    null
+  );
+  const { references, addReference, updateReference, deleteReference } =
+    useReference();
 
-  const handleAdd = () => {
-    if (!refName.trim()) return;
-    addReference({
-      id: new Date().toISOString(),
-      name: refName.trim().toUpperCase(),
-    });
-    setRefName("");
+  const closeModal = () => {
     setModalVisible(false);
+    setEditingReference(null);
+    setRefName("");
+  };
+
+  const handleStartEdit = (reference: Reference) => {
+    setEditingReference(reference);
+    setRefName(reference.name);
+  };
+
+  const handleSave = () => {
+    if (!refName.trim()) return;
+    if (editingReference) {
+      updateReference(editingReference.id, refName.trim().toUpperCase());
+    } else {
+      addReference({
+        id: new Date().toISOString(),
+        name: refName.trim().toUpperCase(),
+      });
+    }
+    setEditingReference(null);
+    setRefName("");
+  };
+
+  const handleDelete = (reference: Reference) => {
+    Alert.alert(
+      "Supprimer la référence",
+      `Que faire des produits associés à "${reference.name}" ?`,
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Conserver les produits",
+          onPress: () => deleteReference(reference.id, false),
+        },
+        {
+          text: "Supprimer aussi les produits",
+          style: "destructive",
+          onPress: () => deleteReference(reference.id, true),
+        },
+      ]
+    );
   };
 
   return (
@@ -40,14 +80,21 @@ const AddReferenceButton = () => {
         <Ionicons name="settings-outline" size={22} color="#FFF" />
       </TouchableOpacity>
 
-      {/* --- Modal ajout référence --- */}
-      <Modal visible={modalVisible} transparent animationType="fade">
+      {/* --- Modal gestion des références --- */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
         <KeyboardAvoidingView
           style={styles.modalOverlay}
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Nouvelle référence</Text>
+            <Text style={styles.modalTitle}>
+              {editingReference ? "Modifier la référence" : "Nouvelle référence"}
+            </Text>
 
             <TextInput
               style={styles.input}
@@ -57,10 +104,45 @@ const AddReferenceButton = () => {
             />
 
             <View style={styles.actions}>
-              <SaveButton onPress={handleAdd} />
-
-              <CancelButton onPress={() => setModalVisible(false)} />
+              <SaveButton onPress={handleSave} />
+              <CancelButton
+                onPress={
+                  editingReference
+                    ? () => {
+                        setEditingReference(null);
+                        setRefName("");
+                      }
+                    : closeModal
+                }
+              />
             </View>
+
+            {!!references?.length && (
+              <>
+                <Text style={styles.listTitle}>Références existantes</Text>
+                <ScrollView style={styles.list}>
+                  {references.map((reference) => (
+                    <View key={reference.id} style={styles.listRow}>
+                      <Text style={styles.listRowName}>{reference.name}</Text>
+                      <View style={styles.listRowActions}>
+                        <TouchableOpacity
+                          style={styles.listRowBtn}
+                          onPress={() => handleStartEdit(reference)}
+                        >
+                          <Entypo name="edit" size={15} color="#B7BFD8" />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.listRowBtn, styles.listRowBtnDanger]}
+                          onPress={() => handleDelete(reference)}
+                        >
+                          <Entypo name="trash" size={15} color="#F43F5E" />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ))}
+                </ScrollView>
+              </>
+            )}
           </View>
         </KeyboardAvoidingView>
       </Modal>
@@ -128,5 +210,56 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 16,
+  },
+
+  listTitle: {
+    fontSize: 12,
+    color: "#7A83A2",
+    fontWeight: "700",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+
+  list: {
+    maxHeight: 220,
+  },
+
+  listRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#1B2342",
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 8,
+  },
+
+  listRowName: {
+    flex: 1,
+    color: "#F4F6FF",
+    fontWeight: "600",
+    fontSize: 14,
+  },
+
+  listRowActions: {
+    flexDirection: "row",
+    gap: 8,
+  },
+
+  listRowBtn: {
+    padding: 8,
+    borderRadius: 10,
+    backgroundColor: "rgba(255,255,255,0.04)",
+  },
+
+  listRowBtnDanger: {
+    backgroundColor: "rgba(244,63,94,0.10)",
+    borderWidth: 1,
+    borderColor: "rgba(244,63,94,0.25)",
   },
 });
