@@ -1,4 +1,4 @@
-import { Suggestion } from "@/interface/suggestion";
+import { Suggestion, SuggestionFilters } from "@/interface/suggestion";
 import { getSuggestions } from "@/services/suggestions";
 import { useCallback, useState } from "react";
 import { useProducts } from "../product/useProduct";
@@ -12,15 +12,18 @@ export const useSuggestions = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [analyzing, setAnalyzing] = useState(false);
 
-  const analyze = useCallback(() => {
-    if (!products || !sales) return;
-    setAnalyzing(true);
-    // laisse le temps au skeleton de s'afficher avant le calcul (thread JS unique)
-    setTimeout(() => {
-      setSuggestions(getSuggestions({ products, sales, settings }));
-      setAnalyzing(false);
-    }, 0);
-  }, [products, sales, settings]);
+  const analyze = useCallback(
+    (filters?: SuggestionFilters) => {
+      if (!products || !sales) return;
+      setAnalyzing(true);
+      // laisse le temps au skeleton de s'afficher avant le calcul (thread JS unique)
+      setTimeout(() => {
+        setSuggestions(getSuggestions({ products, sales, settings, filters }));
+        setAnalyzing(false);
+      }, 0);
+    },
+    [products, sales, settings]
+  );
 
   return { suggestions, analyzing, analyze };
 };

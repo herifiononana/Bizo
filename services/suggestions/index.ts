@@ -1,8 +1,10 @@
+import { OTHER_REFERENCE } from "@/constants/constants";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import {
   DEFAULT_SUGGESTION_SETTINGS,
   Suggestion,
+  SuggestionFilters,
   SuggestionSettings,
   SuggestionType,
 } from "@/interface/suggestion";
@@ -42,6 +44,41 @@ const stdDev = (values: number[]) => {
   if (values.length < 2) return 0;
   const m = mean(values);
   return Math.sqrt(mean(values.map((v) => (v - m) ** 2)));
+};
+
+// Applique le filtre référence + intervalle de dates avant tout calcul
+const applyFilters = (
+  products: Product[],
+  sales: Sale[],
+  filters?: SuggestionFilters
+) => {
+  if (!filters) return { products, sales };
+
+  const filteredProducts = filters.referenceId
+    ? products.filter((p) =>
+        filters.referenceId === OTHER_REFERENCE
+          ? !p.referenceId
+          : p.referenceId === filters.referenceId
+      )
+    : products;
+
+  const productIds = new Set(filteredProducts.map((p) => p.id));
+  let filteredSales = filters.referenceId
+    ? sales.filter((s) => productIds.has(s.productId))
+    : sales;
+
+  if (filters.startDate) {
+    const start = new Date(filters.startDate);
+    start.setHours(0, 0, 0, 0);
+    filteredSales = filteredSales.filter((s) => new Date(s.saleDate) >= start);
+  }
+  if (filters.endDate) {
+    const end = new Date(filters.endDate);
+    end.setHours(23, 59, 59, 999);
+    filteredSales = filteredSales.filter((s) => new Date(s.saleDate) <= end);
+  }
+
+  return { products: filteredProducts, sales: filteredSales };
 };
 
 type ProductStats = {
@@ -528,13 +565,16 @@ export const getSuggestions = ({
   products,
   sales,
   settings = DEFAULT_SUGGESTION_SETTINGS,
+  filters,
 }: {
   products: Product[];
   sales: Sale[];
   settings?: SuggestionSettings;
+  filters?: SuggestionFilters;
 }): Suggestion[] => {
+  const { products: p, sales: s } = applyFilters(products, sales, filters);
   const now = new Date();
-  const stats = buildProductStats(products, sales);
+  const stats = buildProductStats(p, s);
 
   const all: Suggestion[] = [
     ...detectLossSalesToday(stats, now),
@@ -542,8 +582,8 @@ export const getSuggestions = ({
     ...detectNotProfitable(stats, settings),
     ...detectAbnormalProfit(stats, now, settings),
     ...detectLowStockFast(stats, now, settings),
-    ...detectCreditOverdue(sales, products, now, settings),
-    ...detectProfitTrendDown(sales, products, now, settings),
+    ...detectCreditOverdue(s, p, now, settings),
+    ...detectProfitTrendDown(s, p, now, settings),
     ...detectAbnormalQuantity(stats, now, settings),
     ...detectPriceDrift(stats, settings),
     ...detectProfitConcentration(stats, settings),
@@ -554,7 +594,9 @@ export const getSuggestions = ({
   ];
 
   const priorityIndex = new Map(PRIORITY_ORDER.map((type, i) => [type, i]));
-  return all.sort(
+  const sorted = all.sort(
     (a, b) => (priorityIndex.get(a.type) ?? 99) - (priorityIndex.get(b.type) ?? 99)
   );
+
+  return filters?.type ? sorted.filter((sug) => sug.type === filters.type) : sorted;
 };

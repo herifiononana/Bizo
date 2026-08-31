@@ -1,8 +1,13 @@
 import Skeleton from "@/components/skeleton";
 import { useSuggestions } from "@/hooks/suggestions/useSuggestions";
-import { Suggestion, SuggestionSeverity } from "@/interface/suggestion";
+import {
+  DEFAULT_SUGGESTION_FILTERS,
+  Suggestion,
+  SuggestionFilters,
+  SuggestionSeverity,
+} from "@/interface/suggestion";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
   ScrollView,
@@ -13,6 +18,7 @@ import {
   View,
 } from "react-native";
 import SuggestionSettingsModal from "./suggestion-settings-modal";
+import SuggestionsFilter from "./suggestions-filter";
 
 const SEVERITY_STYLE: Record<
   SuggestionSeverity,
@@ -45,12 +51,15 @@ const SKELETON_ROWS = 5;
 const AiSuggestionsButton = () => {
   const [open, setOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [filters, setFilters] = useState<SuggestionFilters>(
+    DEFAULT_SUGGESTION_FILTERS
+  );
   const { suggestions, analyzing, analyze } = useSuggestions();
 
-  const handleOpen = () => {
-    setOpen(true);
-    analyze();
-  };
+  useEffect(() => {
+    if (open) analyze(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, filters]);
 
   const groupedSuggestions = useMemo(() => {
     const groups: Record<SuggestionSeverity, Suggestion[]> = {
@@ -67,7 +76,7 @@ const AiSuggestionsButton = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconButton} onPress={handleOpen}>
+      <TouchableOpacity style={styles.iconButton} onPress={() => setOpen(true)}>
         <MaterialCommunityIcons name="robot-outline" size={22} color="#FFF" />
       </TouchableOpacity>
 
@@ -106,6 +115,8 @@ const AiSuggestionsButton = () => {
             visible={settingsOpen}
             onClose={() => setSettingsOpen(false)}
           />
+
+          <SuggestionsFilter value={filters} onChange={setFilters} />
 
           <ScrollView
             contentContainerStyle={styles.body}

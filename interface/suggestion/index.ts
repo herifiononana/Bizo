@@ -25,6 +25,38 @@ export interface Suggestion {
   productId?: string;
 }
 
+export const SUGGESTION_TYPE_LABELS: Record<SuggestionType, string> = {
+  "loss-sale-today": "Vente à perte",
+  "out-of-stock": "Rupture stock",
+  "not-profitable": "Pas rentable",
+  "abnormal-profit": "Profit anormal",
+  "low-stock-fast": "Stock faible",
+  "credit-overdue": "Crédit en retard",
+  "profit-trend-down": "Profit en baisse",
+  "abnormal-quantity": "Quantité anormale",
+  "price-drift": "Prix instable",
+  "profit-concentration": "Concentration",
+  "dead-stock": "Stock mort",
+  "overvalued-stock": "Stock immobilisé",
+  "sales-spike": "Pic de vente",
+  "monthly-best-worst": "Bilan du mois",
+};
+
+// Filtres appliqués aux suggestions : intervalle de dates, référence, type
+export interface SuggestionFilters {
+  startDate: Date | null;
+  endDate: Date | null;
+  referenceId: string | null; // null = toutes, OTHER_REFERENCE = sans référence
+  type: SuggestionType | null; // null = tous les types
+}
+
+export const DEFAULT_SUGGESTION_FILTERS: SuggestionFilters = {
+  startDate: null,
+  endDate: null,
+  referenceId: null,
+  type: null,
+};
+
 // Seuils paramétrables par l'utilisateur pour les algorithmes de suggestion
 export interface SuggestionSettings {
   lowStockQty: number; // quantité en dessous de laquelle un stock est "faible"
