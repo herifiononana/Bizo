@@ -50,12 +50,13 @@ export interface SuggestionFilters {
   type: SuggestionType | null; // null = tous les types
 }
 
-export const DEFAULT_SUGGESTION_FILTERS: SuggestionFilters = {
-  startDate: null,
-  endDate: null,
+// Filtre date par défaut = aujourd'hui (fonction pour renvoyer la date du jour à chaque appel)
+export const getDefaultSuggestionFilters = (): SuggestionFilters => ({
+  startDate: new Date(),
+  endDate: new Date(),
   referenceId: null,
   type: null,
-};
+});
 
 // Seuils paramétrables par l'utilisateur pour les algorithmes de suggestion
 export interface SuggestionSettings {

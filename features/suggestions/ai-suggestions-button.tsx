@@ -1,10 +1,10 @@
 import Skeleton from "@/components/skeleton";
 import { useSuggestions } from "@/hooks/suggestions/useSuggestions";
 import {
-  DEFAULT_SUGGESTION_FILTERS,
   Suggestion,
   SuggestionFilters,
   SuggestionSeverity,
+  getDefaultSuggestionFilters,
 } from "@/interface/suggestion";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useMemo, useState } from "react";
@@ -52,7 +52,7 @@ const AiSuggestionsButton = () => {
   const [open, setOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [filters, setFilters] = useState<SuggestionFilters>(
-    DEFAULT_SUGGESTION_FILTERS
+    getDefaultSuggestionFilters
   );
   const { suggestions, analyzing, analyze } = useSuggestions();
 
