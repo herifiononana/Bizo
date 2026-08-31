@@ -3,10 +3,12 @@ import { getSuggestions } from "@/services/suggestions";
 import { useCallback, useState } from "react";
 import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
+import { useSuggestionSettings } from "./useSuggestionSettings";
 
 export const useSuggestions = () => {
   const { products } = useProducts();
   const { sales } = useSale();
+  const { settings } = useSuggestionSettings();
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [analyzing, setAnalyzing] = useState(false);
 
@@ -15,10 +17,10 @@ export const useSuggestions = () => {
     setAnalyzing(true);
     // laisse le temps au skeleton de s'afficher avant le calcul (thread JS unique)
     setTimeout(() => {
-      setSuggestions(getSuggestions({ products, sales }));
+      setSuggestions(getSuggestions({ products, sales, settings }));
       setAnalyzing(false);
     }, 0);
-  }, [products, sales]);
+  }, [products, sales, settings]);
 
   return { suggestions, analyzing, analyze };
 };

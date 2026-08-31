@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import SuggestionSettingsModal from "./suggestion-settings-modal";
 
 const SEVERITY_STYLE: Record<
   SuggestionSeverity,
@@ -43,6 +44,7 @@ const SKELETON_ROWS = 5;
 
 const AiSuggestionsButton = () => {
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const { suggestions, analyzing, analyze } = useSuggestions();
 
   const handleOpen = () => {
@@ -84,13 +86,26 @@ const AiSuggestionsButton = () => {
                   : `${suggestions.length} suggestion${suggestions.length > 1 ? "s" : ""}`}
               </Text>
             </View>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setOpen(false)}
-            >
-              <Ionicons name="close" size={22} color="#F4F6FF" />
-            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setSettingsOpen(true)}
+              >
+                <Ionicons name="settings-outline" size={20} color="#F4F6FF" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setOpen(false)}
+              >
+                <Ionicons name="close" size={22} color="#F4F6FF" />
+              </TouchableOpacity>
+            </View>
           </View>
+
+          <SuggestionSettingsModal
+            visible={settingsOpen}
+            onClose={() => setSettingsOpen(false)}
+          />
 
           <ScrollView
             contentContainerStyle={styles.body}
@@ -208,6 +223,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#7A83A2",
     marginTop: 4,
+  },
+  headerActions: {
+    flexDirection: "row",
+    gap: 10,
   },
   closeButton: {
     width: 40,

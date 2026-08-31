@@ -1,26 +1,11 @@
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
-import { Suggestion, SuggestionType } from "@/interface/suggestion";
-
-// --- Seuils (nommés pour rester ajustables) ---
-const LOW_STOCK_QTY = 3;
-const NOT_PROFITABLE_MARGIN = 0.05; // 5%
-const NOT_PROFITABLE_MIN_UNITS = 3;
-const ABNORMAL_PROFIT_MULTIPLIER = 2;
-const LOW_STOCK_VELOCITY_DAYS = 30;
-const LOW_STOCK_VELOCITY_MIN_UNITS = 5;
-const ABNORMAL_QTY_WINDOW_DAYS = 7;
-const ABNORMAL_QTY_MULTIPLIER = 3;
-const PRICE_DRIFT_MIN_SALES = 3;
-const PRICE_DRIFT_CV_THRESHOLD = 0.25; // coefficient de variation
-const CREDIT_OVERDUE_DAYS = 15;
-const PROFIT_TREND_WINDOW_DAYS = 7;
-const PROFIT_TREND_DROP_RATIO = 0.7;
-const CONCENTRATION_SHARE_THRESHOLD = 0.5;
-const DEAD_STOCK_DAYS = 30;
-const OVERVALUED_TOP_N = 3;
-const OVERVALUED_ROTATION_MULTIPLIER = 3;
-const SALES_SPIKE_MULTIPLIER = 2.5;
+import {
+  DEFAULT_SUGGESTION_SETTINGS,
+  Suggestion,
+  SuggestionSettings,
+  SuggestionType,
+} from "@/interface/suggestion";
 
 // Ordre de priorité d'affichage (du plus urgent au plus informatif)
 const PRIORITY_ORDER: SuggestionType[] = [
@@ -146,13 +131,17 @@ const detectLossSalesToday = (stats: ProductStats[], now: Date): Suggestion[] =>
 };
 
 // 2. Rupture de stock sur un produit qui se vend
-const detectOutOfStock = (stats: ProductStats[], now: Date): Suggestion[] =>
+const detectOutOfStock = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] =>
   stats
     .filter(
       (s) =>
         s.product.quantity === 0 &&
         s.lastSaleDate &&
-        daysBetween(now, s.lastSaleDate) <= LOW_STOCK_VELOCITY_DAYS
+        daysBetween(now, s.lastSaleDate) <= settings.recentSaleWindowDays
     )
     .map((s) => ({
       id: `out-of-stock-${s.product.id}`,
@@ -164,12 +153,15 @@ const detectOutOfStock = (stats: ProductStats[], now: Date): Suggestion[] =>
     }));
 
 // 3. Produit pas rentable
-const detectNotProfitable = (stats: ProductStats[]): Suggestion[] =>
+const detectNotProfitable = (
+  stats: ProductStats[],
+  settings: SuggestionSettings
+): Suggestion[] =>
   stats
     .filter(
       (s) =>
-        s.unitsSold >= NOT_PROFITABLE_MIN_UNITS &&
-        s.marginRatio < NOT_PROFITABLE_MARGIN
+        s.unitsSold >= settings.notProfitableMinUnits &&
+        s.marginRatio < settings.notProfitableMargin
     )
     .map((s) => ({
       id: `not-profitable-${s.product.id}`,
@@ -181,10 +173,14 @@ const detectNotProfitable = (stats: ProductStats[]): Suggestion[] =>
     }));
 
 // 4. Vente anormale (profit trop élevé par rapport à l'historique du produit)
-const detectAbnormalProfit = (stats: ProductStats[], now: Date): Suggestion[] => {
+const detectAbnormalProfit = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] => {
   const suggestions: Suggestion[] = [];
   for (const s of stats) {
-    if (s.marginRatio <= 0 || s.sales.length < PRICE_DRIFT_MIN_SALES) continue;
+    if (s.marginRatio <= 0 || s.sales.length < settings.minSampleSize) continue;
     const todaySales = s.sales.filter((sale) =>
       isSameDay(new Date(sale.saleDate), now)
     );
@@ -193,7 +189,7 @@ const detectAbnormalProfit = (stats: ProductStats[], now: Date): Suggestion[] =>
         sale.salePrice > 0
           ? (sale.salePrice - s.product.purchasePrice) / sale.salePrice
           : 0;
-      if (saleMargin > s.marginRatio * ABNORMAL_PROFIT_MULTIPLIER) {
+      if (saleMargin > s.marginRatio * settings.abnormalProfitMultiplier) {
         suggestions.push({
           id: `abnormal-profit-${sale.id}`,
           type: "abnormal-profit",
@@ -209,18 +205,23 @@ const detectAbnormalProfit = (stats: ProductStats[], now: Date): Suggestion[] =>
 };
 
 // 5. Stock faible avec forte vélocité de vente
-const detectLowStockFast = (stats: ProductStats[], now: Date): Suggestion[] =>
+const detectLowStockFast = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] =>
   stats
     .filter((s) => {
-      if (s.product.quantity === 0 || s.product.quantity > LOW_STOCK_QTY)
+      if (s.product.quantity === 0 || s.product.quantity > settings.lowStockQty)
         return false;
       const recentUnits = s.sales
         .filter(
           (sale) =>
-            daysBetween(now, new Date(sale.saleDate)) <= LOW_STOCK_VELOCITY_DAYS
+            daysBetween(now, new Date(sale.saleDate)) <=
+            settings.recentSaleWindowDays
         )
         .reduce((sum, sale) => sum + sale.quantity, 0);
-      return recentUnits >= LOW_STOCK_VELOCITY_MIN_UNITS;
+      return recentUnits >= settings.lowStockVelocityMinUnits;
     })
     .map((s) => ({
       id: `low-stock-fast-${s.product.id}`,
@@ -232,13 +233,18 @@ const detectLowStockFast = (stats: ProductStats[], now: Date): Suggestion[] =>
     }));
 
 // 6. Vente à crédit qui traîne
-const detectCreditOverdue = (sales: Sale[], products: Product[], now: Date): Suggestion[] => {
+const detectCreditOverdue = (
+  sales: Sale[],
+  products: Product[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] => {
   const productMap = new Map(products.map((p) => [p.id, p]));
   return sales
     .filter(
       (sale) =>
         sale.isCredit === true &&
-        daysBetween(now, new Date(sale.saleDate)) > CREDIT_OVERDUE_DAYS
+        daysBetween(now, new Date(sale.saleDate)) > settings.creditOverdueDays
     )
     .map((sale) => {
       const product = productMap.get(sale.productId);
@@ -254,8 +260,13 @@ const detectCreditOverdue = (sales: Sale[], products: Product[], now: Date): Sug
     });
 };
 
-// 7. Tendance profit en baisse (aujourd'hui vs moyenne des 7 derniers jours)
-const detectProfitTrendDown = (sales: Sale[], products: Product[], now: Date): Suggestion[] => {
+// 7. Tendance profit en baisse (aujourd'hui vs moyenne des derniers jours)
+const detectProfitTrendDown = (
+  sales: Sale[],
+  products: Product[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] => {
   const productMap = new Map(products.map((p) => [p.id, p]));
   const profitOf = (list: Sale[]) =>
     list.reduce((sum, sale) => {
@@ -269,15 +280,18 @@ const detectProfitTrendDown = (sales: Sale[], products: Product[], now: Date): S
   );
   const pastSales = sales.filter((sale) => {
     const d = daysBetween(now, new Date(sale.saleDate));
-    return d > 0 && d <= PROFIT_TREND_WINDOW_DAYS;
+    return d > 0 && d <= settings.profitTrendWindowDays;
   });
 
   if (!pastSales.length) return [];
 
   const todayProfit = profitOf(todaySales);
-  const avgPastProfit = profitOf(pastSales) / PROFIT_TREND_WINDOW_DAYS;
+  const avgPastProfit = profitOf(pastSales) / settings.profitTrendWindowDays;
 
-  if (avgPastProfit <= 0 || todayProfit >= avgPastProfit * PROFIT_TREND_DROP_RATIO)
+  if (
+    avgPastProfit <= 0 ||
+    todayProfit >= avgPastProfit * settings.profitTrendDropRatio
+  )
     return [];
 
   return [
@@ -286,24 +300,31 @@ const detectProfitTrendDown = (sales: Sale[], products: Product[], now: Date): S
       type: "profit-trend-down",
       severity: "medium",
       title: "Le profit ralentit",
-      message: `Profit du jour (${money(todayProfit)}) nettement en dessous de la moyenne des ${PROFIT_TREND_WINDOW_DAYS} derniers jours (${money(avgPastProfit)}).`,
+      message: `Profit du jour (${money(todayProfit)}) nettement en dessous de la moyenne des ${settings.profitTrendWindowDays} derniers jours (${money(avgPastProfit)}).`,
     },
   ];
 };
 
 // 8. Quantité anormale sur une vente récente
-const detectAbnormalQuantity = (stats: ProductStats[], now: Date): Suggestion[] => {
+const detectAbnormalQuantity = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] => {
   const suggestions: Suggestion[] = [];
   for (const s of stats) {
-    if (s.sales.length < PRICE_DRIFT_MIN_SALES) continue;
+    if (s.sales.length < settings.minSampleSize) continue;
     const recentSales = s.sales.filter(
       (sale) =>
-        daysBetween(now, new Date(sale.saleDate)) <= ABNORMAL_QTY_WINDOW_DAYS
+        daysBetween(now, new Date(sale.saleDate)) <= settings.abnormalQtyWindowDays
     );
     for (const sale of recentSales) {
       const others = s.sales.filter((other) => other.id !== sale.id);
       const avgOthers = mean(others.map((o) => o.quantity));
-      if (avgOthers > 0 && sale.quantity > avgOthers * ABNORMAL_QTY_MULTIPLIER) {
+      if (
+        avgOthers > 0 &&
+        sale.quantity > avgOthers * settings.abnormalQtyMultiplier
+      ) {
         suggestions.push({
           id: `abnormal-quantity-${sale.id}`,
           type: "abnormal-quantity",
@@ -319,15 +340,18 @@ const detectAbnormalQuantity = (stats: ProductStats[], now: Date): Suggestion[] 
 };
 
 // 9. Dérive de prix (prix de vente incohérent d'une vente à l'autre)
-const detectPriceDrift = (stats: ProductStats[]): Suggestion[] =>
+const detectPriceDrift = (
+  stats: ProductStats[],
+  settings: SuggestionSettings
+): Suggestion[] =>
   stats
-    .filter((s) => s.sales.length >= PRICE_DRIFT_MIN_SALES)
+    .filter((s) => s.sales.length >= settings.minSampleSize)
     .map((s) => {
       const prices = s.sales.map((sale) => sale.salePrice);
       const cv = s.avgSalePrice > 0 ? stdDev(prices) / s.avgSalePrice : 0;
       return { s, cv };
     })
-    .filter(({ cv }) => cv > PRICE_DRIFT_CV_THRESHOLD)
+    .filter(({ cv }) => cv > settings.priceDriftCvThreshold)
     .map(({ s, cv }) => ({
       id: `price-drift-${s.product.id}`,
       type: "price-drift" as const,
@@ -338,13 +362,16 @@ const detectPriceDrift = (stats: ProductStats[]): Suggestion[] =>
     }));
 
 // 10. Concentration du profit sur un seul produit
-const detectProfitConcentration = (stats: ProductStats[]): Suggestion[] => {
+const detectProfitConcentration = (
+  stats: ProductStats[],
+  settings: SuggestionSettings
+): Suggestion[] => {
   const totalProfit = stats.reduce((sum, s) => sum + Math.max(s.profit, 0), 0);
   if (totalProfit <= 0) return [];
   const top = [...stats].sort((a, b) => b.profit - a.profit)[0];
   if (!top || top.profit <= 0) return [];
   const share = top.profit / totalProfit;
-  if (share < CONCENTRATION_SHARE_THRESHOLD) return [];
+  if (share < settings.concentrationShareThreshold) return [];
   return [
     {
       id: `profit-concentration-${top.product.id}`,
@@ -357,38 +384,46 @@ const detectProfitConcentration = (stats: ProductStats[]): Suggestion[] => {
   ];
 };
 
-// 11. Stock mort (produit en stock qui ne se vend plus)
-const detectDeadStock = (stats: ProductStats[], now: Date): Suggestion[] =>
+// 11. Stock mort (produit en stock qui ne se vend plus / jamais vendu)
+const detectDeadStock = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] =>
   stats
     .filter((s) => {
       if (s.product.quantity === 0) return false;
       const createdAt = s.product.createdAt
         ? new Date(s.product.createdAt)
         : null;
-      if (createdAt && daysBetween(now, createdAt) < DEAD_STOCK_DAYS) return false;
+      if (createdAt && daysBetween(now, createdAt) < settings.deadStockDays)
+        return false;
       if (!s.lastSaleDate) return true;
-      return daysBetween(now, s.lastSaleDate) > DEAD_STOCK_DAYS;
+      return daysBetween(now, s.lastSaleDate) > settings.deadStockDays;
     })
     .map((s) => ({
       id: `dead-stock-${s.product.id}`,
       type: "dead-stock" as const,
       severity: "low" as const,
       title: `${s.product.name} ne se vend plus`,
-      message: `Aucune vente depuis plus de ${DEAD_STOCK_DAYS} jours alors qu'il reste ${s.product.quantity} unité(s) en stock. Envisagez une promotion.`,
+      message: `Aucune vente depuis plus de ${settings.deadStockDays} jours alors qu'il reste ${s.product.quantity} unité(s) en stock. Envisagez une promotion.`,
       productId: s.product.id,
     }));
 
 // 12. Stock survalorisé (capital immobilisé, rotation lente)
-const detectOvervaluedStock = (stats: ProductStats[]): Suggestion[] =>
+const detectOvervaluedStock = (
+  stats: ProductStats[],
+  settings: SuggestionSettings
+): Suggestion[] =>
   [...stats]
     .map((s) => ({ s, stockValue: s.product.quantity * s.product.purchasePrice }))
     .filter(
       ({ s }) =>
         s.product.quantity > 0 &&
-        s.product.quantity > s.unitsSold * OVERVALUED_ROTATION_MULTIPLIER
+        s.product.quantity > s.unitsSold * settings.overvaluedRotationMultiplier
     )
     .sort((a, b) => b.stockValue - a.stockValue)
-    .slice(0, OVERVALUED_TOP_N)
+    .slice(0, settings.overvaluedTopN)
     .map(({ s, stockValue }) => ({
       id: `overvalued-stock-${s.product.id}`,
       type: "overvalued-stock" as const,
@@ -399,7 +434,11 @@ const detectOvervaluedStock = (stats: ProductStats[]): Suggestion[] =>
     }));
 
 // 13. Pic de vente inhabituel aujourd'hui
-const detectSalesSpike = (stats: ProductStats[], now: Date): Suggestion[] => {
+const detectSalesSpike = (
+  stats: ProductStats[],
+  now: Date,
+  settings: SuggestionSettings
+): Suggestion[] => {
   const suggestions: Suggestion[] = [];
   for (const s of stats) {
     const todayUnits = s.sales
@@ -412,14 +451,17 @@ const detectSalesSpike = (stats: ProductStats[], now: Date): Suggestion[] => {
         .filter((sale) => !isSameDay(new Date(sale.saleDate), now))
         .map((sale) => new Date(sale.saleDate).toDateString())
     ).size;
-    if (daysWithSales < PRICE_DRIFT_MIN_SALES) continue;
+    if (daysWithSales < settings.minSampleSize) continue;
 
     const pastUnits = s.sales
       .filter((sale) => !isSameDay(new Date(sale.saleDate), now))
       .reduce((sum, sale) => sum + sale.quantity, 0);
     const avgDailyUnits = pastUnits / daysWithSales;
 
-    if (avgDailyUnits > 0 && todayUnits > avgDailyUnits * SALES_SPIKE_MULTIPLIER) {
+    if (
+      avgDailyUnits > 0 &&
+      todayUnits > avgDailyUnits * settings.salesSpikeMultiplier
+    ) {
       suggestions.push({
         id: `sales-spike-${s.product.id}`,
         type: "sales-spike",
@@ -485,27 +527,29 @@ const detectMonthlyBestWorst = (stats: ProductStats[], now: Date): Suggestion[] 
 export const getSuggestions = ({
   products,
   sales,
+  settings = DEFAULT_SUGGESTION_SETTINGS,
 }: {
   products: Product[];
   sales: Sale[];
+  settings?: SuggestionSettings;
 }): Suggestion[] => {
   const now = new Date();
   const stats = buildProductStats(products, sales);
 
   const all: Suggestion[] = [
     ...detectLossSalesToday(stats, now),
-    ...detectOutOfStock(stats, now),
-    ...detectNotProfitable(stats),
-    ...detectAbnormalProfit(stats, now),
-    ...detectLowStockFast(stats, now),
-    ...detectCreditOverdue(sales, products, now),
-    ...detectProfitTrendDown(sales, products, now),
-    ...detectAbnormalQuantity(stats, now),
-    ...detectPriceDrift(stats),
-    ...detectProfitConcentration(stats),
-    ...detectDeadStock(stats, now),
-    ...detectOvervaluedStock(stats),
-    ...detectSalesSpike(stats, now),
+    ...detectOutOfStock(stats, now, settings),
+    ...detectNotProfitable(stats, settings),
+    ...detectAbnormalProfit(stats, now, settings),
+    ...detectLowStockFast(stats, now, settings),
+    ...detectCreditOverdue(sales, products, now, settings),
+    ...detectProfitTrendDown(sales, products, now, settings),
+    ...detectAbnormalQuantity(stats, now, settings),
+    ...detectPriceDrift(stats, settings),
+    ...detectProfitConcentration(stats, settings),
+    ...detectDeadStock(stats, now, settings),
+    ...detectOvervaluedStock(stats, settings),
+    ...detectSalesSpike(stats, now, settings),
     ...detectMonthlyBestWorst(stats, now),
   ];
 
