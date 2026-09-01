@@ -1,11 +1,16 @@
+import PasswordPromptModal from "@/components/password-prompt-modal";
 import { OTHER_REFERENCE } from "@/constants/constants";
+import { useDeleteDaySales } from "@/hooks/history/useDeleteDaySales";
+import { useHistorySecurity } from "@/hooks/history/useHistorySecurity";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import { filterSalesByReference, getFinance } from "@/services/finance";
-import React, { useMemo } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useMemo, useState } from "react";
 import {
+  Alert,
   Modal,
   ScrollView,
   StyleSheet,
@@ -26,6 +31,8 @@ type FinanceDetailModalProps = {
   title: string;
   sales: Sale[];
   products: Product[];
+  // Présent uniquement pour une journée précise — absent pour la vue "Période" (plusieurs jours).
+  dateKey?: string;
 };
 
 const ReferenceSummaryRow = ({
@@ -81,8 +88,12 @@ export default function FinanceDetailModal({
   title,
   sales,
   products,
+  dateKey,
 }: FinanceDetailModalProps) {
   const { references } = useReference();
+  const { hasPassword, verifyPassword } = useHistorySecurity();
+  const { deleteDaySales } = useDeleteDaySales();
+  const [passwordPromptVisible, setPasswordPromptVisible] = useState(false);
 
   const breakdown = useMemo<ReferenceBreakdown[]>(() => {
     const groups = [
@@ -101,6 +112,43 @@ export default function FinanceDetailModal({
       }))
       .filter((group) => group.summary.totalSalesValue > 0);
   }, [references, sales, products]);
+
+  const handleDeleteDay = () => {
+    if (!hasPassword) {
+      Alert.alert(
+        "Mot de passe requis",
+        "Configurez d'abord un mot de passe de suppression dans les réglages de l'historique."
+      );
+      return;
+    }
+
+    Alert.alert(
+      "Supprimer cette journée",
+      `Voulez-vous vraiment supprimer les ${sales.length} vente(s) du ${title} ? Le stock des produits concernés sera restauré. Cette action est irréversible.`,
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: () => setPasswordPromptVisible(true),
+        },
+      ]
+    );
+  };
+
+  const handleConfirmDelete = async (password: string) => {
+    if (!verifyPassword(password)) return false;
+
+    const success = await deleteDaySales(sales);
+    setPasswordPromptVisible(false);
+    if (success) {
+      Alert.alert("✅ Succès", "Ventes supprimées et stock restauré.");
+      onClose();
+    } else {
+      Alert.alert("Erreur", "Suppression échouée, données restaurées.");
+    }
+    return true;
+  };
 
   return (
     <Modal
@@ -131,11 +179,27 @@ export default function FinanceDetailModal({
             )}
           </ScrollView>
 
+          {dateKey && sales.length > 0 && (
+            <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDay}>
+              <Ionicons name="trash-outline" size={16} color="#F43F5E" />
+              <Text style={styles.deleteText}>Supprimer cette journée</Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeText}>Fermer</Text>
           </TouchableOpacity>
         </View>
       </View>
+
+      <PasswordPromptModal
+        visible={passwordPromptVisible}
+        title="Confirmer la suppression"
+        subtitle="Saisissez le mot de passe pour supprimer cette journée."
+        confirmLabel="Supprimer"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setPasswordPromptVisible(false)}
+      />
     </Modal>
   );
 }
@@ -219,8 +283,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 12,
   },
+  deleteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    marginTop: 16,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: "rgba(244,63,94,0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(244,63,94,0.25)",
+  },
+  deleteText: {
+    color: "#F43F5E",
+    fontWeight: "700",
+    fontSize: 13,
+  },
   closeButton: {
-    marginTop: 20,
+    marginTop: 12,
     paddingVertical: 12,
     borderRadius: 14,
     backgroundColor: "#F97316",

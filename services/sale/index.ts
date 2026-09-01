@@ -39,3 +39,9 @@ export const updateSaleGroup = (
   const withoutGroup = allSales.filter((s) => s.groupId !== groupId);
   return [...newSales, ...withoutGroup];
 };
+
+// Removes every Sale whose id is in idsToRemove. Pure — no side effects.
+export const removeSalesByIds = (
+  sales: Sale[],
+  idsToRemove: Set<string>
+): Sale[] => sales.filter((sale) => !idsToRemove.has(sale.id));

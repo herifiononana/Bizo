@@ -10,15 +10,16 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import FinanceDetailModal from "@/features/finance/finance-detail-modal";
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
+import HistorySecurityModal from "@/features/finance/history-security-modal";
 import { useHistory } from "@/hooks/history/useHistory";
 import { Sale } from "@/interface/sale/sale";
 import { getFinance } from "@/services/finance";
 import { useProductsStore } from "@/stores/product.store";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
-type DetailTarget = { title: string; sales: Sale[] };
+type DetailTarget = { title: string; sales: Sale[]; dateKey?: string };
 
 const DailyFinanceScreen = () => {
   const { history: sales } = useHistory();
@@ -29,6 +30,7 @@ const DailyFinanceScreen = () => {
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
   const [detailTarget, setDetailTarget] = useState<DetailTarget | null>(null);
+  const [securityModalVisible, setSecurityModalVisible] = useState(false);
 
   const groupedFinance = useMemo(() => {
     if (!sales) return {};
@@ -106,6 +108,12 @@ const DailyFinanceScreen = () => {
             {"Résumé journalier · "}{daysCount}{" jour"}{daysCount !== 1 ? "s" : ""}{" d’activité"}
           </Text>
         </View>
+        <TouchableOpacity
+          style={styles.securityButton}
+          onPress={() => setSecurityModalVisible(true)}
+        >
+          <Ionicons name="lock-closed-outline" size={18} color="#F4F6FF" />
+        </TouchableOpacity>
       </View>
 
       {/* Date range filters */}
@@ -209,6 +217,7 @@ const DailyFinanceScreen = () => {
                   locale: fr,
                 }),
                 sales: item.sales,
+                dateKey: item.dateKey,
               })
             }
           />
@@ -229,6 +238,12 @@ const DailyFinanceScreen = () => {
         title={detailTarget?.title ?? ""}
         sales={detailTarget?.sales ?? []}
         products={products ?? []}
+        dateKey={detailTarget?.dateKey}
+      />
+
+      <HistorySecurityModal
+        visible={securityModalVisible}
+        onClose={() => setSecurityModalVisible(false)}
       />
     </View>
   );
@@ -244,6 +259,16 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     marginBottom: 16,
+  },
+  securityButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#1B2342",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
   },
   title: {
     fontSize: 28,
