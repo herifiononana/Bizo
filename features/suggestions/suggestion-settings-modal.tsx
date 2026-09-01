@@ -1,5 +1,9 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
+import {
+  SUGGESTION_FIELD_GROUPS,
+  SuggestionFieldKey,
+} from "@/constants/suggestion-fields";
 import { useSuggestionSettings } from "@/hooks/suggestions/useSuggestionSettings";
 import {
   DEFAULT_SUGGESTION_SETTINGS,
@@ -21,138 +25,11 @@ import {
   View,
 } from "react-native";
 
-type FieldKey = keyof SuggestionSettings;
-
-type FieldDef = {
-  key: FieldKey;
-  label: string;
-  unit: string;
-  isPercent?: boolean;
-};
-
-type Group = { title: string; fields: FieldDef[] };
-
-const GROUPS: Group[] = [
-  {
-    title: "Stock",
-    fields: [
-      { key: "lowStockQty", label: "Seuil stock faible", unit: "unités" },
-      {
-        key: "recentSaleWindowDays",
-        label: "Fenêtre pour juger une vente/rupture récente",
-        unit: "jours",
-      },
-      {
-        key: "lowStockVelocityMinUnits",
-        label: "Unités vendues (sur la fenêtre) pour alerter",
-        unit: "unités",
-      },
-      {
-        key: "deadStockDays",
-        label: "Jours sans vente = produit jamais vendu",
-        unit: "jours",
-      },
-    ],
-  },
-  {
-    title: "Rentabilité",
-    fields: [
-      {
-        key: "notProfitableMargin",
-        label: "Marge minimum acceptable",
-        unit: "%",
-        isPercent: true,
-      },
-      {
-        key: "notProfitableMinUnits",
-        label: "Ventes minimum avant de juger la rentabilité",
-        unit: "ventes",
-      },
-      {
-        key: "abnormalProfitMultiplier",
-        label: "Marge d'une vente = X fois la moyenne → suspecte",
-        unit: "x",
-      },
-    ],
-  },
-  {
-    title: "Anomalies de vente",
-    fields: [
-      {
-        key: "minSampleSize",
-        label: "Ventes minimum avant calcul statistique",
-        unit: "ventes",
-      },
-      {
-        key: "abnormalQtyWindowDays",
-        label: "Fenêtre pour détecter une quantité anormale",
-        unit: "jours",
-      },
-      {
-        key: "abnormalQtyMultiplier",
-        label: "Quantité d'une vente = X fois la moyenne → suspecte",
-        unit: "x",
-      },
-      {
-        key: "priceDriftCvThreshold",
-        label: "Variation de prix jugée instable",
-        unit: "%",
-        isPercent: true,
-      },
-      {
-        key: "salesSpikeMultiplier",
-        label: "Ventes du jour = X fois la moyenne → pic",
-        unit: "x",
-      },
-    ],
-  },
-  {
-    title: "Finance",
-    fields: [
-      {
-        key: "creditOverdueDays",
-        label: "Jours avant de signaler un crédit impayé",
-        unit: "jours",
-      },
-      {
-        key: "profitTrendWindowDays",
-        label: "Fenêtre de comparaison de la tendance",
-        unit: "jours",
-      },
-      {
-        key: "profitTrendDropRatio",
-        label: "Seuil de chute du profit du jour",
-        unit: "%",
-        isPercent: true,
-      },
-      {
-        key: "concentrationShareThreshold",
-        label: "Part du profit sur 1 produit jugée risquée",
-        unit: "%",
-        isPercent: true,
-      },
-    ],
-  },
-  {
-    title: "Stock immobilisé",
-    fields: [
-      {
-        key: "overvaluedTopN",
-        label: "Nombre de produits à remonter",
-        unit: "produits",
-      },
-      {
-        key: "overvaluedRotationMultiplier",
-        label: "Stock = X fois les ventes → rotation lente",
-        unit: "x",
-      },
-    ],
-  },
-];
-
-const toValueStrings = (settings: SuggestionSettings): Record<FieldKey, string> => {
-  const result = {} as Record<FieldKey, string>;
-  for (const group of GROUPS) {
+const toValueStrings = (
+  settings: SuggestionSettings
+): Record<SuggestionFieldKey, string> => {
+  const result = {} as Record<SuggestionFieldKey, string>;
+  for (const group of SUGGESTION_FIELD_GROUPS) {
     for (const field of group.fields) {
       const raw = settings[field.key];
       result[field.key] = field.isPercent
@@ -170,7 +47,7 @@ type Props = {
 
 const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
   const { settings, updateSettings, resetSettings } = useSuggestionSettings();
-  const [values, setValues] = useState<Record<FieldKey, string>>(() =>
+  const [values, setValues] = useState<Record<SuggestionFieldKey, string>>(() =>
     toValueStrings(settings)
   );
 
@@ -179,13 +56,13 @@ const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  const handleChange = (key: FieldKey, text: string) => {
+  const handleChange = (key: SuggestionFieldKey, text: string) => {
     setValues((prev) => ({ ...prev, [key]: text }));
   };
 
   const handleSave = () => {
     const next: SuggestionSettings = { ...settings };
-    for (const group of GROUPS) {
+    for (const group of SUGGESTION_FIELD_GROUPS) {
       for (const field of group.fields) {
         const parsed = parseFloat(values[field.key].replace(",", "."));
         if (Number.isNaN(parsed)) continue;
@@ -238,7 +115,7 @@ const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
           contentContainerStyle={styles.body}
           showsVerticalScrollIndicator={false}
         >
-          {GROUPS.map((group) => (
+          {SUGGESTION_FIELD_GROUPS.map((group) => (
             <View key={group.title} style={styles.section}>
               <Text style={styles.sectionTitle}>{group.title}</Text>
               {group.fields.map((field) => (
