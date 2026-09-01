@@ -7,13 +7,7 @@ import { useSalesStore } from "@/stores/sales.store";
 import { Entypo } from "@expo/vector-icons";
 import React from "react";
 import { Alert, StyleSheet, TouchableOpacity } from "react-native";
-function DeleteProductButton({
-  item,
-  callback,
-}: {
-  item: Product;
-  callback: () => void;
-}) {
+function DeleteProductButton({ item }: { item: Product }) {
   const { products, setProducts } = useProductsStore();
   const { sales, setSales } = useSalesStore();
 

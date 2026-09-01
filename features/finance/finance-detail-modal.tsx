@@ -1,3 +1,4 @@
+import { ModalTrigger } from "@/components/modal-trigger";
 import PasswordPromptModal from "@/components/password-prompt-modal";
 import { OTHER_REFERENCE } from "@/constants/constants";
 import SaleRow from "@/features/finance/sale-row";
@@ -27,8 +28,8 @@ type ReferenceBreakdown = {
 };
 
 type FinanceDetailModalProps = {
-  visible: boolean;
-  onClose: () => void;
+  // Bouton d'ouverture personnalisable — dépend du contexte (carte jour, carte période…), pas de défaut générique possible.
+  trigger: ModalTrigger;
   title: string;
   sales: Sale[];
   products: Product[];
@@ -84,8 +85,7 @@ const ReferenceSummaryRow = ({
 };
 
 export default function FinanceDetailModal({
-  visible,
-  onClose,
+  trigger,
   title,
   sales,
   products,
@@ -94,6 +94,9 @@ export default function FinanceDetailModal({
   const { references } = useReference();
   const { hasPassword, verifyPassword } = useHistorySecurity();
   const { deleteDaySales } = useDeleteDaySales();
+
+  const [visible, setVisible] = useState(false);
+  const onClose = () => setVisible(false);
 
   // Copie locale affichée : mise à jour immédiatement après une suppression,
   // sans attendre que le parent recalcule et repasse la prop `sales`.
@@ -191,12 +194,15 @@ export default function FinanceDetailModal({
   };
 
   return (
-    <Modal
-      transparent
-      animationType="slide"
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <>
+      {trigger({ onPress: () => setVisible(true) })}
+
+      <Modal
+        transparent
+        animationType="slide"
+        visible={visible}
+        onRequestClose={onClose}
+      >
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
           <View style={styles.grabHandle} />
@@ -256,7 +262,8 @@ export default function FinanceDetailModal({
         onConfirm={handleConfirmDelete}
         onCancel={() => setPendingDeletion(null)}
       />
-    </Modal>
+      </Modal>
+    </>
   );
 }
 

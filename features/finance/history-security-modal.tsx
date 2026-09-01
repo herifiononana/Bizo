@@ -1,4 +1,6 @@
+import { ModalTrigger } from "@/components/modal-trigger";
 import { useHistorySecurity } from "@/hooks/history/useHistorySecurity";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -11,16 +13,25 @@ import {
 } from "react-native";
 
 type HistorySecurityModalProps = {
-  visible: boolean;
-  onClose: () => void;
+  // Bouton d'ouverture personnalisable — par défaut une icône cadenas.
+  trigger?: ModalTrigger;
 };
 
-const HistorySecurityModal = ({ visible, onClose }: HistorySecurityModalProps) => {
+const DefaultTrigger: ModalTrigger = ({ onPress }) => (
+  <TouchableOpacity style={styles.defaultTrigger} onPress={onPress}>
+    <Ionicons name="lock-closed-outline" size={18} color="#F4F6FF" />
+  </TouchableOpacity>
+);
+
+const HistorySecurityModal = ({ trigger }: HistorySecurityModalProps) => {
   const { hasPassword, changePassword } = useHistorySecurity();
 
+  const [visible, setVisible] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const onClose = () => setVisible(false);
 
   useEffect(() => {
     if (visible) {
@@ -51,7 +62,12 @@ const HistorySecurityModal = ({ visible, onClose }: HistorySecurityModalProps) =
   };
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <>
+      {trigger ? trigger({ onPress: () => setVisible(true) }) : (
+        <DefaultTrigger onPress={() => setVisible(true)} />
+      )}
+
+      <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.container}>
           <Text style={styles.title}>Mot de passe de suppression</Text>
@@ -96,13 +112,24 @@ const HistorySecurityModal = ({ visible, onClose }: HistorySecurityModalProps) =
           </View>
         </View>
       </View>
-    </Modal>
+      </Modal>
+    </>
   );
 };
 
 export default HistorySecurityModal;
 
 const styles = StyleSheet.create({
+  defaultTrigger: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#1B2342",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+  },
   overlay: {
     flex: 1,
     justifyContent: "center",

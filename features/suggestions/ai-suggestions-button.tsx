@@ -51,8 +51,6 @@ const SKELETON_ROWS = 5;
 
 const AiSuggestionsButton = () => {
   const [open, setOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
   const [filters, setFilters] = useState<SuggestionFilters>(
     getDefaultSuggestionFilters
   );
@@ -98,18 +96,8 @@ const AiSuggestionsButton = () => {
               </Text>
             </View>
             <View style={styles.headerActions}>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setHelpOpen(true)}
-              >
-                <Ionicons name="help-circle-outline" size={20} color="#F4F6FF" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setSettingsOpen(true)}
-              >
-                <Ionicons name="settings-outline" size={20} color="#F4F6FF" />
-              </TouchableOpacity>
+              <SuggestionHelpModal />
+              <SuggestionSettingsModal />
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setOpen(false)}
@@ -118,12 +106,6 @@ const AiSuggestionsButton = () => {
               </TouchableOpacity>
             </View>
           </View>
-
-          <SuggestionSettingsModal
-            visible={settingsOpen}
-            onClose={() => setSettingsOpen(false)}
-          />
-          <SuggestionHelpModal visible={helpOpen} onClose={() => setHelpOpen(false)} />
 
           <SuggestionsFilter value={filters} onChange={setFilters} />
 

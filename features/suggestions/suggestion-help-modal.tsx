@@ -1,3 +1,4 @@
+import { ModalTrigger } from "@/components/modal-trigger";
 import { SUGGESTION_FIELD_GROUPS } from "@/constants/suggestion-fields";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
@@ -13,14 +14,22 @@ import {
 } from "react-native";
 
 type SuggestionHelpModalProps = {
-  visible: boolean;
-  onClose: () => void;
+  // Bouton d'ouverture personnalisable — par défaut une icône aide.
+  trigger?: ModalTrigger;
 };
+
+const DefaultTrigger: ModalTrigger = ({ onPress }) => (
+  <TouchableOpacity style={styles.defaultTrigger} onPress={onPress}>
+    <Ionicons name="help-circle-outline" size={20} color="#F4F6FF" />
+  </TouchableOpacity>
+);
 
 const matchesQuery = (text: string, query: string) =>
   text.toLowerCase().includes(query.toLowerCase());
 
-const SuggestionHelpModal = ({ visible, onClose }: SuggestionHelpModalProps) => {
+const SuggestionHelpModal = ({ trigger }: SuggestionHelpModalProps) => {
+  const [visible, setVisible] = useState(false);
+  const onClose = () => setVisible(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredGroups = useMemo(() => {
@@ -37,7 +46,12 @@ const SuggestionHelpModal = ({ visible, onClose }: SuggestionHelpModalProps) => 
   }, [searchQuery]);
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <>
+      {trigger ? trigger({ onPress: () => setVisible(true) }) : (
+        <DefaultTrigger onPress={() => setVisible(true)} />
+      )}
+
+      <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={styles.screen}>
         <StatusBar barStyle="light-content" backgroundColor="#0C1224" />
 
@@ -92,13 +106,24 @@ const SuggestionHelpModal = ({ visible, onClose }: SuggestionHelpModalProps) => 
           )}
         </ScrollView>
       </View>
-    </Modal>
+      </Modal>
+    </>
   );
 };
 
 export default SuggestionHelpModal;
 
 const styles = StyleSheet.create({
+  defaultTrigger: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#1B2342",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+  },
   screen: {
     flex: 1,
     backgroundColor: "#0C1224",

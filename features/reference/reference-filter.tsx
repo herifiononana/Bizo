@@ -1,3 +1,4 @@
+import { ModalTrigger } from "@/components/modal-trigger";
 import { OTHER_REFERENCE } from "@/constants/constants";
 import { Colors } from "@/constants/theme";
 import { useReference } from "@/hooks/reference/useRefecence";
@@ -15,8 +16,11 @@ import {
 type ReferenceFilterProps = {
   selectedReference?: string | null;
   setSelectedReference: (reference?: string | null) => void;
+  // Position du bouton par défaut (ignorée si `trigger` est fourni).
   top?: number;
   right?: number;
+  // Bouton d'ouverture personnalisable — par défaut une icône filtre positionnée en absolu.
+  trigger?: ModalTrigger;
 };
 
 export default function ReferenceFilterModal({
@@ -24,6 +28,7 @@ export default function ReferenceFilterModal({
   setSelectedReference,
   right = 10,
   top = 205,
+  trigger,
 }: ReferenceFilterProps) {
   const { references } = useReference();
   const [open, setOpen] = useState(false);
@@ -36,11 +41,19 @@ export default function ReferenceFilterModal({
   };
 
   return (
-    <View style={{ ...styles.container, top, right }}>
-      {/* --- BOUTON QUI OUVRE LE MODAL --- */}
-      <TouchableOpacity style={styles.iconButton} onPress={() => setOpen(true)}>
-        <Ionicons name="filter" size={22} color="#FFF" />
-      </TouchableOpacity>
+    <>
+      {trigger ? (
+        trigger({ onPress: () => setOpen(true) })
+      ) : (
+        <View style={{ ...styles.container, top, right }}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => setOpen(true)}
+          >
+            <Ionicons name="filter" size={22} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* --- MODAL --- */}
       <Modal
@@ -125,7 +138,7 @@ export default function ReferenceFilterModal({
           </View>
         </View>
       </Modal>
-    </View>
+    </>
   );
 }
 

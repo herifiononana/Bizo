@@ -1,4 +1,5 @@
 import { AddButton } from "@/components/add-button";
+import { ModalTrigger } from "@/components/modal-trigger";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Sale } from "@/interface/sale/sale";
 import { saveProducts } from "@/services/product";
@@ -8,7 +9,19 @@ import { useSalesStore } from "@/stores/sales.store";
 import React, { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import CreateSaleForm from "./create-sale-form";
-function CreateSaleButton() {
+
+type CreateSaleButtonProps = {
+  // Bouton d'ouverture personnalisable — par défaut le bouton "+" flottant.
+  trigger?: ModalTrigger;
+};
+
+const DefaultTrigger: ModalTrigger = ({ onPress }) => (
+  <View style={styles.addButtonContainer}>
+    <AddButton onPress={onPress} />
+  </View>
+);
+
+function CreateSaleButton({ trigger }: CreateSaleButtonProps) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { changeFinanceStatus } = useFinance();
 
@@ -43,9 +56,9 @@ function CreateSaleButton() {
 
   return (
     <>
-      <View style={styles.addButtonContainer}>
-        <AddButton onPress={() => setModalVisible(true)} />
-      </View>
+      {trigger ? trigger({ onPress: () => setModalVisible(true) }) : (
+        <DefaultTrigger onPress={() => setModalVisible(true)} />
+      )}
 
       {/* Modal Nouvelle vente */}
       <Modal

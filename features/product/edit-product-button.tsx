@@ -1,26 +1,25 @@
 import { ModalTrigger } from "@/components/modal-trigger";
-import { Sale } from "@/interface/sale/sale";
+import EditProductForm from "@/features/product/edit-product-form";
+import { Product } from "@/interface/product/product";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
-import UpdateSaleForm from "./update-sale-form";
 
-type EditSaleButtonProps = {
-  sale: Sale;
+type EditProductButtonProps = {
+  product: Product;
   // Bouton d'ouverture personnalisable — par défaut une icône crayon.
   trigger?: ModalTrigger;
 };
 
 const DefaultTrigger: ModalTrigger = ({ onPress }) => (
-  <View style={styles.buttonContainer}>
-    <TouchableOpacity style={styles.editButton} onPress={onPress}>
-      <Entypo name="edit" size={16} color="#B7BFD8" />
-    </TouchableOpacity>
-  </View>
+  <TouchableOpacity style={styles.actionBtn} onPress={onPress}>
+    <Entypo name="edit" size={15} color="#B7BFD8" />
+  </TouchableOpacity>
 );
 
-function EditSaleButton({ sale, trigger }: EditSaleButtonProps) {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+const EditProductButton = ({ product, trigger }: EditProductButtonProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <>
       {trigger ? trigger({ onPress: () => setModalVisible(true) }) : (
@@ -34,28 +33,25 @@ function EditSaleButton({ sale, trigger }: EditSaleButtonProps) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <UpdateSaleForm onCancel={() => setModalVisible(false)} sale={sale} />
+          <EditProductForm
+            onCancel={() => setModalVisible(false)}
+            product={product}
+          />
         </View>
       </Modal>
     </>
   );
-}
+};
 
-export default EditSaleButton;
+export default EditProductButton;
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  editButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 12,
+  actionBtn: {
+    padding: 8,
+    borderRadius: 10,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
     backgroundColor: "rgba(255,255,255,0.04)",
-    marginTop: 4,
   },
   modalOverlay: {
     flex: 1,

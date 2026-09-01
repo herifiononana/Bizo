@@ -1,4 +1,5 @@
 import { AddButton } from "@/components/add-button";
+import { ModalTrigger } from "@/components/modal-trigger";
 import AddProductForm from "@/features/product/add-product-form";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
@@ -7,7 +8,18 @@ import { useProductsStore } from "@/stores/product.store";
 import React, { useState } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 
-function AddProductButton() {
+type AddProductButtonProps = {
+  // Bouton d'ouverture personnalisable — par défaut le bouton "+" flottant.
+  trigger?: ModalTrigger;
+};
+
+const DefaultTrigger: ModalTrigger = ({ onPress }) => (
+  <View style={styles.addButtonContainer}>
+    <AddButton onPress={onPress} />
+  </View>
+);
+
+function AddProductButton({ trigger }: AddProductButtonProps) {
   const { products, setProducts } = useProductsStore((state) => state);
   const { changeFinanceStatus } = useFinance();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -22,9 +34,9 @@ function AddProductButton() {
 
   return (
     <>
-      <View style={styles.addButtonContainer}>
-        <AddButton onPress={() => setModalVisible(true)} />
-      </View>
+      {trigger ? trigger({ onPress: () => setModalVisible(true) }) : (
+        <DefaultTrigger onPress={() => setModalVisible(true)} />
+      )}
 
       {/* Modal d'ajout */}
       <Modal

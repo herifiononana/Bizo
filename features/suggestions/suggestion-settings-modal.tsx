@@ -1,4 +1,5 @@
 import { CancelButton } from "@/components/cancel-button";
+import { ModalTrigger } from "@/components/modal-trigger";
 import { SaveButton } from "@/components/save-button";
 import {
   SUGGESTION_FIELD_GROUPS,
@@ -41,12 +42,20 @@ const toValueStrings = (
 };
 
 type Props = {
-  visible: boolean;
-  onClose: () => void;
+  // Bouton d'ouverture personnalisable — par défaut une icône réglages.
+  trigger?: ModalTrigger;
 };
 
-const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
+const DefaultTrigger: ModalTrigger = ({ onPress }) => (
+  <TouchableOpacity style={styles.defaultTrigger} onPress={onPress}>
+    <Ionicons name="settings-outline" size={20} color="#F4F6FF" />
+  </TouchableOpacity>
+);
+
+const SuggestionSettingsModal = ({ trigger }: Props) => {
   const { settings, updateSettings, resetSettings } = useSuggestionSettings();
+  const [visible, setVisible] = useState(false);
+  const onClose = () => setVisible(false);
   const [values, setValues] = useState<Record<SuggestionFieldKey, string>>(() =>
     toValueStrings(settings)
   );
@@ -92,7 +101,12 @@ const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
   };
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <>
+      {trigger ? trigger({ onPress: () => setVisible(true) }) : (
+        <DefaultTrigger onPress={() => setVisible(true)} />
+      )}
+
+      <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <KeyboardAvoidingView
         style={styles.screen}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -146,13 +160,24 @@ const SuggestionSettingsModal = ({ visible, onClose }: Props) => {
           <CancelButton onPress={onClose} />
         </View>
       </KeyboardAvoidingView>
-    </Modal>
+      </Modal>
+    </>
   );
 };
 
 export default SuggestionSettingsModal;
 
 const styles = StyleSheet.create({
+  defaultTrigger: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#1B2342",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.10)",
+  },
   screen: {
     flex: 1,
     backgroundColor: "#0C1224",

@@ -15,11 +15,9 @@ import { useHistory } from "@/hooks/history/useHistory";
 import { Sale } from "@/interface/sale/sale";
 import { getFinance } from "@/services/finance";
 import { useProductsStore } from "@/stores/product.store";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-
-type DetailTarget = { title: string; sales: Sale[]; dateKey?: string };
 
 const DailyFinanceScreen = () => {
   const { history: sales } = useHistory();
@@ -29,8 +27,6 @@ const DailyFinanceScreen = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isStartPickerVisible, setStartPickerVisible] = useState(false);
   const [isEndPickerVisible, setEndPickerVisible] = useState(false);
-  const [detailTarget, setDetailTarget] = useState<DetailTarget | null>(null);
-  const [securityModalVisible, setSecurityModalVisible] = useState(false);
 
   const groupedFinance = useMemo(() => {
     if (!sales) return {};
@@ -108,12 +104,7 @@ const DailyFinanceScreen = () => {
             {"Résumé journalier · "}{daysCount}{" jour"}{daysCount !== 1 ? "s" : ""}{" d’activité"}
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.securityButton}
-          onPress={() => setSecurityModalVisible(true)}
-        >
-          <Ionicons name="lock-closed-outline" size={18} color="#F4F6FF" />
-        </TouchableOpacity>
+        <HistorySecurityModal />
       </View>
 
       {/* Date range filters */}
@@ -150,38 +141,43 @@ const DailyFinanceScreen = () => {
 
       {/* Period hero card */}
       {daysCount > 0 && (
-        <TouchableOpacity
-          style={styles.periodCard}
-          activeOpacity={0.85}
-          onPress={() =>
-            setDetailTarget({ title: "Période", sales: periodSales })
-          }
-        >
-          <Text style={styles.periodLabel}>PÉRIODE</Text>
-          <View style={styles.metricsRow}>
-            <View style={styles.metricCol}>
-              <Text style={styles.metricSubLabel}>TOTAL VENTES</Text>
-              <Text style={styles.periodValue}>
-                {totalVentes.toLocaleString()} Ar
-              </Text>
-            </View>
-            <View style={styles.metricDivider} />
-            <View style={styles.metricCol}>
-              <Text style={styles.metricSubLabel}>BÉNÉFICE</Text>
-              <Text style={styles.profitValue}>
-                {totalProfit.toLocaleString()} Ar
-              </Text>
-            </View>
-          </View>
-          <View style={styles.periodBadgesRow}>
-            <View style={styles.periodBadge}>
-              <View style={styles.periodDot} />
-              <Text style={styles.periodBadgeText}>
-                {daysCount} jour{daysCount !== 1 ? "s" : ""}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <FinanceDetailModal
+          title="Période"
+          sales={periodSales}
+          products={products ?? []}
+          trigger={({ onPress }) => (
+            <TouchableOpacity
+              style={styles.periodCard}
+              activeOpacity={0.85}
+              onPress={onPress}
+            >
+              <Text style={styles.periodLabel}>PÉRIODE</Text>
+              <View style={styles.metricsRow}>
+                <View style={styles.metricCol}>
+                  <Text style={styles.metricSubLabel}>TOTAL VENTES</Text>
+                  <Text style={styles.periodValue}>
+                    {totalVentes.toLocaleString()} Ar
+                  </Text>
+                </View>
+                <View style={styles.metricDivider} />
+                <View style={styles.metricCol}>
+                  <Text style={styles.metricSubLabel}>BÉNÉFICE</Text>
+                  <Text style={styles.profitValue}>
+                    {totalProfit.toLocaleString()} Ar
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.periodBadgesRow}>
+                <View style={styles.periodBadge}>
+                  <View style={styles.periodDot} />
+                  <Text style={styles.periodBadgeText}>
+                    {daysCount} jour{daysCount !== 1 ? "s" : ""}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
       )}
 
       <DateTimePickerModal
@@ -208,18 +204,20 @@ const DailyFinanceScreen = () => {
         keyExtractor={(item) => item.dateKey}
         contentContainerStyle={styles.container}
         renderItem={({ item }) => (
-          <DailyFinanceItem
+          <FinanceDetailModal
+            title={format(new Date(item.dateKey), "EEEE d MMMM yyyy", {
+              locale: fr,
+            })}
+            sales={item.sales}
+            products={products ?? []}
             dateKey={item.dateKey}
-            finance={item.finance}
-            onPress={() =>
-              setDetailTarget({
-                title: format(new Date(item.dateKey), "EEEE d MMMM yyyy", {
-                  locale: fr,
-                }),
-                sales: item.sales,
-                dateKey: item.dateKey,
-              })
-            }
+            trigger={({ onPress }) => (
+              <DailyFinanceItem
+                dateKey={item.dateKey}
+                finance={item.finance}
+                onPress={onPress}
+              />
+            )}
           />
         )}
         ListHeaderComponent={ListHeader}
@@ -230,20 +228,6 @@ const DailyFinanceScreen = () => {
         maxToRenderPerBatch={10}
         windowSize={5}
         removeClippedSubviews={true}
-      />
-
-      <FinanceDetailModal
-        visible={!!detailTarget}
-        onClose={() => setDetailTarget(null)}
-        title={detailTarget?.title ?? ""}
-        sales={detailTarget?.sales ?? []}
-        products={products ?? []}
-        dateKey={detailTarget?.dateKey}
-      />
-
-      <HistorySecurityModal
-        visible={securityModalVisible}
-        onClose={() => setSecurityModalVisible(false)}
       />
     </View>
   );
@@ -259,16 +243,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     marginBottom: 16,
-  },
-  securityButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: "#1B2342",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
   },
   title: {
     fontSize: 28,

@@ -1,9 +1,9 @@
 import { Product } from "@/interface/product/product";
-import { Entypo, Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
-import EditProductForm from "./edit-product-form";
+import EditProductButton from "./edit-product-button";
 
 function getStockBadge(qty: number): { label: string; color: string; bg: string } {
   if (qty === 0) return { label: "Rupture", color: "#F43F5E", bg: "rgba(244,63,94,0.12)" };
@@ -16,8 +16,6 @@ const ProductListItem = React.memo(function ProductListItem({
 }: {
   item: Product;
 }) {
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
-
   const stockBadge = getStockBadge(item.quantity);
 
   const marginPct =
@@ -33,7 +31,6 @@ const ProductListItem = React.memo(function ProductListItem({
       : null;
 
   return (
-    <>
       <View style={styles.card}>
         {/* Top row: icon + name + badges | edit + delete */}
         <View style={styles.topRow}>
@@ -73,16 +70,8 @@ const ProductListItem = React.memo(function ProductListItem({
             </View>
           </View>
           <View style={styles.actions}>
-            <TouchableOpacity
-              style={styles.actionBtn}
-              onPress={() => setModalVisible(true)}
-            >
-              <Entypo name="edit" size={15} color="#B7BFD8" />
-            </TouchableOpacity>
-            <DeleteProductButton
-              callback={() => setModalVisible(false)}
-              item={item}
-            />
+            <EditProductButton product={item} />
+            <DeleteProductButton item={item} />
           </View>
         </View>
 
@@ -115,21 +104,6 @@ const ProductListItem = React.memo(function ProductListItem({
           </View>
         </View>
       </View>
-
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <EditProductForm
-            onCancel={() => setModalVisible(false)}
-            product={item}
-          />
-        </View>
-      </Modal>
-    </>
   );
 });
 
@@ -197,13 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 6,
   },
-  actionBtn: {
-    padding: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    backgroundColor: "rgba(255,255,255,0.04)",
-  },
   pricesRow: {
     flexDirection: "row",
     backgroundColor: "#1B2342",
@@ -234,11 +201,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     letterSpacing: -0.2,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(5,8,18,0.75)",
-    justifyContent: "flex-end",
   },
 });
 
