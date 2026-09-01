@@ -1,6 +1,8 @@
+import { Sale } from "@/interface/sale/sale";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import DeleteSaleButton from "./delete-sale-button";
 
 type Props = {
   isCredit: boolean;
@@ -9,6 +11,8 @@ type Props = {
   onToggleExpand: () => void;
   onEdit: () => void;
   onPayCredit: () => void;
+  groupSales: Sale[];
+  deleteConfirmMessage: string;
 };
 
 const SaleGroupFooter = React.memo(function SaleGroupFooter({
@@ -18,6 +22,8 @@ const SaleGroupFooter = React.memo(function SaleGroupFooter({
   onToggleExpand,
   onEdit,
   onPayCredit,
+  groupSales,
+  deleteConfirmMessage,
 }: Props) {
   return (
     <View style={styles.footerRow}>
@@ -46,6 +52,10 @@ const SaleGroupFooter = React.memo(function SaleGroupFooter({
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
           <MaterialIcons name="edit" size={14} color="#A78BFA" />
         </TouchableOpacity>
+        <DeleteSaleButton
+          salesToDelete={groupSales}
+          confirmMessage={deleteConfirmMessage}
+        />
         {isCredit && (
           <TouchableOpacity style={styles.payButton} onPress={onPayCredit}>
             <Text style={styles.payButtonText}>Marquer payé</Text>

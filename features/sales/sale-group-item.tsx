@@ -136,6 +136,8 @@ const SaleGroupItem = React.memo(function SaleGroupItem({
           onToggleExpand={() => setExpanded(!expanded)}
           onEdit={() => setEditModalVisible(true)}
           onPayCredit={handlePayCredit}
+          groupSales={items}
+          deleteConfirmMessage={`Voulez-vous vraiment supprimer cette vente (${productsSummary}) ? Le stock sera restauré. Cette action est irréversible.`}
         />
       </View>
 

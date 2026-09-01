@@ -5,6 +5,7 @@ import { useSalesStore } from "@/stores/sales.store";
 import { Entypo } from "@expo/vector-icons";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import DeleteSaleButton from "./delete-sale-button";
 import EditSaleButton from "./edit-sale-button";
 
 type SaleListItemProps = {
@@ -45,6 +46,10 @@ const SaleListItem = React.memo(function SaleListItem({
   const detailText = item.isCredit || wasCreditNowPaid
     ? `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u · ${item.clientName}`
     : `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u`;
+
+  const deleteConfirmMessage = `Voulez-vous vraiment supprimer cette vente de ${
+    product?.name ?? "ce produit"
+  } ? Le stock sera restauré. Cette action est irréversible.`;
 
   return (
     <View style={styles.saleCard}>
@@ -90,6 +95,10 @@ const SaleListItem = React.memo(function SaleListItem({
             </View>
             <View style={styles.footerActions}>
               <EditSaleButton sale={item} />
+              <DeleteSaleButton
+                salesToDelete={[item]}
+                confirmMessage={deleteConfirmMessage}
+              />
               <TouchableOpacity style={styles.payButton} onPress={handlePayCredit}>
                 <Text style={styles.payButtonText}>Marquer payé</Text>
               </TouchableOpacity>
@@ -101,11 +110,23 @@ const SaleListItem = React.memo(function SaleListItem({
               <Entypo name="check" size={13} color="#2ECC71" />
               <Text style={styles.paidText}>Crédit remboursé</Text>
             </View>
-            <EditSaleButton sale={item} />
+            <View style={styles.footerActions}>
+              <EditSaleButton sale={item} />
+              <DeleteSaleButton
+                salesToDelete={[item]}
+                confirmMessage={deleteConfirmMessage}
+              />
+            </View>
           </>
         ) : (
           <View style={styles.footerRight}>
-            <EditSaleButton sale={item} />
+            <View style={styles.footerActions}>
+              <EditSaleButton sale={item} />
+              <DeleteSaleButton
+                salesToDelete={[item]}
+                confirmMessage={deleteConfirmMessage}
+              />
+            </View>
           </View>
         )}
       </View>
