@@ -1,3 +1,4 @@
+import SecureConfirmModal from "@/components/secure-confirm-modal";
 import { useProducts } from "@/hooks/product/useProduct";
 import { useSale } from "@/hooks/sale/useSale";
 import { exportAllDataToCSV, importAllDataFromCSV } from "@/libs/export-to-csv";
@@ -12,8 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-type PendingAction = "export" | "import" | null;
 
 type ConfirmationModalProps = {
   visible: boolean;
@@ -58,7 +57,8 @@ const ConfirmationModal = ({
 const CsvButtons = () => {
   const { loadProducts } = useProducts();
   const { loadSales } = useSale();
-  const [pendingAction, setPendingAction] = useState<PendingAction>(null);
+  const [exportConfirmVisible, setExportConfirmVisible] = useState(false);
+  const [importConfirmVisible, setImportConfirmVisible] = useState(false);
 
   const handleExport = async () => {
     try {
@@ -67,6 +67,8 @@ const CsvButtons = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       Alert.alert("Erreur", "Export impossible.");
+    } finally {
+      setExportConfirmVisible(false);
     }
   };
 
@@ -89,50 +91,45 @@ const CsvButtons = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
       Alert.alert("Erreur", "Importation impossible.");
+    } finally {
+      setImportConfirmVisible(false);
     }
-  };
-
-  const handleConfirmPendingAction = () => {
-    const action = pendingAction;
-    setPendingAction(null);
-    if (action === "export") handleExport();
-    if (action === "import") handleImport();
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.iconButton}
-        onPress={() => setPendingAction("export")}
+        onPress={() => setExportConfirmVisible(true)}
       >
         <Ionicons name="download-outline" size={22} color="#00D4FF" />
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.iconButton}
-        onPress={() => setPendingAction("import")}
+        onPress={() => setImportConfirmVisible(true)}
       >
         <Ionicons name="cloud-upload-outline" size={22} color="#00D4FF" />
       </TouchableOpacity>
 
       <ConfirmationModal
-        visible={pendingAction === "export"}
+        visible={exportConfirmVisible}
         title="Exporter les données"
         message="Un fichier CSV contenant vos produits, ventes et références va être créé, puis vous pourrez le partager (email, stockage, etc.). Vos données locales ne sont pas modifiées."
         confirmLabel="Exporter"
         confirmColor="#00D4FF"
-        onConfirm={handleConfirmPendingAction}
-        onCancel={() => setPendingAction(null)}
+        onConfirm={handleExport}
+        onCancel={() => setExportConfirmVisible(false)}
       />
 
-      <ConfirmationModal
-        visible={pendingAction === "import"}
+      <SecureConfirmModal
+        visible={importConfirmVisible}
         title="Importer des données"
         message="Cette action va remplacer définitivement toutes vos données locales actuelles (produits, ventes, références) par celles du fichier sélectionné. Cette action est irréversible."
         confirmLabel="Choisir un fichier et importer"
         confirmColor="#F43F5E"
-        onConfirm={handleConfirmPendingAction}
-        onCancel={() => setPendingAction(null)}
+        onConfirmed={handleImport}
+        onCancel={() => setImportConfirmVisible(false)}
       />
     </View>
   );

@@ -1,7 +1,9 @@
 import { CancelButton } from "@/components/cancel-button";
 import { SaveButton } from "@/components/save-button";
+import SecureConfirmModal from "@/components/secure-confirm-modal";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Reference } from "@/interface/reference";
+import { useProductsStore } from "@/stores/product.store";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -17,14 +19,19 @@ import {
   View,
 } from "react-native";
 
+type PendingReferenceDelete = { reference: Reference; cascade: boolean };
+
 const AddReferenceButton = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [refName, setRefName] = useState("");
   const [editingReference, setEditingReference] = useState<Reference | null>(
     null
   );
+  const [pendingDelete, setPendingDelete] =
+    useState<PendingReferenceDelete | null>(null);
   const { references, addReference, updateReference, deleteReference } =
     useReference();
+  const products = useProductsStore((state) => state.products);
 
   const closeModal = () => {
     setModalVisible(false);
@@ -52,22 +59,50 @@ const AddReferenceButton = () => {
   };
 
   const handleDelete = (reference: Reference) => {
+    const productCount = (products ?? []).filter(
+      (product) => product.referenceId === reference.id
+    ).length;
+
+    // Référence sans produit associé : suppression directe, sans mot de passe.
+    if (productCount === 0) {
+      Alert.alert(
+        "Supprimer la référence",
+        `Voulez-vous vraiment supprimer "${reference.name}" ?`,
+        [
+          { text: "Annuler", style: "cancel" },
+          {
+            text: "Supprimer",
+            style: "destructive",
+            onPress: () => deleteReference(reference.id, false),
+          },
+        ]
+      );
+      return;
+    }
+
+    // Référence associée à des produits : mot de passe requis quel que soit le choix.
     Alert.alert(
       "Supprimer la référence",
-      `Que faire des produits associés à "${reference.name}" ?`,
+      `${productCount} produit(s) sont associés à "${reference.name}". Que faire des produits associés ?`,
       [
         { text: "Annuler", style: "cancel" },
         {
           text: "Conserver les produits",
-          onPress: () => deleteReference(reference.id, false),
+          onPress: () => setPendingDelete({ reference, cascade: false }),
         },
         {
           text: "Supprimer aussi les produits",
           style: "destructive",
-          onPress: () => deleteReference(reference.id, true),
+          onPress: () => setPendingDelete({ reference, cascade: true }),
         },
       ]
     );
+  };
+
+  const handleConfirmedDelete = async () => {
+    if (!pendingDelete) return;
+    await deleteReference(pendingDelete.reference.id, pendingDelete.cascade);
+    setPendingDelete(null);
   };
 
   return (
@@ -146,6 +181,19 @@ const AddReferenceButton = () => {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+      <SecureConfirmModal
+        visible={!!pendingDelete}
+        title="Confirmer la suppression"
+        message={
+          pendingDelete?.cascade
+            ? `Les produits associés à "${pendingDelete.reference.name}" seront aussi supprimés. Cette action est irréversible.`
+            : `"${pendingDelete?.reference.name}" sera supprimée. Les produits associés seront conservés sans référence.`
+        }
+        confirmLabel="Supprimer"
+        onConfirmed={handleConfirmedDelete}
+        onCancel={() => setPendingDelete(null)}
+      />
     </View>
   );
 };
