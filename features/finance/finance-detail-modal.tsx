@@ -1,7 +1,6 @@
 import { ModalTrigger } from "@/components/modal-trigger";
 import PasswordPromptModal from "@/components/password-prompt-modal";
 import { OTHER_REFERENCE } from "@/constants/constants";
-import SaleRow from "@/features/finance/sale-row";
 import { useDeleteDaySales } from "@/hooks/history/useDeleteDaySales";
 import { useHistorySecurity } from "@/hooks/history/useHistorySecurity";
 import { useReference } from "@/hooks/reference/useRefecence";
@@ -10,7 +9,7 @@ import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import { filterSalesByReference, getFinance } from "@/services/finance";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Alert,
   Modal,
@@ -97,23 +96,7 @@ export default function FinanceDetailModal({
 
   const [visible, setVisible] = useState(false);
   const onClose = () => setVisible(false);
-
-  // Copie locale affichée : mise à jour immédiatement après une suppression,
-  // sans attendre que le parent recalcule et repasse la prop `sales`.
-  const [displaySales, setDisplaySales] = useState<Sale[]>(sales);
-  const [pendingDeletion, setPendingDeletion] = useState<{
-    sales: Sale[];
-    closeOnSuccess: boolean;
-  } | null>(null);
-
-  useEffect(() => {
-    setDisplaySales(sales);
-  }, [sales]);
-
-  const productMap = useMemo(
-    () => new Map(products.map((product) => [product.id, product])),
-    [products]
-  );
+  const [passwordPromptVisible, setPasswordPromptVisible] = useState(false);
 
   const breakdown = useMemo<ReferenceBreakdown[]>(() => {
     const groups = [
@@ -127,17 +110,13 @@ export default function FinanceDetailModal({
         name: group.name,
         summary: getFinance({
           products,
-          sales: filterSalesByReference(displaySales, products, group.id),
+          sales: filterSalesByReference(sales, products, group.id),
         }),
       }))
       .filter((group) => group.summary.totalSalesValue > 0);
-  }, [references, displaySales, products]);
+  }, [references, sales, products]);
 
-  const requestDeletion = (
-    salesToDelete: Sale[],
-    confirmMessage: string,
-    closeOnSuccess: boolean
-  ) => {
+  const handleDeleteDay = () => {
     if (!hasPassword) {
       Alert.alert(
         "Mot de passe requis",
@@ -146,47 +125,28 @@ export default function FinanceDetailModal({
       return;
     }
 
-    Alert.alert("Confirmer la suppression", confirmMessage, [
-      { text: "Annuler", style: "cancel" },
-      {
-        text: "Supprimer",
-        style: "destructive",
-        onPress: () =>
-          setPendingDeletion({ sales: salesToDelete, closeOnSuccess }),
-      },
-    ]);
-  };
-
-  const handleDeleteDay = () => {
-    requestDeletion(
-      displaySales,
-      `Voulez-vous vraiment supprimer les ${displaySales.length} vente(s) du ${title} ? Le stock des produits concernés sera restauré. Cette action est irréversible.`,
-      true
-    );
-  };
-
-  const handleDeleteSale = (sale: Sale) => {
-    const productName = productMap.get(sale.productId)?.name ?? "ce produit";
-    requestDeletion(
-      [sale],
-      `Voulez-vous vraiment supprimer cette vente de ${productName} ? Le stock sera restauré. Cette action est irréversible.`,
-      false
+    Alert.alert(
+      "Confirmer la suppression",
+      `Voulez-vous vraiment supprimer les ${sales.length} vente(s) du ${title} ? Le stock des produits concernés sera restauré. Cette action est irréversible.`,
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: () => setPasswordPromptVisible(true),
+        },
+      ]
     );
   };
 
   const handleConfirmDelete = async (password: string) => {
     if (!verifyPassword(password)) return false;
-    if (!pendingDeletion) return false;
 
-    const { sales: salesToDelete, closeOnSuccess } = pendingDeletion;
-    const success = await deleteDaySales(salesToDelete);
-    setPendingDeletion(null);
-
+    const success = await deleteDaySales(sales);
+    setPasswordPromptVisible(false);
     if (success) {
-      const deletedIds = new Set(salesToDelete.map((sale) => sale.id));
-      setDisplaySales((prev) => prev.filter((sale) => !deletedIds.has(sale.id)));
-      Alert.alert("✅ Succès", "Vente(s) supprimée(s) et stock restauré.");
-      if (closeOnSuccess) onClose();
+      Alert.alert("✅ Succès", "Ventes supprimées et stock restauré.");
+      onClose();
     } else {
       Alert.alert("Erreur", "Suppression échouée, données restaurées.");
     }
@@ -203,65 +163,49 @@ export default function FinanceDetailModal({
         visible={visible}
         onRequestClose={onClose}
       >
-      <View style={styles.overlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.grabHandle} />
-          <Text style={styles.title}>{title}</Text>
+        <View style={styles.overlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.grabHandle} />
+            <Text style={styles.title}>{title}</Text>
 
-          <ScrollView
-            contentContainerStyle={styles.list}
-            showsVerticalScrollIndicator={false}
-          >
-            {breakdown.length === 0 ? (
-              <Text style={styles.empty}>Aucune vente sur cette période.</Text>
-            ) : (
-              breakdown.map((group) => (
-                <ReferenceSummaryRow
-                  key={group.id}
-                  name={group.name}
-                  summary={group.summary}
-                />
-              ))
-            )}
-
-            {displaySales.length > 0 && (
-              <>
-                <Text style={styles.sectionTitle}>Ventes</Text>
-                {displaySales.map((sale) => (
-                  <SaleRow
-                    key={sale.id}
-                    sale={sale}
-                    productName={
-                      productMap.get(sale.productId)?.name ?? "Produit supprimé"
-                    }
-                    onDelete={() => handleDeleteSale(sale)}
+            <ScrollView
+              contentContainerStyle={styles.list}
+              showsVerticalScrollIndicator={false}
+            >
+              {breakdown.length === 0 ? (
+                <Text style={styles.empty}>Aucune vente sur cette période.</Text>
+              ) : (
+                breakdown.map((group) => (
+                  <ReferenceSummaryRow
+                    key={group.id}
+                    name={group.name}
+                    summary={group.summary}
                   />
-                ))}
-              </>
+                ))
+              )}
+            </ScrollView>
+
+            {dateKey && sales.length > 0 && (
+              <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDay}>
+                <Ionicons name="trash-outline" size={16} color="#F43F5E" />
+                <Text style={styles.deleteText}>Supprimer cette journée</Text>
+              </TouchableOpacity>
             )}
-          </ScrollView>
 
-          {dateKey && displaySales.length > 0 && (
-            <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDay}>
-              <Ionicons name="trash-outline" size={16} color="#F43F5E" />
-              <Text style={styles.deleteText}>Supprimer cette journée</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Text style={styles.closeText}>Fermer</Text>
             </TouchableOpacity>
-          )}
-
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeText}>Fermer</Text>
-          </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <PasswordPromptModal
-        visible={!!pendingDeletion}
-        title="Confirmer la suppression"
-        subtitle="Saisissez le mot de passe pour continuer."
-        confirmLabel="Supprimer"
-        onConfirm={handleConfirmDelete}
-        onCancel={() => setPendingDeletion(null)}
-      />
+        <PasswordPromptModal
+          visible={passwordPromptVisible}
+          title="Confirmer la suppression"
+          subtitle="Saisissez le mot de passe pour continuer."
+          confirmLabel="Supprimer"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setPasswordPromptVisible(false)}
+        />
       </Modal>
     </>
   );
@@ -302,15 +246,6 @@ const styles = StyleSheet.create({
   },
   row: {
     marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#B7BFD8",
-    letterSpacing: 0.3,
-    marginTop: 4,
-    marginBottom: 8,
-    textTransform: "uppercase",
   },
   rowTitle: {
     fontSize: 13,
