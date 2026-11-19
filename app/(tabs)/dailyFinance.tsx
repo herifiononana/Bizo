@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+import { useArchivedProducts } from "@/hooks/product/useArchivedProducts";
 import FinanceDetailModal from "@/features/finance/finance-detail-modal";
 import DailyFinanceItem from "@/features/finance/daily-finance-item";
 import HistorySecurityModal from "@/features/finance/history-security-modal";
@@ -22,6 +23,7 @@ import { fr } from "date-fns/locale";
 const DailyFinanceScreen = () => {
   const { history: sales } = useHistory();
   const products = useProductsStore((state) => state.products);
+  const { archivedProducts } = useArchivedProducts();
 
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -59,10 +61,11 @@ const DailyFinanceScreen = () => {
         sales: groupedFinance[dateKey],
         finance: getFinance({
           products: products ?? [],
+          archivedProducts,
           sales: groupedFinance[dateKey],
         }),
       })),
-    [filteredDates, groupedFinance, products]
+    [filteredDates, groupedFinance, products, archivedProducts]
   );
 
   const periodSales = useMemo(
@@ -71,8 +74,13 @@ const DailyFinanceScreen = () => {
   );
 
   const periodFinance = useMemo(
-    () => getFinance({ products: products ?? [], sales: periodSales }),
-    [products, periodSales]
+    () =>
+      getFinance({
+        products: products ?? [],
+        archivedProducts,
+        sales: periodSales,
+      }),
+    [products, archivedProducts, periodSales]
   );
 
   const totalVentes = periodFinance.totalSalesValue;

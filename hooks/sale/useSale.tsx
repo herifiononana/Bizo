@@ -1,4 +1,5 @@
 import { OTHER_REFERENCE } from "@/constants/constants";
+import { useArchivedProducts } from "@/hooks/product/useArchivedProducts";
 import { getSales, saveSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
@@ -23,10 +24,12 @@ export const useSale = () => {
   );
   const [error, setError] = useState<string | null>(null);
 
-  // O(1) product lookup — rebuilt only when products change
+  const { archivedProducts } = useArchivedProducts();
+
+  // O(1) product lookup (produits actifs + archivés) — rebuilt only when they change
   const productMap = useMemo(
-    () => new Map((products ?? []).map((p) => [p.id, p])),
-    [products]
+    () => new Map([...(products ?? []), ...archivedProducts].map((p) => [p.id, p])),
+    [products, archivedProducts]
   );
 
   const loadSales = async () => {

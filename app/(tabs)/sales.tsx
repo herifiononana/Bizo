@@ -5,6 +5,7 @@ import CreateSaleButton from "@/features/sales/create-sale-button";
 import SaleGroupItem from "@/features/sales/sale-group-item";
 import SaleListItem from "@/features/sales/sale-list-item";
 import SaleListItemSkeleton from "@/features/sales/sale-skeleton";
+import { useArchivedProducts } from "@/hooks/product/useArchivedProducts";
 import { FilteredParamsType, useSale } from "@/hooks/sale/useSale";
 import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -75,9 +76,11 @@ const SalesScreen = () => {
     creditOnly: false,
   });
 
+  const { archivedProducts } = useArchivedProducts();
+
   const productMap = useMemo(
-    () => new Map((products ?? []).map((p) => [p.id, p])),
-    [products]
+    () => new Map([...(products ?? []), ...archivedProducts].map((p) => [p.id, p])),
+    [products, archivedProducts]
   );
 
   const handleConfirmStart = (date: Date) => {

@@ -1,5 +1,6 @@
 import { ModalTrigger } from "@/components/modal-trigger";
 import SecureConfirmModal from "@/components/secure-confirm-modal";
+import { loadArchivedProducts } from "@/hooks/product/useArchivedProducts";
 import { useProducts } from "@/hooks/product/useProduct";
 import { useSale } from "@/hooks/sale/useSale";
 import { importAllDataFromCSV } from "@/libs/export-to-csv";
@@ -36,6 +37,7 @@ const ImportDataButton = ({ trigger }: ImportDataButtonProps) => {
       const response: any = await importAllDataFromCSV(res.assets[0].uri);
       loadProducts();
       loadSales();
+      loadArchivedProducts(true);
       Alert.alert(
         response?.success ? "Importation réussie" : "échec de l'importation",
         ""

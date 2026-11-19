@@ -5,10 +5,13 @@ import { Sale } from "@/interface/sale/sale";
 
 export const getFinance = ({
   products,
+  archivedProducts = [],
   sales,
   reference,
 }: {
   products: Product[];
+  // Produits supprimés dont l'historique est conservé : utilisés pour le profit, jamais pour le stock.
+  archivedProducts?: Product[];
   sales: Sale[];
   reference?: string | null;
 }): FinanceSummary => {
@@ -43,7 +46,9 @@ export const getFinance = ({
     .reduce((sum, sale) => sum + sale.totalAmount, 0);
 
   // calcul du profit (bénéfice) — O(n) avec Map au lieu de O(n × m)
-  const productMap = new Map(products.map((p) => [p.id, p]));
+  const productMap = new Map(
+    [...products, ...archivedProducts].map((p) => [p.id, p])
+  );
   let totalProfit = 0;
   for (const sale of sales) {
     const product = productMap.get(sale.productId);
@@ -81,9 +86,12 @@ const groupSalesByDay = (sales: Sale[]) => {
 export const filterSalesByReference = (
   sales: Sale[],
   products: Product[],
-  reference: string
+  reference: string,
+  archivedProducts: Product[] = []
 ): Sale[] => {
-  const productMap = new Map(products.map((p) => [p.id, p]));
+  const productMap = new Map(
+    [...products, ...archivedProducts].map((p) => [p.id, p])
+  );
   return sales.filter((sale) => {
     const product = productMap.get(sale.productId);
     if (!product) return false;
@@ -95,9 +103,11 @@ export const filterSalesByReference = (
 
 export const getDailyFinanceList = ({
   products,
+  archivedProducts,
   sales,
 }: {
   products: Product[];
+  archivedProducts?: Product[];
   sales: Sale[];
 }): { date: string; summary: FinanceSummary }[] => {
   const grouped = groupSalesByDay(sales);
@@ -107,6 +117,7 @@ export const getDailyFinanceList = ({
   for (const date in grouped) {
     const summary = getFinance({
       products,
+      archivedProducts,
       sales: grouped[date],
     });
 

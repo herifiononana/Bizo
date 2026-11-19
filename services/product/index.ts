@@ -2,23 +2,22 @@ import { PRODUCTS_KEY } from "@/constants/key-storage";
 import { Product } from "@/interface/product/product";
 import { getData, saveData } from "@/storage";
 
-export const getProduct = async () => {
-  const data = await getData(PRODUCTS_KEY);
-
-  const products: Product[] =
-    data?.map((p: any) => {
-      let response: Product;
-      response = {
-        ...p,
-        purchasePrice: Number(p?.purchasePrice ?? 0),
-        quantity: Number(p?.quantity ?? 0),
-        salePrice: p?.salePrice ? Number(p?.salePrice) : undefined,
-      };
-      return response;
-    }) ?? [];
-
-  return products;
+// Valeurs numériques potentiellement stockées en chaîne (ex: import CSV).
+type StoredProduct = Omit<Product, "purchasePrice" | "quantity" | "salePrice"> & {
+  purchasePrice?: unknown;
+  quantity?: unknown;
+  salePrice?: unknown;
 };
+
+export const toProducts = (data: StoredProduct[] | null): Product[] =>
+  data?.map((p) => ({
+    ...p,
+    purchasePrice: Number(p?.purchasePrice ?? 0),
+    quantity: Number(p?.quantity ?? 0),
+    salePrice: p?.salePrice ? Number(p?.salePrice) : undefined,
+  })) ?? [];
+
+export const getProduct = async () => toProducts(await getData(PRODUCTS_KEY));
 
 export const saveProducts = async (data: Product[]) => {
   await saveData(PRODUCTS_KEY, data);

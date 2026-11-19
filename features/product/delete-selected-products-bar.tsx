@@ -3,6 +3,7 @@ import { useHistorySecurity } from "@/hooks/history/useHistorySecurity";
 import { useDeleteProducts } from "@/hooks/product/useDeleteProducts";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { showDeleteProductsAlert } from "./show-delete-products-alert";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type DeleteSelectedProductsBarProps = {
@@ -18,6 +19,7 @@ const DeleteSelectedProductsBar = ({
   const { hasPassword, verifyPassword } = useHistorySecurity();
   const { deleteProducts, countLinkedSales } = useDeleteProducts();
   const [passwordPromptVisible, setPasswordPromptVisible] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(true);
 
   const selectedCount = selectedIds.size;
   const isDisabled = selectedCount === 0;
@@ -32,28 +34,22 @@ const DeleteSelectedProductsBar = ({
     }
 
     const linkedSalesCount = countLinkedSales(selectedIds);
-    Alert.alert(
-      `Supprimer ${selectedCount} produit${selectedCount > 1 ? "s" : ""} ?`,
-      `${linkedSalesCount} vente${linkedSalesCount > 1 ? "s" : ""} liée${
+    showDeleteProductsAlert({
+      title: `Supprimer ${selectedCount} produit${selectedCount > 1 ? "s" : ""} ?`,
+      message: `${linkedSalesCount} vente${linkedSalesCount > 1 ? "s" : ""} liée${
         linkedSalesCount > 1 ? "s" : ""
-      } sera${linkedSalesCount > 1 ? "ont" : ""} aussi supprimée${
-        linkedSalesCount > 1 ? "s" : ""
-      }. Action irréversible.`,
-      [
-        { text: "Annuler", style: "cancel" },
-        {
-          text: "Supprimer",
-          style: "destructive",
-          onPress: () => setPasswordPromptVisible(true),
-        },
-      ]
-    );
+      }.`,
+      onChoose: (shouldKeepHistory) => {
+        setKeepHistory(shouldKeepHistory);
+        setPasswordPromptVisible(true);
+      },
+    });
   };
 
   const handleConfirm = async (password: string) => {
     if (!verifyPassword(password)) return false;
 
-    const success = await deleteProducts(selectedIds);
+    const success = await deleteProducts(selectedIds, keepHistory);
     setPasswordPromptVisible(false);
     if (success) {
       onDeleted();

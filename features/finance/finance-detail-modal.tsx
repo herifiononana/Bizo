@@ -3,6 +3,7 @@ import PasswordPromptModal from "@/components/password-prompt-modal";
 import { OTHER_REFERENCE } from "@/constants/constants";
 import { useDeleteDaySales } from "@/hooks/history/useDeleteDaySales";
 import { useHistorySecurity } from "@/hooks/history/useHistorySecurity";
+import { useArchivedProducts } from "@/hooks/product/useArchivedProducts";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { FinanceSummary } from "@/interface/finance/finance-summary";
 import { Product } from "@/interface/product/product";
@@ -91,6 +92,7 @@ export default function FinanceDetailModal({
   dateKey,
 }: FinanceDetailModalProps) {
   const { references } = useReference();
+  const { archivedProducts } = useArchivedProducts();
   const { hasPassword, verifyPassword } = useHistorySecurity();
   const { deleteDaySales } = useDeleteDaySales();
 
@@ -110,11 +112,17 @@ export default function FinanceDetailModal({
         name: group.name,
         summary: getFinance({
           products,
-          sales: filterSalesByReference(sales, products, group.id),
+          archivedProducts,
+          sales: filterSalesByReference(
+            sales,
+            products,
+            group.id,
+            archivedProducts
+          ),
         }),
       }))
       .filter((group) => group.summary.totalSalesValue > 0);
-  }, [references, sales, products]);
+  }, [references, sales, products, archivedProducts]);
 
   const handleDeleteDay = () => {
     if (!hasPassword) {

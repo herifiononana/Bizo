@@ -1,45 +1,25 @@
 import { Colors } from "@/constants/theme";
+import { useDeleteProducts } from "@/hooks/product/useDeleteProducts";
 import { Product } from "@/interface/product/product";
-import { saveProducts } from "@/services/product";
-import { saveSales } from "@/services/sale";
-import { useProductsStore } from "@/stores/product.store";
-import { useSalesStore } from "@/stores/sales.store";
 import { Entypo } from "@expo/vector-icons";
 import React from "react";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
-function DeleteProductButton({ item }: { item: Product }) {
-  const { products, setProducts } = useProductsStore();
-  const { sales, setSales } = useSalesStore();
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { showDeleteProductsAlert } from "./show-delete-products-alert";
 
-  //   Supprimer un produit
+function DeleteProductButton({ item }: { item: Product }) {
+  const { deleteProducts } = useDeleteProducts();
+
   const handleDeleteProduct = () => {
-    Alert.alert(
-      "Supprimer le produit",
-      `Voulez-vous vraiment supprimer "${item.name}" ?`,
-      [
-        { text: "Annuler", style: "cancel" },
-        {
-          text: "Supprimer",
-          style: "destructive",
-          onPress: async () => {
-            if (!products) return;
-            const updatedProducts = products.filter((p) => p.id !== item.id);
-            const updatedSales = sales
-              ? sales.filter((s) => s.productId !== item.id)
-              : [];
-            setProducts(updatedProducts);
-            setSales(updatedSales);
-            try {
-              await saveProducts(updatedProducts);
-              await saveSales(updatedSales);
-            } catch (error) {
-              console.error("Erreur suppression produit", error);
-            }
-          },
-        },
-      ]
-    );
+    showDeleteProductsAlert({
+      title: "Supprimer le produit",
+      message: `Voulez-vous vraiment supprimer "${item.name}" ?`,
+      onChoose: async (keepHistory) => {
+        const success = await deleteProducts(new Set([item.id]), keepHistory);
+        if (!success) console.error("Erreur suppression produit", item.id);
+      },
+    });
   };
+
   return (
     <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteProduct}>
       <Entypo name="trash" size={18} color={Colors.dark.danger} />

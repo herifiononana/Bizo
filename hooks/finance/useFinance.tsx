@@ -1,11 +1,13 @@
 import { getFinance } from "@/services/finance";
 import { useFinanceSummaryStore } from "@/stores/finance.store";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useArchivedProducts } from "../product/useArchivedProducts";
 import { useProducts } from "../product/useProduct";
 import { useSale } from "../sale/useSale";
 
 export const useFinance = () => {
   const { products } = useProducts();
+  const { archivedProducts } = useArchivedProducts();
   const { sales, getTodaySaleList, getTodaySaleListGroupedByReferences } =
     useSale();
   const data = useFinanceSummaryStore((state) => state.finance);
@@ -25,6 +27,7 @@ export const useFinance = () => {
     setFinance(
       getFinance({
         products,
+        archivedProducts,
         sales: filteredSales,
         reference: selectedReference,
       })
@@ -32,6 +35,7 @@ export const useFinance = () => {
   }, [
     sales,
     products,
+    archivedProducts,
     selectedReference,
     getTodaySaleList,
     getTodaySaleListGroupedByReferences,

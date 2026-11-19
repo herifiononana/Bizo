@@ -2,6 +2,7 @@ import { CancelButton } from "@/components/cancel-button";
 import { ModalTrigger } from "@/components/modal-trigger";
 import { SaveButton } from "@/components/save-button";
 import SecureConfirmModal from "@/components/secure-confirm-modal";
+import { showDeleteProductsAlert } from "@/features/product/show-delete-products-alert";
 import ReferenceListRow from "@/features/reference/reference-list-row";
 import { useReference } from "@/hooks/reference/useRefecence";
 import { Reference } from "@/interface/reference";
@@ -21,7 +22,11 @@ import {
   View,
 } from "react-native";
 
-type PendingReferenceDelete = { reference: Reference; cascade: boolean };
+type PendingReferenceDelete = {
+  reference: Reference;
+  cascade: boolean;
+  keepHistory: boolean;
+};
 
 type AddReferenceButtonProps = {
   // Bouton d'ouverture personnalisable — par défaut une icône réglages.
@@ -103,12 +108,19 @@ const AddReferenceButton = ({ trigger }: AddReferenceButtonProps) => {
         { text: "Annuler", style: "cancel" },
         {
           text: "Conserver les produits",
-          onPress: () => setPendingDelete({ reference, cascade: false }),
+          onPress: () =>
+            setPendingDelete({ reference, cascade: false, keepHistory: true }),
         },
         {
           text: "Supprimer aussi les produits",
           style: "destructive",
-          onPress: () => setPendingDelete({ reference, cascade: true }),
+          onPress: () =>
+            showDeleteProductsAlert({
+              title: "Supprimer aussi les produits",
+              message: `Les ${productCount} produit(s) de "${reference.name}" seront supprimés.`,
+              onChoose: (keepHistory) =>
+                setPendingDelete({ reference, cascade: true, keepHistory }),
+            }),
         },
       ]
     );
@@ -116,7 +128,11 @@ const AddReferenceButton = ({ trigger }: AddReferenceButtonProps) => {
 
   const handleConfirmedDelete = async () => {
     if (!pendingDelete) return;
-    await deleteReference(pendingDelete.reference.id, pendingDelete.cascade);
+    await deleteReference(
+      pendingDelete.reference.id,
+      pendingDelete.cascade,
+      pendingDelete.keepHistory
+    );
     setPendingDelete(null);
   };
 
@@ -187,7 +203,9 @@ const AddReferenceButton = ({ trigger }: AddReferenceButtonProps) => {
         title="Confirmer la suppression"
         message={
           pendingDelete?.cascade
-            ? `Les produits associés à "${pendingDelete.reference.name}" seront aussi supprimés. Cette action est irréversible.`
+            ? pendingDelete.keepHistory
+              ? `Les produits associés à "${pendingDelete.reference.name}" seront supprimés ; leurs ventes et finances sont conservées.`
+              : `Les produits associés à "${pendingDelete.reference.name}" et leurs ventes seront supprimés. Cette action est irréversible.`
             : `"${pendingDelete?.reference.name}" sera supprimée. Les produits associés seront conservés sans référence.`
         }
         confirmLabel="Supprimer"

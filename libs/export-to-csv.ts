@@ -1,4 +1,5 @@
 import {
+  ARCHIVED_PRODUCTS_KEY,
   PRODUCTS_KEY,
   REFERENCE_KEY,
   SALES_KEY,
@@ -8,7 +9,12 @@ import * as FileSystem from "expo-file-system/legacy";
 import * as Sharing from "expo-sharing";
 import Papa from "papaparse";
 
-const storageKeys = [SALES_KEY, PRODUCTS_KEY, REFERENCE_KEY];
+const storageKeys = [
+  SALES_KEY,
+  PRODUCTS_KEY,
+  REFERENCE_KEY,
+  ARCHIVED_PRODUCTS_KEY,
+];
 
 export const exportAllDataToCSV = async (fileName: string) => {
   try {
@@ -16,7 +22,7 @@ export const exportAllDataToCSV = async (fileName: string) => {
 
     for (const key of storageKeys) {
       const data = await getData(key);
-      const typed = data.map((item: any) => ({ _type: key, ...item }));
+      const typed = (data ?? []).map((item: any) => ({ _type: key, ...item }));
       allData = [...allData, ...typed];
     }
 
@@ -66,12 +72,13 @@ export const importAllDataFromCSV = async (uri: string) => {
       [SALES_KEY]: [],
       [PRODUCTS_KEY]: [],
       [REFERENCE_KEY]: [],
+      [ARCHIVED_PRODUCTS_KEY]: [],
     };
 
     imported.forEach((row: any) => {
       if (!row._type) return;
       const { _type, ...rest } = row;
-      regroup[_type].push(rest);
+      regroup[_type]?.push(rest);
     });
 
     let response: any = regroup;
