@@ -82,7 +82,7 @@ const AiSuggestionsButton = () => {
 
       <Modal visible={open} animationType="slide" onRequestClose={() => setOpen(false)}>
         <View style={styles.screen}>
-          <StatusBar barStyle="light-content" backgroundColor="#0C1224" />
+          <StatusBar barStyle="light-content" />
 
           <View style={styles.header}>
             <View style={styles.headerText}>

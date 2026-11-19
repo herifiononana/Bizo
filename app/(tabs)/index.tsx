@@ -21,7 +21,7 @@ const Dashboard = () => {
   return (
     <View style={styles.screen}>
       <ActivationModal />
-      <StatusBar barStyle="light-content" backgroundColor="#0C1224" />
+      <StatusBar barStyle="light-content" />
 
       {/* Absolute-positioned action buttons — must stay outside ScrollView */}
       <CsvButtons />

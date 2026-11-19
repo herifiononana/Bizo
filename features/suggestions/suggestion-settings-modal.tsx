@@ -111,7 +111,7 @@ const SuggestionSettingsModal = ({ trigger }: Props) => {
         style={styles.screen}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <StatusBar barStyle="light-content" backgroundColor="#0C1224" />
+        <StatusBar barStyle="light-content" />
 
         <View style={styles.header}>
           <View style={styles.headerText}>

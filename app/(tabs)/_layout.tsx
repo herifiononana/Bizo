@@ -3,6 +3,11 @@ import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { Ionicons } from "@expo/vector-icons";
+import { ColorValue } from "react-native";
+
+// Ionicons n'accepte pas null ni number : on ne garde que les couleurs en chaîne.
+const toIconColor = (color: ColorValue): string | undefined =>
+  typeof color === "string" ? color : undefined;
 
 export default function TabLayout() {
   return (
@@ -42,7 +47,7 @@ export default function TabLayout() {
         options={{
           title: "Dashboard",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="home-outline" size={22} color={color} />
+            <Ionicons name="home-outline" size={22} color={toIconColor(color)} />
           ),
         }}
       />
@@ -51,7 +56,7 @@ export default function TabLayout() {
         options={{
           title: "Ventes",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="card-outline" size={22} color={color} />
+            <Ionicons name="card-outline" size={22} color={toIconColor(color)} />
           ),
         }}
       />
@@ -60,7 +65,7 @@ export default function TabLayout() {
         options={{
           title: "Produits",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="albums-outline" size={22} color={color} />
+            <Ionicons name="albums-outline" size={22} color={toIconColor(color)} />
           ),
         }}
       />
@@ -69,7 +74,7 @@ export default function TabLayout() {
         options={{
           title: "Historique",
           tabBarIcon: ({ color }) => (
-            <Ionicons name="list-outline" size={22} color={color} />
+            <Ionicons name="list-outline" size={22} color={toIconColor(color)} />
           ),
         }}
       />
