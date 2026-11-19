@@ -179,7 +179,10 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
           {/* Cart */}
           {cartDrafts.length > 0 && (
             <View style={styles.cartSection}>
@@ -251,6 +254,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
               )}
               {search.length > 0 && (
                 <FlatList
+                  nestedScrollEnabled
                   data={(products ?? []).filter((p) =>
                     p?.name?.toLowerCase().includes(search.toLowerCase())
                   )}

@@ -172,7 +172,10 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
           {/* Product selector */}
           <Text style={styles.label}>Produit</Text>
           {selectedProduct ? (
@@ -208,6 +211,7 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
               )}
               {search.length > 0 && (
                 <FlatList
+                  nestedScrollEnabled
                   data={filteredProducts}
                   initialNumToRender={5}
                   maxToRenderPerBatch={5}

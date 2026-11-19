@@ -389,6 +389,7 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
                   )}
                   {search.length > 0 && (
                     <FlatList
+                      nestedScrollEnabled
                       data={(products ?? []).filter((p) =>
                         p?.name?.toLowerCase().includes(search.toLowerCase())
                       )}
