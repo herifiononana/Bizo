@@ -89,15 +89,12 @@ const DeleteSelectedProductsBar = ({
 };
 
 const styles = StyleSheet.create({
+  // Au-dessus de la barre d'onglets flottante (bottom 12 + hauteur 68).
   bar: {
     position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    padding: 16,
-    backgroundColor: "#0C1224",
-    borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.06)",
+    left: 20,
+    right: 20,
+    bottom: 92,
   },
   button: {
     flexDirection: "row",
@@ -107,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F43F5E",
     paddingVertical: 14,
     borderRadius: 14,
+    elevation: 6,
   },
   buttonDisabled: {
     opacity: 0.4,

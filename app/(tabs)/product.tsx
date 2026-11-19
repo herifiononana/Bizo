@@ -204,7 +204,10 @@ const ProductsScreen: React.FC = () => {
             />
           )
         }
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[
+          styles.listContent,
+          isSelecting && styles.listContentSelecting,
+        ]}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
             {showOutOfStock
@@ -335,6 +338,9 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 120,
+  },
+  listContentSelecting: {
+    paddingBottom: 180,
   },
   emptyText: {
     textAlign: "center",
