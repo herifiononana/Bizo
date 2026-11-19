@@ -2,6 +2,7 @@ import { OTHER_REFERENCE } from "@/constants/constants";
 import AddProductButton from "@/features/product/add-product-button";
 import DeleteSelectedProductsBar from "@/features/product/delete-selected-products-bar";
 import ProductListItem from "@/features/product/product-list-item";
+import { getEmptyListMessage, matchesStockFilter, StockFilter } from "@/features/product/stock-filter.helper";
 import ProductSelectionHeader from "@/features/product/product-selection-header";
 import SkeletonProduct from "@/features/product/skeleton-product";
 import ReferenceFilter from "@/features/reference/reference-filter";
@@ -24,7 +25,10 @@ const ProductsScreen: React.FC = () => {
   const products = useProductsStore((state) => state.products);
 
   const [search, setSearch] = useState<string>("");
-  const [showOutOfStock, setShowOutOfStock] = useState<boolean>(false);
+  const [stockFilter, setStockFilter] = useState<StockFilter>(null);
+
+  const toggleStockFilter = (filter: Exclude<StockFilter, null>) =>
+    setStockFilter((current) => (current === filter ? null : filter));
   const [selectedReference, setSelectedReference] = useState<
     string | null | undefined
   >(null);
@@ -69,10 +73,9 @@ const ProductsScreen: React.FC = () => {
           if (p.referenceId !== selectedReference) return false;
         }
       }
-      if (showOutOfStock && p.quantity > 3) return false;
-      return true;
+      return matchesStockFilter(p, stockFilter);
     });
-  }, [products, search, selectedReference, showOutOfStock]);
+  }, [products, search, selectedReference, stockFilter]);
 
   const filteredIds = filteredProducts.map((product) => product.id);
   const allSelected =
@@ -132,13 +135,16 @@ const ProductsScreen: React.FC = () => {
           </TouchableOpacity>
         )}
         <TouchableOpacity
-          style={[styles.rupturBtn, showOutOfStock && styles.ruptureActive]}
-          onPress={() => setShowOutOfStock(!showOutOfStock)}
+          style={[
+            styles.rupturBtn,
+            stockFilter === "alert" && styles.ruptureActive,
+          ]}
+          onPress={() => toggleStockFilter("alert")}
         >
           <MaterialIcons
             name="inventory"
             size={16}
-            color={showOutOfStock ? "#F43F5E" : "#7A83A2"}
+            color={stockFilter === "alert" ? "#F43F5E" : "#7A83A2"}
           />
         </TouchableOpacity>
       </View>
@@ -150,11 +156,13 @@ const ProductsScreen: React.FC = () => {
           <Text style={styles.chipValue}>{totalCount}</Text>
           <Text style={styles.chipBottomLabel}>articles</Text>
         </View>
-        <View
+        <TouchableOpacity
           style={[
             styles.summaryChip,
             lowStockCount > 0 && styles.chipWarning,
+            stockFilter === "low" && styles.chipWarningActive,
           ]}
+          onPress={() => toggleStockFilter("low")}
         >
           <Text style={styles.chipTopLabel}>FAIBLE</Text>
           <Text
@@ -166,14 +174,14 @@ const ProductsScreen: React.FC = () => {
             {lowStockCount}
           </Text>
           <Text style={styles.chipBottomLabel}>articles</Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.summaryChip,
             outOfStockCount > 0 && styles.chipDanger,
-            showOutOfStock && styles.chipDangerActive,
+            stockFilter === "out" && styles.chipDangerActive,
           ]}
-          onPress={() => setShowOutOfStock(!showOutOfStock)}
+          onPress={() => toggleStockFilter("out")}
         >
           <Text style={styles.chipTopLabel}>RUPTURE</Text>
           <Text
@@ -210,9 +218,7 @@ const ProductsScreen: React.FC = () => {
         ]}
         ListEmptyComponent={
           <Text style={styles.emptyText}>
-            {showOutOfStock
-              ? "Aucun produit en rupture."
-              : "Aucun produit pour le moment."}
+            {getEmptyListMessage(stockFilter)}
           </Text>
         }
         initialNumToRender={15}
@@ -302,6 +308,10 @@ const styles = StyleSheet.create({
   chipWarning: {
     backgroundColor: "rgba(245,181,68,0.06)",
     borderColor: "rgba(245,181,68,0.22)",
+  },
+  chipWarningActive: {
+    backgroundColor: "rgba(245,181,68,0.16)",
+    borderColor: "#F5B544",
   },
   chipDanger: {
     backgroundColor: "rgba(244,63,94,0.06)",
