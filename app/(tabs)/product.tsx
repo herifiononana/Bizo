@@ -1,9 +1,12 @@
 import { OTHER_REFERENCE } from "@/constants/constants";
 import AddProductButton from "@/features/product/add-product-button";
+import DeleteSelectedProductsBar from "@/features/product/delete-selected-products-bar";
 import ProductListItem from "@/features/product/product-list-item";
+import ProductSelectionHeader from "@/features/product/product-selection-header";
 import SkeletonProduct from "@/features/product/skeleton-product";
 import ReferenceFilter from "@/features/reference/reference-filter";
 import { useProducts } from "@/hooks/product/useProduct";
+import { useProductSelection } from "@/hooks/product/useProductSelection";
 import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
@@ -25,6 +28,15 @@ const ProductsScreen: React.FC = () => {
   const [selectedReference, setSelectedReference] = useState<
     string | null | undefined
   >(null);
+
+  const {
+    isSelecting,
+    selectedIds,
+    startSelection,
+    toggle,
+    selectAll,
+    stopSelection,
+  } = useProductSelection();
 
   const allProducts = products ?? [];
 
@@ -62,6 +74,10 @@ const ProductsScreen: React.FC = () => {
     });
   }, [products, search, selectedReference, showOutOfStock]);
 
+  const filteredIds = filteredProducts.map((product) => product.id);
+  const allSelected =
+    filteredIds.length > 0 && filteredIds.every((id) => selectedIds.has(id));
+
   return (
     <View style={styles.container}>
       {/* Absolute-positioned filter — must be sibling of FlatList */}
@@ -73,14 +89,24 @@ const ProductsScreen: React.FC = () => {
       />
 
       {/* Header */}
-      <View style={styles.headerRow}>
-        <View>
-          <Text style={styles.title}>Produits</Text>
-          <Text style={styles.subtitle}>
-            {totalCount} article{totalCount !== 1 ? "s" : ""} · {stockValueDisplay} Ar en stock
-          </Text>
+      {isSelecting ? (
+        <ProductSelectionHeader
+          selectedCount={selectedIds.size}
+          allSelected={allSelected}
+          onSelectAll={() => selectAll(filteredIds)}
+          onClear={() => selectAll([])}
+          onClose={stopSelection}
+        />
+      ) : (
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={styles.title}>Produits</Text>
+            <Text style={styles.subtitle}>
+              {totalCount} article{totalCount !== 1 ? "s" : ""} · {stockValueDisplay} Ar en stock
+            </Text>
+          </View>
         </View>
-      </View>
+      )}
 
       {/* Search + rupture filter */}
       <View style={styles.searchRow}>
@@ -97,6 +123,14 @@ const ProductsScreen: React.FC = () => {
           value={search}
           onChangeText={setSearch}
         />
+        {!isSelecting && (
+          <TouchableOpacity
+            style={styles.rupturBtn}
+            onPress={() => startSelection()}
+          >
+            <MaterialIcons name="checklist" size={16} color="#7A83A2" />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.rupturBtn, showOutOfStock && styles.ruptureActive]}
           onPress={() => setShowOutOfStock(!showOutOfStock)}
@@ -160,7 +194,15 @@ const ProductsScreen: React.FC = () => {
           loading ? "skeleton-" + index : item.id.toString()
         }
         renderItem={({ item }) =>
-          loading ? <SkeletonProduct /> : <ProductListItem item={item} />
+          loading ? <SkeletonProduct /> : (
+            <ProductListItem
+              item={item}
+              isSelecting={isSelecting}
+              isSelected={selectedIds.has(item.id)}
+              onToggle={toggle}
+              onStartSelection={startSelection}
+            />
+          )
         }
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
@@ -175,9 +217,17 @@ const ProductsScreen: React.FC = () => {
         windowSize={10}
         updateCellsBatchingPeriod={50}
         removeClippedSubviews={true}
+        extraData={selectedIds}
       />
 
-      <AddProductButton />
+      {isSelecting ? (
+        <DeleteSelectedProductsBar
+          selectedIds={selectedIds}
+          onDeleted={stopSelection}
+        />
+      ) : (
+        <AddProductButton />
+      )}
     </View>
   );
 };

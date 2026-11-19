@@ -1,7 +1,7 @@
 import { Product } from "@/interface/product/product";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import DeleteProductButton from "./delete-product-button";
 import EditProductButton from "./edit-product-button";
 
@@ -11,11 +11,21 @@ function getStockBadge(qty: number): { label: string; color: string; bg: string 
   return { label: `${qty} en stock`, color: "#3B82F6", bg: "rgba(59,130,246,0.12)" };
 }
 
+type ProductListItemProps = {
+  item: Product;
+  isSelecting?: boolean;
+  isSelected?: boolean;
+  onToggle?: (productId: string) => void;
+  onStartSelection?: (productId: string) => void;
+};
+
 const ProductListItem = React.memo(function ProductListItem({
   item,
-}: {
-  item: Product;
-}) {
+  isSelecting = false,
+  isSelected = false,
+  onToggle,
+  onStartSelection,
+}: ProductListItemProps) {
   const stockBadge = getStockBadge(item.quantity);
 
   const marginPct =
@@ -30,8 +40,17 @@ const ProductListItem = React.memo(function ProductListItem({
       ? item.salePrice - item.purchasePrice
       : null;
 
+  const handlePress = () => {
+    if (isSelecting) onToggle?.(item.id);
+  };
+
+  const handleLongPress = () => {
+    if (!isSelecting) onStartSelection?.(item.id);
+  };
+
   return (
-      <View style={styles.card}>
+    <Pressable onPress={handlePress} onLongPress={handleLongPress}>
+      <View style={[styles.card, isSelected && styles.cardSelected]}>
         {/* Top row: icon + name + badges | edit + delete */}
         <View style={styles.topRow}>
           <View style={styles.iconWrap}>
@@ -69,10 +88,18 @@ const ProductListItem = React.memo(function ProductListItem({
               )}
             </View>
           </View>
-          <View style={styles.actions}>
-            <EditProductButton product={item} />
-            <DeleteProductButton item={item} />
-          </View>
+          {isSelecting ? (
+            <Ionicons
+              name={isSelected ? "checkbox" : "square-outline"}
+              size={26}
+              color={isSelected ? "#3B82F6" : "#545C7A"}
+            />
+          ) : (
+            <View style={styles.actions}>
+              <EditProductButton product={item} />
+              <DeleteProductButton item={item} />
+            </View>
+          )}
         </View>
 
         {/* Prices row */}
@@ -104,6 +131,7 @@ const ProductListItem = React.memo(function ProductListItem({
           </View>
         </View>
       </View>
+    </Pressable>
   );
 });
 
@@ -119,6 +147,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     elevation: 4,
+  },
+  cardSelected: {
+    borderColor: "#3B82F6",
+    backgroundColor: "rgba(59,130,246,0.08)",
   },
   topRow: {
     flexDirection: "row",
