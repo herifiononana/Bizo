@@ -3,10 +3,11 @@ import {
   applyQuantityChange,
   applyTotalChange,
 } from "./sale-amount.helper";
+import { Product } from "@/interface/product/product";
 import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -53,14 +54,16 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
 
   const selectedProduct = products?.find((p) => p.id === formData.productId);
 
-  useEffect(() => {
-    if (selectedProduct) {
-      setFormData((prev) =>
-        applyPriceChange(prev, String(selectedProduct.salePrice ?? ""))
-      );
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProduct?.id]);
+  // Le prix du produit pré-remplit le formulaire dès la sélection.
+  const handleSelectProduct = (product: Product) => {
+    setFormData((prev) =>
+      applyPriceChange(
+        { ...prev, productId: product.id },
+        String(product.salePrice ?? "")
+      )
+    );
+    setSearch("");
+  };
 
   const totalDisplay =
     formData.quantity && formData.salePrice
@@ -267,10 +270,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
                     <TouchableOpacity
                       key={item.id}
                       style={styles.dropdownItem}
-                      onPress={() => {
-                        setFormData({ ...formData, productId: item.id });
-                        setSearch("");
-                      }}
+                      onPress={() => handleSelectProduct(item)}
                     >
                       <Text style={styles.dropdownText}>
                         {item.name} ({item.quantity} en stock)
