@@ -61,11 +61,25 @@ export const exportAllDataToCSV = async (fileName: string) => {
 };
 
 /** IMPORTER UN CSV SELECTIONNÉ */
+const readCsvFile = async (uri: string): Promise<string> => {
+  const options = { encoding: FileSystem.EncodingType.UTF8 };
+  try {
+    return await FileSystem.readAsStringAsync(uri, options);
+  } catch {
+    // Certains fournisseurs (content://) refusent la lecture directe : on copie d'abord en cache.
+    const target = `${FileSystem.cacheDirectory}import-${Date.now()}.csv`;
+    await FileSystem.copyAsync({ from: uri, to: target });
+    try {
+      return await FileSystem.readAsStringAsync(target, options);
+    } finally {
+      await FileSystem.deleteAsync(target, { idempotent: true });
+    }
+  }
+};
+
 export const importAllDataFromCSV = async (uri: string) => {
   try {
-    const csvString = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.UTF8,
-    });
+    const csvString = await readCsvFile(uri);
     const { data: imported } = Papa.parse(csvString, { header: true });
 
     const regroup: Record<string, any[]> = {

@@ -31,7 +31,8 @@ const ImportDataButton = ({ trigger }: ImportDataButtonProps) => {
         // Le type MIME d'un CSV varie selon l'app de partage et le téléphone (octet-stream, excel, plain…) :
         // filtrer sur text/csv grise le fichier. Le contenu est validé à l'import.
         type: "*/*",
-        copyToCacheDirectory: true,
+        // Pas de copie auto : sur certains téléphones la copie en cache est illisible. On lit l'URI source.
+        copyToCacheDirectory: false,
       });
 
       if (res.canceled) return;
