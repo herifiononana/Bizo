@@ -13,7 +13,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -215,16 +214,14 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
                 <Text style={styles.errorText}>{errors.productId}</Text>
               )}
               {search.length > 0 && (
-                <FlatList
+                <ScrollView
                   nestedScrollEnabled
-                  data={filteredProducts}
-                  initialNumToRender={5}
-                  maxToRenderPerBatch={5}
-                  windowSize={5}
-                  keyExtractor={(item) => item.id}
+                  keyboardShouldPersistTaps="handled"
                   style={styles.dropdown}
-                  renderItem={({ item }) => (
+                >
+                  {filteredProducts.map((item) => (
                     <TouchableOpacity
+                      key={item.id}
                       style={styles.dropdownItem}
                       onPress={() => handleSelectProduct(item.id)}
                     >
@@ -232,8 +229,8 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
                         {item.name} ({item.quantity} en stock)
                       </Text>
                     </TouchableOpacity>
-                  )}
-                />
+                  ))}
+                </ScrollView>
               )}
             </View>
           )}

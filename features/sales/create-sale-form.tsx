@@ -9,7 +9,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -257,18 +256,16 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
                 <Text style={styles.errorText}>{errors.productId}</Text>
               )}
               {search.length > 0 && (
-                <FlatList
+                <ScrollView
                   nestedScrollEnabled
-                  data={(products ?? []).filter((p) =>
-                    p?.name?.toLowerCase().includes(search.toLowerCase())
-                  )}
-                  initialNumToRender={5}
-                  maxToRenderPerBatch={5}
-                  windowSize={5}
-                  keyExtractor={(item) => item.id}
+                  keyboardShouldPersistTaps="handled"
                   style={styles.dropdown}
-                  renderItem={({ item }) => (
+                >
+                  {(products ?? []).filter((p) =>
+                    p?.name?.toLowerCase().includes(search.toLowerCase())
+                  ).map((item) => (
                     <TouchableOpacity
+                      key={item.id}
                       style={styles.dropdownItem}
                       onPress={() => {
                         setFormData({ ...formData, productId: item.id });
@@ -279,8 +276,8 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
                         {item.name} ({item.quantity} en stock)
                       </Text>
                     </TouchableOpacity>
-                  )}
-                />
+                  ))}
+                </ScrollView>
               )}
             </View>
           )}

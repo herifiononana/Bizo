@@ -3,7 +3,6 @@ import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useMemo, useState } from "react";
 import {
-  FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -388,18 +387,16 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
                     <Text style={styles.errorText}>{errors.newItem_productId}</Text>
                   )}
                   {search.length > 0 && (
-                    <FlatList
+                    <ScrollView
                       nestedScrollEnabled
-                      data={(products ?? []).filter((p) =>
-                        p?.name?.toLowerCase().includes(search.toLowerCase())
-                      )}
-                      initialNumToRender={5}
-                      maxToRenderPerBatch={5}
-                      windowSize={3}
-                      keyExtractor={(item) => item.id}
+                      keyboardShouldPersistTaps="handled"
                       style={styles.dropdown}
-                      renderItem={({ item }) => (
+                    >
+                      {(products ?? []).filter((p) =>
+                        p?.name?.toLowerCase().includes(search.toLowerCase())
+                      ).map((item) => (
                         <TouchableOpacity
+                          key={item.id}
                           style={styles.dropdownItem}
                           onPress={() => {
                             setNewItemForm({
@@ -414,8 +411,8 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
                             {item.name} ({availableStock(item.id)} dispo)
                           </Text>
                         </TouchableOpacity>
-                      )}
-                    />
+                      ))}
+                    </ScrollView>
                   )}
                 </View>
               )}
