@@ -1,9 +1,10 @@
 import { ModalTrigger } from "@/components/modal-trigger";
+import { useUpdateSingleSale } from "@/hooks/sale/useUpdateSingleSale";
 import { Sale } from "@/interface/sale/sale";
 import { Entypo } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
-import UpdateSaleForm from "./update-sale-form";
+import { Alert, Modal, StyleSheet, TouchableOpacity, View } from "react-native";
+import UpdateSaleGroupForm from "./update-sale-group-form";
 
 type EditSaleButtonProps = {
   sale: Sale;
@@ -21,6 +22,18 @@ const DefaultTrigger: ModalTrigger = ({ onPress }) => (
 
 function EditSaleButton({ sale, trigger }: EditSaleButtonProps) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const { updateSingleSale } = useUpdateSingleSale();
+
+  const handleUpdate = async (editedSales: Sale[]) => {
+    setModalVisible(false);
+    const success = await updateSingleSale(sale, editedSales);
+    if (success) {
+      Alert.alert("✅ Succès", "Vente modifiée avec succès !");
+    } else {
+      Alert.alert("Erreur", "Modification échouée, données restaurées.");
+    }
+  };
+
   return (
     <>
       {trigger ? trigger({ onPress: () => setModalVisible(true) }) : (
@@ -34,7 +47,11 @@ function EditSaleButton({ sale, trigger }: EditSaleButtonProps) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <UpdateSaleForm onCancel={() => setModalVisible(false)} sale={sale} />
+          <UpdateSaleGroupForm
+            groupItems={[sale]}
+            onUpdateGroup={handleUpdate}
+            onCancel={() => setModalVisible(false)}
+          />
         </View>
       </Modal>
     </>
