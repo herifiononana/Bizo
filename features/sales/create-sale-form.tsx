@@ -1,3 +1,8 @@
+import {
+  applyPriceChange,
+  applyQuantityChange,
+  applyTotalChange,
+} from "./sale-amount.helper";
 import { Sale } from "@/interface/sale/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -51,10 +56,9 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
 
   useEffect(() => {
     if (selectedProduct) {
-      setFormData((prev) => ({
-        ...prev,
-        salePrice: String(selectedProduct.salePrice ?? ""),
-      }));
+      setFormData((prev) =>
+        applyPriceChange(prev, String(selectedProduct.salePrice ?? ""))
+      );
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProduct?.id]);
@@ -291,16 +295,9 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
                 style={[styles.input, errors.quantity && styles.errorInput]}
                 keyboardType="numeric"
                 value={formData.quantity}
-                onChangeText={(text) => {
-                  const total = selectedProduct?.salePrice
-                    ? Number(text) * selectedProduct.salePrice
-                    : 0;
-                  setFormData({
-                    ...formData,
-                    quantity: text,
-                    totalPrice: total ? total.toFixed(2) : "",
-                  });
-                }}
+                onChangeText={(text) =>
+                  setFormData((prev) => applyQuantityChange(prev, text))
+                }
               />
               {errors.quantity && (
                 <Text style={styles.errorText}>{errors.quantity}</Text>
@@ -315,7 +312,7 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
                 keyboardType="numeric"
                 value={formData.salePrice}
                 onChangeText={(text) =>
-                  setFormData({ ...formData, salePrice: text })
+                  setFormData((prev) => applyPriceChange(prev, text))
                 }
               />
               {errors.salePrice && (
@@ -337,13 +334,9 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
             style={[styles.input, styles.totalInput]}
             keyboardType="numeric"
             value={formData.totalPrice}
-            onChangeText={(text) => {
-              const qty =
-                formData.salePrice && Number(formData.salePrice) > 0
-                  ? String(Number(text) / Number(formData.salePrice))
-                  : formData.quantity;
-              setFormData({ ...formData, totalPrice: text, quantity: qty });
-            }}
+            onChangeText={(text) =>
+              setFormData((prev) => applyTotalChange(prev, text))
+            }
           />
 
           {/* Add to cart — visible only when product selected */}

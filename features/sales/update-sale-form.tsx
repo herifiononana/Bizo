@@ -4,6 +4,11 @@ import { saveProducts } from "@/services/product";
 import { saveSales, updateLocalSales } from "@/services/sale";
 import { useProductsStore } from "@/stores/product.store";
 import { useSalesStore } from "@/stores/sales.store";
+import {
+  applyPriceChange,
+  applyQuantityChange,
+  applyTotalChange,
+} from "./sale-amount.helper";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -243,16 +248,9 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
                 style={[styles.input, errors.quantity && styles.errorInput]}
                 keyboardType="numeric"
                 value={formData.quantity}
-                onChangeText={(text) => {
-                  const total = selectedProduct?.salePrice
-                    ? Number(text) * selectedProduct.salePrice
-                    : 0;
-                  setFormData({
-                    ...formData,
-                    quantity: text,
-                    totalPrice: total ? total.toFixed(2) : "",
-                  });
-                }}
+                onChangeText={(text) =>
+                  setFormData((prev) => applyQuantityChange(prev, text))
+                }
               />
               {errors.quantity && (
                 <Text style={styles.errorText}>{errors.quantity}</Text>
@@ -267,7 +265,7 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
                 keyboardType="numeric"
                 value={formData.salePrice}
                 onChangeText={(text) =>
-                  setFormData({ ...formData, salePrice: text })
+                  setFormData((prev) => applyPriceChange(prev, text))
                 }
               />
               {errors.salePrice && (
@@ -289,13 +287,9 @@ const UpdateSaleForm: React.FC<CreateSaleProps> = ({ sale, onCancel }) => {
             style={[styles.input, styles.totalInput]}
             keyboardType="numeric"
             value={formData.totalPrice}
-            onChangeText={(text) => {
-              const qty =
-                formData.salePrice && Number(formData.salePrice) > 0
-                  ? String(Number(text) / Number(formData.salePrice))
-                  : formData.quantity;
-              setFormData({ ...formData, totalPrice: text, quantity: qty });
-            }}
+            onChangeText={(text) =>
+              setFormData((prev) => applyTotalChange(prev, text))
+            }
           />
 
           {/* Vente à crédit */}
