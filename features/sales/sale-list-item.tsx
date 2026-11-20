@@ -57,7 +57,12 @@ const SaleListItem = React.memo(function SaleListItem({
       <View style={styles.topRow}>
         <View style={styles.nameRow}>
           <Text style={styles.saleProduct}>{product?.name}</Text>
-          {item.isCredit ? (
+          {item.isExpiredLoss ? (
+            <View style={styles.badgeLoss}>
+              <View style={[styles.dot, { backgroundColor: "#F43F5E" }]} />
+              <Text style={styles.badgeLossText}>Perte (expiré)</Text>
+            </View>
+          ) : item.isCredit ? (
             <View style={styles.badgeCredit}>
               <View style={styles.dot} />
               <Text style={styles.badgeCreditText}>Crédit</Text>
@@ -278,6 +283,20 @@ const styles = StyleSheet.create({
   badgeCashText: {
     fontSize: 12,
     color: "#22D3EE",
+    fontWeight: "700",
+  },
+  badgeLoss: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(244,63,94,0.12)",
+    borderRadius: 7,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 4,
+  },
+  badgeLossText: {
+    fontSize: 12,
+    color: "#F43F5E",
     fontWeight: "700",
   },
   dot: {

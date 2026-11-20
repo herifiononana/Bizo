@@ -15,6 +15,10 @@ export const getSales = async () => {
         salePrice: Number(s?.salePrice ?? 0),
         totalAmount: Number(s?.totalAmount ?? 0),
         isCredit: s?.isCredit === "true" || s?.isCredit === true ? true : false,
+        isExpiredLoss:
+          s?.isExpiredLoss === "true" || s?.isExpiredLoss === true
+            ? true
+            : undefined,
       };
       return response;
     }) ?? [];

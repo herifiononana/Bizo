@@ -8,6 +8,7 @@ type Props = {
   wasCreditNowPaid: boolean;
   totalAmount: number;
   formattedDate: string;
+  isExpiredLoss?: boolean;
 };
 
 const SaleGroupTopRow = React.memo(function SaleGroupTopRow({
@@ -16,6 +17,7 @@ const SaleGroupTopRow = React.memo(function SaleGroupTopRow({
   wasCreditNowPaid,
   totalAmount,
   formattedDate,
+  isExpiredLoss = false,
 }: Props) {
   return (
     <View style={styles.topRow}>
@@ -24,7 +26,12 @@ const SaleGroupTopRow = React.memo(function SaleGroupTopRow({
           <MaterialIcons name="layers" size={12} color="#A78BFA" />
           <Text style={styles.multiChipText}>{itemCount} produits</Text>
         </View>
-        {isCredit ? (
+        {isExpiredLoss ? (
+          <View style={styles.badgeLoss}>
+            <View style={[styles.dot, { backgroundColor: "#F43F5E" }]} />
+            <Text style={styles.badgeLossText}>Perte (expiré)</Text>
+          </View>
+        ) : isCredit ? (
           <View style={styles.badgeCredit}>
             <View style={styles.dot} />
             <Text style={styles.badgeCreditText}>Crédit</Text>
@@ -137,6 +144,20 @@ const styles = StyleSheet.create({
   badgeCashText: {
     fontSize: 12,
     color: "#22D3EE",
+    fontWeight: "700",
+  },
+  badgeLoss: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(244,63,94,0.12)",
+    borderRadius: 7,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 4,
+  },
+  badgeLossText: {
+    fontSize: 12,
+    color: "#F43F5E",
     fontWeight: "700",
   },
   dot: {

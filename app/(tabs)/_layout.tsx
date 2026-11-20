@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/components/haptic-tab";
+import { useExpiryCheck } from "@/hooks/product/useExpiryCheck";
 import { Ionicons } from "@expo/vector-icons";
 import { ColorValue } from "react-native";
 
@@ -10,6 +11,7 @@ const toIconColor = (color: ColorValue): string | undefined =>
   typeof color === "string" ? color : undefined;
 
 export default function TabLayout() {
+  useExpiryCheck();
   return (
     <Tabs
       screenOptions={{

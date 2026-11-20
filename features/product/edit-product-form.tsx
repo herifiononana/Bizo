@@ -4,6 +4,7 @@ import { Colors } from "@/constants/theme";
 import { useFinance } from "@/hooks/finance/useFinance";
 import { Product } from "@/interface/product/product";
 import { saveProducts, updateLocalProduct } from "@/services/product";
+import { computeExpiryDate } from "@/services/product/expiry";
 import { useProductsStore } from "@/stores/product.store";
 import { useReferencesStore } from "@/stores/reference.store";
 import { Picker } from "@react-native-picker/picker";
@@ -27,6 +28,13 @@ const productSchema = z.object({
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
     .optional(),
   referenceId: z.string().optional(),
+  shelfLifeDays: z
+    .string()
+    .refine(
+      (val) => val === "" || (Number.isInteger(Number(val)) && Number(val) >= 1),
+      "Nombre de jours invalide"
+    )
+    .optional(),
 });
 
 export type productDTO = z.infer<typeof productSchema>;
@@ -48,6 +56,7 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
     purchasePrice: String(product.purchasePrice),
     salePrice: String(product.salePrice ?? ""),
     referenceId: product?.referenceId ?? "",
+    shelfLifeDays: product.shelfLifeDays ? String(product.shelfLifeDays) : "",
   });
   const { references } = useReferencesStore();
 
@@ -76,9 +85,22 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
       (r) => r.id === result.data.referenceId
     )?.id;
 
+    // Expiration : repart de maintenant si la durée change ou si du stock est ajouté (réapprovisionnement).
+    const newQuantity = Number(result.data.quantity);
+    const shelfLifeDays = Number(result.data.shelfLifeDays) || undefined;
+    const restarted =
+      shelfLifeDays !== product.shelfLifeDays || newQuantity > product.quantity;
+    const expiryDate = !shelfLifeDays
+      ? undefined
+      : restarted || !product.expiryDate
+        ? computeExpiryDate(shelfLifeDays)
+        : product.expiryDate;
+
     // Mettre à jour le produit existant (même id et createdAt)
     const updatedProduct: Product = {
       ...product,
+      shelfLifeDays,
+      expiryDate,
       name: result.data.name,
       quantity: Number(result.data.quantity),
       purchasePrice: Number(result.data.purchasePrice),
@@ -162,6 +184,20 @@ const EditProductForm: React.FC<EditProductFormProps> = ({
           />
           {errors.salePrice && (
             <Text style={styles.errorText}>{errors.salePrice}</Text>
+          )}
+        </View>
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Durée de vie (jours) · optionnel</Text>
+          <TextInput
+            style={[styles.input, errors.shelfLifeDays && styles.errorInput]}
+            placeholder="Ex : 30 — vendu à 0 Ar à l'expiration"
+            placeholderTextColor="#8891B3"
+            keyboardType="numeric"
+            value={formData.shelfLifeDays}
+            onChangeText={(text) => handleChange("shelfLifeDays", text)}
+          />
+          {errors.shelfLifeDays && (
+            <Text style={styles.errorText}>{errors.shelfLifeDays}</Text>
           )}
         </View>
         {references?.length ? (

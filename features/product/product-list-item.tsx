@@ -2,6 +2,7 @@ import { Product } from "@/interface/product/product";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { daysUntilExpiry } from "@/services/product/expiry";
 import DeleteProductButton from "./delete-product-button";
 import EditProductButton from "./edit-product-button";
 
@@ -9,6 +10,22 @@ function getStockBadge(qty: number): { label: string; color: string; bg: string 
   if (qty === 0) return { label: "Rupture", color: "#F43F5E", bg: "rgba(244,63,94,0.12)" };
   if (qty <= 3) return { label: "Faible", color: "#F5B544", bg: "rgba(245,181,68,0.12)" };
   return { label: `${qty} en stock`, color: "#3B82F6", bg: "rgba(59,130,246,0.12)" };
+}
+
+const EXPIRY_WARNING_DAYS = 7;
+
+function getExpiryBadge(
+  expiryDate: number | undefined,
+  qty: number
+): { label: string; color: string; bg: string } | null {
+  if (!expiryDate || qty === 0) return null;
+  const days = daysUntilExpiry(expiryDate);
+  const soon = days <= EXPIRY_WARNING_DAYS;
+  return {
+    label: days <= 0 ? "Expiré" : days === 1 ? "Expire demain" : `Expire dans ${days} j`,
+    color: soon ? "#F43F5E" : "#B7BFD8",
+    bg: soon ? "rgba(244,63,94,0.12)" : "rgba(183,191,216,0.10)",
+  };
 }
 
 type ProductListItemProps = {
@@ -27,6 +44,7 @@ const ProductListItem = React.memo(function ProductListItem({
   onStartSelection,
 }: ProductListItemProps) {
   const stockBadge = getStockBadge(item.quantity);
+  const expiryBadge = getExpiryBadge(item.expiryDate, item.quantity);
 
   const marginPct =
     item.purchasePrice > 0 && item.salePrice
@@ -64,6 +82,13 @@ const ProductListItem = React.memo(function ProductListItem({
                   {stockBadge.label}
                 </Text>
               </View>
+              {expiryBadge && (
+                <View style={[styles.stockBadge, { backgroundColor: expiryBadge.bg }]}>
+                  <Text style={[styles.stockBadgeText, { color: expiryBadge.color }]}>
+                    {expiryBadge.label}
+                  </Text>
+                </View>
+              )}
               {marginPct !== null && (
                 <View
                   style={[

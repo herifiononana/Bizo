@@ -110,6 +110,7 @@ const SaleGroupItem = React.memo(function SaleGroupItem({
           wasCreditNowPaid={wasCreditNowPaid}
           totalAmount={totalAmount}
           formattedDate={formattedDate}
+          isExpiredLoss={items.some((s) => s.isExpiredLoss)}
         />
 
         <TouchableOpacity onPress={() => setExpanded(!expanded)}>

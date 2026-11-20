@@ -1,4 +1,5 @@
 import { Product } from "@/interface/product/product";
+import { computeExpiryDate } from "@/services/product/expiry";
 import { useReferencesStore } from "@/stores/reference.store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
@@ -32,6 +33,13 @@ const productSchema = z.object({
     .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Prix invalide")
     .optional(),
   referenceId: z.string().optional(),
+  shelfLifeDays: z
+    .string()
+    .refine(
+      (val) => val === "" || (Number.isInteger(Number(val)) && Number(val) >= 1),
+      "Nombre de jours invalide"
+    )
+    .optional(),
 });
 
 interface AddProductFormProps {
@@ -49,6 +57,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     purchasePrice: "",
     salePrice: "",
     referenceId: "",
+    shelfLifeDays: "",
   });
   const { references } = useReferencesStore();
 
@@ -74,6 +83,8 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
     const selectedReference =
       references?.find((r) => r.id === result.data.referenceId)?.id ?? "";
 
+    const shelfLifeDays = Number(result.data.shelfLifeDays) || undefined;
+
     const newProduct: Product = {
       id: String(Date.now()),
       name: result.data.name,
@@ -81,6 +92,10 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       purchasePrice: Number(result.data.purchasePrice),
       salePrice: Number(result.data.salePrice),
       referenceId: selectedReference,
+      ...(shelfLifeDays && {
+        shelfLifeDays,
+        expiryDate: computeExpiryDate(shelfLifeDays),
+      }),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -93,6 +108,7 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
       purchasePrice: "",
       salePrice: "",
       referenceId: "",
+      shelfLifeDays: "",
     });
   };
 
@@ -206,6 +222,20 @@ const AddProductForm: React.FC<AddProductFormProps> = ({
               )}
             </View>
           </View>
+
+          {/* Durée de vie */}
+          <Text style={styles.label}>Durée de vie (jours) · optionnel</Text>
+          <TextInput
+            style={[styles.input, errors.shelfLifeDays && styles.errorInput]}
+            placeholder="Ex : 30 — vendu à 0 Ar à l'expiration"
+            placeholderTextColor="#545C7A"
+            keyboardType="numeric"
+            value={formData.shelfLifeDays}
+            onChangeText={(text) => handleChange("shelfLifeDays", text)}
+          />
+          {errors.shelfLifeDays && (
+            <Text style={styles.errorText}>{errors.shelfLifeDays}</Text>
+          )}
 
           {/* Marge estimée helper */}
           <View style={styles.marginHelper}>

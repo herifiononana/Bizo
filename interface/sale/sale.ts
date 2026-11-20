@@ -8,5 +8,6 @@ export interface Sale {
   isCredit?: boolean;
   clientName?: string;
   groupId?: string; // shared across all Sale records in a multi-product transaction
+  isExpiredLoss?: boolean; // vente automatique à 0 d'un stock expiré (perte)
   updatedAt?: string; // ISO date — set on every edit, absent on original creation
 }
