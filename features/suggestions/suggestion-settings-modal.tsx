@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   defaultTrigger: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "#1B2342",
     alignItems: "center",
     justifyContent: "center",
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "#1B2342",
     alignItems: "center",
     justifyContent: "center",
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#141B33",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     paddingHorizontal: 14,

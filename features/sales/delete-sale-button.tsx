@@ -72,7 +72,7 @@ export default DeleteSaleButton;
 const styles = StyleSheet.create({
   button: {
     padding: 8,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: "rgba(244,63,94,0.10)",
     borderWidth: 1,
     borderColor: "rgba(244,63,94,0.25)",

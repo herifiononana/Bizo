@@ -26,7 +26,7 @@ export default function ShowAlertActivation() {
           style={{
             backgroundColor: "#1F2937",
             padding: 18,
-            borderRadius: 10,
+            borderRadius: 3,
             width: "80%",
           }}
         >
@@ -60,7 +60,7 @@ export default function ShowAlertActivation() {
               marginTop: 10,
               backgroundColor: Colors.dark.accent,
               padding: 10,
-              borderRadius: 8,
+              borderRadius: 3,
             }}
           >
             <Text style={{ textAlign: "center", fontSize: 16, color: "white" }}>

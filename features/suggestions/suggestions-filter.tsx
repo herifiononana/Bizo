@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     height: 44,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   chip: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 999,
+    borderRadius: 6,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",

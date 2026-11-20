@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
-const Skeleton = ({ width = "100%", height = 20, radius = 6 }: any) => {
+const Skeleton = ({ width = "100%", height = 20, radius = 3 }: any) => {
   return (
     <View
       style={{

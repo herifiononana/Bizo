@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#141B33",
     padding: 18,
-    borderRadius: 22,
+    borderRadius: 7,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     shadowColor: "#000",
     shadowOpacity: 0.25,
-    shadowRadius: 12,
+    shadowRadius: 4,
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   calIcon: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: "rgba(249,115,22,0.12)",
     alignItems: "center",
     justifyContent: "center",
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 7,
     gap: 5,
   },
   profitBadgeUp: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   statItem: {
     width: "48%",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderWidth: 1,

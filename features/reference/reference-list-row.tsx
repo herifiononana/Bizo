@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     paddingVertical: 10,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   listRowBtn: {
     padding: 8,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.04)",
   },
   listRowBtnDanger: {

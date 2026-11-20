@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "#141B33",
-    borderRadius: 28,
+    borderRadius: 9,
     padding: 24,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     padding: 14,
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   activateButton: {
     backgroundColor: "#F97316",
-    borderRadius: 14,
+    borderRadius: 5,
     padding: 14,
     height: 50,
     alignItems: "center",

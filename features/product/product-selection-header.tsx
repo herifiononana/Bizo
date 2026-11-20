@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     padding: 6,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.06)",
   },
   count: {

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: "#F43F5E",
     paddingVertical: 14,
-    borderRadius: 14,
+    borderRadius: 5,
     elevation: 6,
   },
   buttonDisabled: {

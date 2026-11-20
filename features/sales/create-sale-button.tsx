@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   modalBox: {
     backgroundColor: "#141B33",
-    borderRadius: 28,
+    borderRadius: 9,
     padding: 20,
   },
   modalTitle: {

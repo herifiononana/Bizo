@@ -227,8 +227,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#141B33",
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: 9,
+    borderTopRightRadius: 9,
     padding: 22,
     maxHeight: "80%",
     borderWidth: 1,
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   statItem: {
     width: "48%",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderWidth: 1,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 16,
     paddingVertical: 12,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "rgba(244,63,94,0.08)",
     borderWidth: 1,
     borderColor: "rgba(244,63,94,0.25)",
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 12,
     paddingVertical: 12,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "#F97316",
   },
   closeText: {

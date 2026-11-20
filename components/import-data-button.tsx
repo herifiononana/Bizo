@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   iconButton: {
     padding: 10,
     backgroundColor: "#141B33",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
     width: 44,

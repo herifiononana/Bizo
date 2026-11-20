@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 44,
     height: 44,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
 
   modalContent: {
     backgroundColor: "#141B33",
-    borderRadius: 28,
+    borderRadius: 9,
     padding: 22,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
 
   input: {
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     padding: 14,

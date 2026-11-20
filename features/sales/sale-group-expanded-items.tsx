@@ -43,7 +43,7 @@ export default SaleGroupExpandedItems;
 const styles = StyleSheet.create({
   expandedList: {
     backgroundColor: "rgba(255,255,255,0.03)",
-    borderRadius: 12,
+    borderRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 8,
     marginBottom: 8,

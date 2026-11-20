@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   defaultTrigger: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "#1B2342",
     alignItems: "center",
     justifyContent: "center",
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: "#141B33",
-    borderRadius: 28,
+    borderRadius: 9,
     padding: 24,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     padding: 14,
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F97316",
     paddingVertical: 14,
     paddingHorizontal: 22,
-    borderRadius: 14,
+    borderRadius: 5,
   },
   saveButtonText: {
     color: "#fff",
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(244,63,94,0.08)",
     paddingVertical: 14,
     paddingHorizontal: 22,
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(244,63,94,0.25)",
   },

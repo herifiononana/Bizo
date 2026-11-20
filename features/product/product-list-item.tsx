@@ -138,14 +138,14 @@ const ProductListItem = React.memo(function ProductListItem({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#141B33",
-    borderRadius: 22,
+    borderRadius: 7,
     padding: 16,
     marginBottom: 10,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     shadowColor: "#000",
     shadowOpacity: 0.2,
-    shadowRadius: 10,
+    shadowRadius: 3,
     elevation: 4,
   },
   cardSelected: {
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   iconWrap: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "rgba(59,130,246,0.12)",
     alignItems: "center",
     justifyContent: "center",
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   stockBadge: {
-    borderRadius: 20,
+    borderRadius: 7,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   marginBadge: {
-    borderRadius: 20,
+    borderRadius: 7,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   pricesRow: {
     flexDirection: "row",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderWidth: 1,

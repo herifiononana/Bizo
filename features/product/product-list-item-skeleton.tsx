@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     marginBottom: 10,
     backgroundColor: "#141B33",
-    borderRadius: 22,
+    borderRadius: 7,
     padding: 16,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
   skeletonBlock: {
     backgroundColor: "#1B2342",
-    borderRadius: 8,
+    borderRadius: 3,
   },
 
   deleteBtnSkeleton: {
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     backgroundColor: "#1B2342",
-    borderRadius: 10,
+    borderRadius: 3,
   },
 });

@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#1B2342",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     paddingHorizontal: 14,
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   },
   rupturBtn: {
     padding: 6,
-    borderRadius: 8,
+    borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.04)",
   },
   ruptureActive: {
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   summaryChip: {
     flex: 1,
     backgroundColor: "#141B33",
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     paddingVertical: 10,

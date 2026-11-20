@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   expandBtn: {
     padding: 4,
-    borderRadius: 8,
+    borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.04)",
   },
   editButton: {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(167,139,250,0.12)",
     paddingVertical: 7,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 4,
     borderWidth: 1,
     borderColor: "rgba(167,139,250,0.25)",
   },
@@ -105,10 +105,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F97316",
     paddingVertical: 7,
     paddingHorizontal: 14,
-    borderRadius: 12,
+    borderRadius: 4,
     shadowColor: "rgba(249,115,22,0.45)",
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 3,
     elevation: 4,
   },
   payButtonText: {

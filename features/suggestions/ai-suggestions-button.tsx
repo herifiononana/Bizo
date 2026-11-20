@@ -116,7 +116,7 @@ const AiSuggestionsButton = () => {
             {analyzing ? (
               Array.from({ length: SKELETON_ROWS }).map((_, i) => (
                 <View key={i} style={styles.card}>
-                  <Skeleton width={90} height={18} radius={999} />
+                  <Skeleton width={90} height={18} radius={6} />
                   <Skeleton width="80%" height={16} />
                   <Skeleton width="60%" height={14} />
                 </View>
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 44,
     height: 44,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   closeButton: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "#1B2342",
     alignItems: "center",
     justifyContent: "center",
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   sectionIcon: {
     width: 28,
     height: 28,
-    borderRadius: 10,
+    borderRadius: 3,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     minWidth: 24,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 999,
+    borderRadius: 6,
     alignItems: "center",
   },
   countChipText: {
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor: "#141B33",
-    borderRadius: 20,
+    borderRadius: 7,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   card: {
     width: "48%",
     padding: 18,
-    borderRadius: 22,
+    borderRadius: 7,
     backgroundColor: "#141B33",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -28,21 +28,21 @@ const styles = StyleSheet.create({
   circle: {
     width: 40,
     height: 40,
-    borderRadius: 12,
+    borderRadius: 4,
     backgroundColor: "#1B2342",
     marginBottom: 12,
   },
   lineShort: {
     width: "45%",
     height: 10,
-    borderRadius: 6,
+    borderRadius: 3,
     backgroundColor: "#1B2342",
     marginBottom: 8,
   },
   lineLong: {
     width: "65%",
     height: 14,
-    borderRadius: 6,
+    borderRadius: 3,
     backgroundColor: "#1B2342",
   },
 });

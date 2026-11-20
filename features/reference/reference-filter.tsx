@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   iconButton: {
     width: 44,
     height: 44,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
 
   modalContent: {
     backgroundColor: "#141B33",
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: 9,
+    borderTopRightRadius: 9,
     padding: 22,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   chip: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 999,
+    borderRadius: 6,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   closeButton: {
     marginTop: 20,
     paddingVertical: 12,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: "#F97316",
   },
 
