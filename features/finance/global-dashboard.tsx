@@ -65,13 +65,6 @@ function GlobalDashboard() {
       ? ((finance.totalProfit / finance.totalSalesValue) * 100).toFixed(1)
       : null;
 
-  const totalStockDisplay =
-    finance.totalStockValue >= 1_000_000
-      ? (finance.totalStockValue / 1_000_000).toFixed(1) + "M"
-      : finance.totalStockValue >= 1_000
-        ? (finance.totalStockValue / 1_000).toFixed(1) + "k"
-        : finance.totalStockValue.toFixed(0);
-
   return (
     <View>
       {/* Hero KPI card */}
@@ -136,7 +129,9 @@ function GlobalDashboard() {
             <View style={styles.heroSubDivider} />
             <View>
               <Text style={styles.heroSubLabel}>Stock</Text>
-              <Text style={styles.heroSubValue}>{totalStockDisplay}</Text>
+              <Text style={styles.heroSubValue}>
+                {finance.totalStockValue.toLocaleString()} Ar
+              </Text>
             </View>
           </View>
           <View
