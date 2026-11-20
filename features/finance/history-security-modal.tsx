@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native";
 
+import RevealPasswordSection from "./reveal-password-section";
+
 type HistorySecurityModalProps = {
   // Bouton d'ouverture personnalisable — par défaut une icône cadenas.
   trigger?: ModalTrigger;
@@ -74,6 +76,8 @@ const HistorySecurityModal = ({ trigger }: HistorySecurityModalProps) => {
           <Text style={styles.subtitle}>
             Requis pour supprimer les ventes d&apos;une journée dans l&apos;historique.
           </Text>
+
+          {hasPassword && <RevealPasswordSection key={String(visible)} />}
 
           {hasPassword && (
             <TextInput

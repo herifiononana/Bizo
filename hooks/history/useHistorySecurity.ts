@@ -1,3 +1,4 @@
+import { APP_KEYWORD } from "@/constants/constants";
 import {
   getHistoryDeletePassword,
   saveHistoryDeletePassword,
@@ -27,6 +28,10 @@ export const useHistorySecurity = () => {
   const verifyPassword = (candidate: string): boolean =>
     hasPassword && candidate === password;
 
+  // Le mot de passe n'est révélé que si le mot clé de l'app est correct.
+  const revealPassword = (appKeyword: string): string | null =>
+    hasPassword && appKeyword === APP_KEYWORD ? password : null;
+
   // Un mot de passe déjà défini ne peut être changé qu'en fournissant l'ancien.
   const changePassword = async (
     newPassword: string,
@@ -39,5 +44,11 @@ export const useHistorySecurity = () => {
     return true;
   };
 
-  return { hasPassword, isLoaded, verifyPassword, changePassword };
+  return {
+    hasPassword,
+    isLoaded,
+    verifyPassword,
+    changePassword,
+    revealPassword,
+  };
 };

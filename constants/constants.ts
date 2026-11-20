@@ -1,5 +1,8 @@
 export const OTHER_REFERENCE = "OTHER";
 
+// Mot clé de l'app : seul moyen de ré-afficher le mot de passe de suppression. Valeur provisoire.
+export const APP_KEYWORD = "0000";
+
 export const VALID_KEY = "Bizo@2026";
 
 export const CONTACT_INFO = {
