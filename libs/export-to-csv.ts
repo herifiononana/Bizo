@@ -75,6 +75,9 @@ export const importAllDataFromCSV = async (uri: string) => {
       [ARCHIVED_PRODUCTS_KEY]: [],
     };
 
+    const hasBackupRows = imported.some((row: any) => row?._type in regroup);
+    if (!hasBackupRows) return false;
+
     imported.forEach((row: any) => {
       if (!row._type) return;
       const { _type, ...rest } = row;

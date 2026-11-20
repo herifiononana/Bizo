@@ -28,7 +28,9 @@ const ImportDataButton = ({ trigger }: ImportDataButtonProps) => {
   const handleImport = async () => {
     try {
       const res = await DocumentPicker.getDocumentAsync({
-        type: "text/csv",
+        // Le type MIME d'un CSV varie selon l'app de partage et le téléphone (octet-stream, excel, plain…) :
+        // filtrer sur text/csv grise le fichier. Le contenu est validé à l'import.
+        type: "*/*",
         copyToCacheDirectory: true,
       });
 
