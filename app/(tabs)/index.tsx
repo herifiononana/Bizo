@@ -29,7 +29,7 @@ const Dashboard = () => {
       <ReferenceFilterModal
         selectedReference={selectedReference}
         setSelectedReference={setSelectedReference}
-        top={205}
+        top={260}
         right={10}
       />
       <AiSuggestionsButton />

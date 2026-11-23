@@ -154,7 +154,8 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
       totalAmount: draft.quantity * draft.salePrice,
       saleDate,
       isCredit,
-      clientName: isCredit ? clientName : "",
+      clientName: isCredit ? clientName.trim() : "",
+      customerName: !isCredit && clientName.trim() ? clientName.trim() : undefined,
       groupId,
     }));
 
@@ -368,20 +369,18 @@ const CreateSaleForm: React.FC<CreateSaleProps> = ({ onAddSale, onCancel }) => {
             />
           </View>
 
-          {isCredit && (
-            <>
-              <Text style={styles.label}>Nom du client</Text>
-              <TextInput
-                placeholder="Ex: Tamby"
-                placeholderTextColor="#545C7A"
-                style={[styles.input, errors.clientName && styles.errorInput]}
-                value={clientName}
-                onChangeText={setClientName}
-              />
-              {errors.clientName && (
-                <Text style={styles.errorText}>{errors.clientName}</Text>
-              )}
-            </>
+          <Text style={styles.label}>
+            {isCredit ? "Nom du client" : "Nom du client · optionnel"}
+          </Text>
+          <TextInput
+            placeholder="Ex: Tamby"
+            placeholderTextColor="#545C7A"
+            style={[styles.input, errors.clientName && styles.errorInput]}
+            value={clientName}
+            onChangeText={setClientName}
+          />
+          {errors.clientName && (
+            <Text style={styles.errorText}>{errors.clientName}</Text>
           )}
 
           {/* Actions */}

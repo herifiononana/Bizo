@@ -221,7 +221,7 @@ export default AddReferenceButton;
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 150,
+    top: 205,
     right: 10,
     zIndex: 10,
   },

@@ -5,4 +5,5 @@ export const ACTIVATION_KEY = "@activation";
 export const SALES_HISTOTY = "@history";
 export const SUGGESTION_SETTINGS_KEY = "@suggestion_settings";
 export const HISTORY_DELETE_PASSWORD_KEY = "@history_delete_password";
+export const SELLER_INFO_KEY = "@seller_info";
 export const ARCHIVED_PRODUCTS_KEY = "@archived_products";

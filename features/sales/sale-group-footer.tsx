@@ -2,6 +2,7 @@ import { Sale } from "@/interface/sale/sale";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import InvoiceButton from "@/features/invoice/invoice-button";
 import DeleteSaleButton from "./delete-sale-button";
 
 type Props = {
@@ -49,6 +50,7 @@ const SaleGroupFooter = React.memo(function SaleGroupFooter({
             color="#7A83A2"
           />
         </TouchableOpacity>
+        <InvoiceButton sales={groupSales} />
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
           <MaterialIcons name="edit" size={14} color="#A78BFA" />
         </TouchableOpacity>

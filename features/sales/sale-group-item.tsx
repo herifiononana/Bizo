@@ -124,6 +124,8 @@ const SaleGroupItem = React.memo(function SaleGroupItem({
 
         {(isCredit || wasCreditNowPaid) && firstItem.clientName ? (
           <Text style={styles.clientName}>{firstItem.clientName}</Text>
+        ) : firstItem.customerName ? (
+          <Text style={styles.clientName}>{firstItem.customerName}</Text>
         ) : null}
 
         {expanded && (

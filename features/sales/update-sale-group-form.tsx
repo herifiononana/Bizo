@@ -60,7 +60,9 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
   );
 
   const [isCredit, setIsCredit] = useState(groupItems[0]?.isCredit ?? false);
-  const [clientName, setClientName] = useState(groupItems[0]?.clientName ?? "");
+  const [clientName, setClientName] = useState(
+    groupItems[0]?.clientName || groupItems[0]?.customerName || ""
+  );
   const [newItemForm, setNewItemForm] = useState<NewItemForm>(EMPTY_NEW_ITEM);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
@@ -208,6 +210,7 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
         saleDate,
         isCredit,
         clientName: isCredit ? clientName.trim() : "",
+        customerName: !isCredit && clientName.trim() ? clientName.trim() : undefined,
         groupId: newGroupId,
         updatedAt: new Date().toISOString(),
       };
@@ -489,20 +492,18 @@ const UpdateSaleGroupForm: React.FC<UpdateSaleGroupFormProps> = ({
             />
           </View>
 
-          {isCredit && (
-            <>
-              <Text style={styles.label}>Nom du client</Text>
-              <TextInput
-                placeholder="Ex: Tamby"
-                placeholderTextColor="#545C7A"
-                style={[styles.input, errors.clientName && styles.errorInput]}
-                value={clientName}
-                onChangeText={setClientName}
-              />
-              {errors.clientName && (
-                <Text style={styles.errorText}>{errors.clientName}</Text>
-              )}
-            </>
+          <Text style={styles.label}>
+            {isCredit ? "Nom du client" : "Nom du client · optionnel"}
+          </Text>
+          <TextInput
+            placeholder="Ex: Tamby"
+            placeholderTextColor="#545C7A"
+            style={[styles.input, errors.clientName && styles.errorInput]}
+            value={clientName}
+            onChangeText={setClientName}
+          />
+          {errors.clientName && (
+            <Text style={styles.errorText}>{errors.clientName}</Text>
           )}
 
           <View style={styles.actions}>

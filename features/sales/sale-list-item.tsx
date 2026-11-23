@@ -5,6 +5,7 @@ import { useSalesStore } from "@/stores/sales.store";
 import { Entypo } from "@expo/vector-icons";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import InvoiceButton from "@/features/invoice/invoice-button";
 import DeleteSaleButton from "./delete-sale-button";
 import EditSaleButton from "./edit-sale-button";
 
@@ -45,7 +46,9 @@ const SaleListItem = React.memo(function SaleListItem({
 
   const detailText = item.isCredit || wasCreditNowPaid
     ? `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u · ${item.clientName}`
-    : `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u`;
+    : item.customerName
+      ? `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u · ${item.customerName}`
+      : `Qté ${item.quantity} · ${item.salePrice.toLocaleString()} Ar/u`;
 
   const deleteConfirmMessage = `Voulez-vous vraiment supprimer cette vente de ${
     product?.name ?? "ce produit"
@@ -99,6 +102,7 @@ const SaleListItem = React.memo(function SaleListItem({
               <Text style={styles.pendingText}>Paiement en attente</Text>
             </View>
             <View style={styles.footerActions}>
+              <InvoiceButton sales={[item]} />
               <EditSaleButton sale={item} />
               <DeleteSaleButton
                 salesToDelete={[item]}
@@ -116,6 +120,7 @@ const SaleListItem = React.memo(function SaleListItem({
               <Text style={styles.paidText}>Crédit remboursé</Text>
             </View>
             <View style={styles.footerActions}>
+              <InvoiceButton sales={[item]} />
               <EditSaleButton sale={item} />
               <DeleteSaleButton
                 salesToDelete={[item]}
@@ -126,6 +131,7 @@ const SaleListItem = React.memo(function SaleListItem({
         ) : (
           <View style={styles.footerRight}>
             <View style={styles.footerActions}>
+              <InvoiceButton sales={[item]} />
               <EditSaleButton sale={item} />
               <DeleteSaleButton
                 salesToDelete={[item]}

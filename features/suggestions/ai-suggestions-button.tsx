@@ -185,7 +185,7 @@ export default AiSuggestionsButton;
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 260,
+    top: 315,
     right: 10,
     zIndex: 10,
   },

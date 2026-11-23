@@ -119,8 +119,9 @@ export const useSale = () => {
           product?.name?.toLowerCase().includes(search.toLowerCase()) ?? false;
 
         const clientNameMatch =
-          sale?.clientName?.toLowerCase().includes(search.toLowerCase()) ??
-          false;
+          (sale?.clientName ?? sale?.customerName)
+            ?.toLowerCase()
+            .includes(search.toLowerCase()) ?? false;
 
         const matchesReference = referenceProduct
           ? product?.referenceId === referenceProduct
