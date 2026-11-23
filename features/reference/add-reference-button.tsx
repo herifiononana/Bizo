@@ -241,13 +241,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(5,8,18,0.75)",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    padding: 15,
   },
 
   modalContent: {
     backgroundColor: "#141B33",
     borderRadius: 9,
-    padding: 22,
+    padding: 17,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     width: "100%",
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     color: "#F4F6FF",
-    marginBottom: 16,
+    marginBottom: 12,
     textAlign: "center",
   },
 
@@ -266,16 +266,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    padding: 14,
+    padding: 11,
     height: 50,
     color: "#F4F6FF",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 16,
+    marginTop: 12,
   },
 
   listTitle: {
@@ -284,8 +284,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.5,
     textTransform: "uppercase",
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 15,
+    marginBottom: 8,
   },
 
   list: {

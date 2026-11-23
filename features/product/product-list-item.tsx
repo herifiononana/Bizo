@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 16,
-    marginBottom: 10,
+    padding: 12,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     shadowColor: "#000",
@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 14,
-    gap: 10,
+    marginBottom: 11,
+    gap: 8,
   },
   iconWrap: {
     width: 40,
@@ -199,17 +199,17 @@ const styles = StyleSheet.create({
     color: "#F4F6FF",
     fontWeight: "700",
     letterSpacing: -0.3,
-    marginBottom: 6,
+    marginBottom: 5,
   },
   badgesRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 6,
+    gap: 5,
   },
   stockBadge: {
     borderRadius: 7,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   stockBadgeText: {
     fontSize: 12,
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
   },
   marginBadge: {
     borderRadius: 7,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
   marginBadgeText: {
     fontSize: 12,
@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    gap: 6,
+    gap: 5,
   },
   pricesRow: {
     flexDirection: "row",
     backgroundColor: "#1B2342",
     borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 9,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.04)",
   },
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.3,
     textTransform: "uppercase",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   priceValue: {
     fontSize: 14,

@@ -132,13 +132,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.06)",
   },
-  headerText: { flex: 1, paddingRight: 12 },
+  headerText: { flex: 1, paddingRight: 9 },
   headerTitle: {
     fontSize: 22,
     fontWeight: "800",
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     color: "#7A83A2",
-    marginTop: 4,
+    marginTop: 3,
   },
   closeButton: {
     width: 40,
@@ -167,13 +167,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingHorizontal: 14,
+    paddingHorizontal: 11,
     height: 50,
-    marginHorizontal: 20,
-    marginTop: 16,
+    marginHorizontal: 15,
+    marginTop: 12,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: 6,
   },
   searchInput: {
     flex: 1,
@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    padding: 20,
+    padding: 15,
     paddingBottom: 60,
   },
 
   section: {
-    marginBottom: 24,
+    marginBottom: 18,
   },
   sectionTitle: {
     fontSize: 13,
@@ -195,14 +195,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.5,
     textTransform: "uppercase",
-    marginBottom: 12,
+    marginBottom: 9,
   },
 
   card: {
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 16,
-    marginBottom: 12,
+    padding: 12,
+    marginBottom: 9,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     color: "#F4F6FF",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   cardDescription: {
     fontSize: 13,

@@ -116,7 +116,7 @@ function GlobalDashboard() {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: 16,
+            gap: 12,
           }}
         >
           <View style={styles.heroSubRow}>
@@ -194,10 +194,10 @@ const styles = StyleSheet.create({
   heroCard: {
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 20,
+    padding: 15,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    marginBottom: 12,
+    marginBottom: 9,
     shadowColor: "#000",
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   heroLabel: {
     fontSize: 11,
@@ -220,10 +220,10 @@ const styles = StyleSheet.create({
   trendBadge: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: 7,
-    gap: 5,
+    gap: 4,
   },
   trendUp: {
     backgroundColor: "rgba(46,204,113,0.12)",
@@ -243,8 +243,8 @@ const styles = StyleSheet.create({
   heroValueRow: {
     flexDirection: "row",
     alignItems: "flex-end",
-    gap: 10,
-    marginBottom: 14,
+    gap: 8,
+    marginBottom: 11,
   },
   heroValue: {
     fontSize: 36,
@@ -256,12 +256,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     letterSpacing: -0.3,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   heroSubRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16,
+    gap: 12,
   },
   heroSubDivider: {
     width: 1,
@@ -284,13 +284,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    gap: 12,
-    marginBottom: 20,
+    gap: 9,
+    marginBottom: 15,
   },
   miniCard: {
     width: "48%",
     borderRadius: 7,
-    padding: 16,
+    padding: 12,
     backgroundColor: "#141B33",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
@@ -306,13 +306,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   miniLabel: {
     fontSize: 12,
     color: "#7A83A2",
     fontWeight: "600",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   miniValue: {
     fontSize: 18,

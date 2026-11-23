@@ -245,12 +245,12 @@ export default DailyFinanceScreen;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0C1224" },
-  container: { paddingHorizontal: 20, paddingTop: 60, paddingBottom: 120 },
+  container: { paddingHorizontal: 15, paddingTop: 60, paddingBottom: 120 },
   headerRow: {
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   title: {
     fontSize: 28,
@@ -260,15 +260,15 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: "#7A83A2",
-    marginTop: 3,
+    marginTop: 2,
     fontSize: 13,
     fontWeight: "500",
   },
   dateRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 12,
-    gap: 8,
+    marginBottom: 9,
+    gap: 6,
   },
   dateButton: {
     flex: 1,
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     height: 44,
-    paddingHorizontal: 12,
-    gap: 6,
+    paddingHorizontal: 9,
+    gap: 5,
   },
   dateButtonText: {
     fontSize: 13,
@@ -290,10 +290,10 @@ const styles = StyleSheet.create({
   periodCard: {
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 20,
+    padding: 15,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    marginBottom: 16,
+    marginBottom: 12,
     shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.8,
     textTransform: "uppercase",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   periodValue: {
     fontSize: 26,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   metricsRow: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 12,
+    marginBottom: 9,
   },
   metricCol: {
     flex: 1,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   metricDivider: {
     width: 1,
     backgroundColor: "rgba(255,255,255,0.07)",
-    marginHorizontal: 14,
+    marginHorizontal: 11,
     alignSelf: "stretch",
   },
   metricSubLabel: {
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.8,
     textTransform: "uppercase",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   profitValue: {
     fontSize: 26,
@@ -344,16 +344,16 @@ const styles = StyleSheet.create({
   periodBadgesRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 6,
   },
   periodBadge: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "rgba(46,204,113,0.10)",
     borderRadius: 7,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    gap: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 4,
   },
   periodDot: {
     width: 7,
@@ -369,20 +369,20 @@ const styles = StyleSheet.create({
   resetBtn: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 5,
     alignSelf: "flex-start",
     backgroundColor: "rgba(249,115,22,0.10)",
     borderWidth: 1,
     borderColor: "rgba(249,115,22,0.28)",
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
     borderRadius: 4,
-    marginBottom: 12,
+    marginBottom: 9,
   },
   resetBtnText: {
     color: "#FB923C",
     fontWeight: "700",
     fontSize: 13,
   },
-  empty: { textAlign: "center", color: "#7A83A2", marginTop: 20, fontSize: 15 },
+  empty: { textAlign: "center", color: "#7A83A2", marginTop: 15, fontSize: 15 },
 });

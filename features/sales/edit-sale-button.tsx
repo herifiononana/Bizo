@@ -66,13 +66,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   editButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 9,
+    paddingVertical: 5,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
     backgroundColor: "rgba(255,255,255,0.04)",
-    marginTop: 4,
+    marginTop: 3,
   },
   modalOverlay: {
     flex: 1,

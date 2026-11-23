@@ -165,13 +165,13 @@ export default SaleGroupItem;
 const styles = StyleSheet.create({
   saleCard: {
     backgroundColor: "#141B33",
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 12,
+    paddingHorizontal: 12,
+    paddingTop: 11,
+    paddingBottom: 9,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "rgba(167,139,250,0.2)",
-    marginBottom: 10,
+    marginBottom: 8,
     shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -181,13 +181,13 @@ const styles = StyleSheet.create({
   productsSummary: {
     fontSize: 13,
     color: "#B7BFD8",
-    marginBottom: 6,
+    marginBottom: 5,
     lineHeight: 20,
   },
   clientName: {
     fontSize: 12,
     color: "#7A83A2",
-    marginBottom: 8,
+    marginBottom: 6,
     fontStyle: "italic",
   },
   modalOverlay: {

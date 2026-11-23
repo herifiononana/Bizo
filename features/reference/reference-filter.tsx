@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#141B33",
     borderTopLeftRadius: 9,
     borderTopRightRadius: 9,
-    padding: 22,
+    padding: 17,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
@@ -180,29 +180,29 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.18)",
     borderRadius: 999,
     alignSelf: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 
   title: {
     fontSize: 18,
     fontWeight: "800",
     color: "#F4F6FF",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 
   row: {
     flexDirection: "row",
-    paddingBottom: 10,
+    paddingBottom: 8,
   },
 
   chip: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
-    margin: 4,
+    margin: 3,
   },
 
   chipActive: {
@@ -221,8 +221,8 @@ const styles = StyleSheet.create({
   },
 
   closeButton: {
-    marginTop: 20,
-    paddingVertical: 12,
+    marginTop: 15,
+    paddingVertical: 9,
     borderRadius: 5,
     backgroundColor: "#F97316",
   },

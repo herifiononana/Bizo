@@ -26,7 +26,7 @@ export default DashboardSkeleton;
 const styles = StyleSheet.create({
   statContainer: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 12,
+    gap: 9,
+    marginBottom: 9,
   },
 });

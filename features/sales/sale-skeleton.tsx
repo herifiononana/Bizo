@@ -8,9 +8,9 @@ export default function SaleListItemSkeleton() {
         <View style={styles.skeletonBlockShort} />
         <View style={styles.skeletonBlockTiny} />
       </View>
-      <View style={[styles.skeletonBlockFull, { marginTop: 10 }]} />
-      <View style={[styles.skeletonBlockHalf, { marginTop: 8 }]} />
-      <View style={[styles.creditSkeleton, { marginTop: 12, paddingVertical: 10, paddingHorizontal: 12 }]}>
+      <View style={[styles.skeletonBlockFull, { marginTop: 8 }]} />
+      <View style={[styles.skeletonBlockHalf, { marginTop: 6 }]} />
+      <View style={[styles.creditSkeleton, { marginTop: 9, paddingVertical: 8, paddingHorizontal: 9 }]}>
         <View style={styles.row}>
           <View style={styles.skeletonBlockShort} />
           <View style={styles.skeletonBlockTiny} />
@@ -23,11 +23,11 @@ export default function SaleListItemSkeleton() {
 const styles = StyleSheet.create({
   saleCard: {
     backgroundColor: "#141B33",
-    padding: 16,
+    padding: 12,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   row: {
     flexDirection: "row",

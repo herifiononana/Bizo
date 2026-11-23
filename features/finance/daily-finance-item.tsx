@@ -100,9 +100,9 @@ export default DailyFinanceItem;
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#141B33",
-    padding: 18,
+    padding: 14,
     borderRadius: 7,
-    marginBottom: 12,
+    marginBottom: 9,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     shadowColor: "#000",
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 14,
+    marginBottom: 11,
   },
   dateRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
     flex: 1,
   },
   calIcon: {
@@ -144,10 +144,10 @@ const styles = StyleSheet.create({
   profitBadge: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: 7,
-    gap: 5,
+    gap: 4,
   },
   profitBadgeUp: {
     backgroundColor: "rgba(46,204,113,0.12)",
@@ -168,14 +168,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    gap: 8,
+    gap: 6,
   },
   statItem: {
     width: "48%",
     backgroundColor: "#1B2342",
     borderRadius: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
+    paddingVertical: 9,
+    paddingHorizontal: 11,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     color: "#545C7A",
     fontWeight: "700",
     letterSpacing: 0.5,
-    marginBottom: 4,
+    marginBottom: 3,
     textTransform: "uppercase",
   },
   value: {

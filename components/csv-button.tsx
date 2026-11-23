@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     top: 40,
     right: 10,
     flexDirection: "column",
-    gap: 10,
+    gap: 8,
     zIndex: 999,
   },
 });

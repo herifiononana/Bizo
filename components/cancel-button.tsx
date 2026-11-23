@@ -15,14 +15,14 @@ export function CancelButton({ onPress }: { onPress: () => void }) {
 const styles = StyleSheet.create({
   cancelBtn: {
     backgroundColor: "rgba(244,63,94,0.08)",
-    paddingVertical: 14,
-    paddingHorizontal: 22,
+    paddingVertical: 11,
+    paddingHorizontal: 17,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(244,63,94,0.25)",
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 6,
   },
   cancelText: {
     color: "#F43F5E",

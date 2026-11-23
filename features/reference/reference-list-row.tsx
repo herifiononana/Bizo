@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    marginBottom: 6,
   },
   listRowName: {
     flex: 1,
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
   },
   listRowActions: {
     flexDirection: "row",
-    gap: 8,
+    gap: 6,
   },
   listRowBtn: {
-    padding: 8,
+    padding: 6,
     borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.04)",
   },

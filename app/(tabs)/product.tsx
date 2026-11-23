@@ -245,11 +245,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0C1224",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
   },
   headerRow: {
-    marginBottom: 16,
+    marginBottom: 12,
     paddingRight: 60,
   },
   title: {
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#7A83A2",
     fontWeight: "500",
-    marginTop: 3,
+    marginTop: 2,
   },
   searchRow: {
     flexDirection: "row",
@@ -271,10 +271,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingHorizontal: 14,
+    paddingHorizontal: 11,
     height: 50,
-    marginBottom: 12,
-    gap: 8,
+    marginBottom: 9,
+    gap: 6,
   },
   searchIcon: {},
   searchInput: {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
     color: "#F4F6FF",
   },
   rupturBtn: {
-    padding: 6,
+    padding: 5,
     borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.04)",
   },
@@ -292,8 +292,8 @@ const styles = StyleSheet.create({
   },
   chipsRow: {
     flexDirection: "row",
-    gap: 8,
-    marginBottom: 14,
+    gap: 6,
+    marginBottom: 11,
   },
   summaryChip: {
     flex: 1,
@@ -301,8 +301,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingVertical: 10,
-    paddingHorizontal: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 6,
     alignItems: "center",
   },
   chipWarning: {

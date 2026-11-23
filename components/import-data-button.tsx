@@ -76,7 +76,7 @@ export default ImportDataButton;
 
 const styles = StyleSheet.create({
   iconButton: {
-    padding: 10,
+    padding: 8,
     backgroundColor: "#141B33",
     borderRadius: 5,
     borderWidth: 1,

@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
   expandedList: {
     backgroundColor: "rgba(255,255,255,0.03)",
     borderRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 8,
-    gap: 4,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+    marginBottom: 6,
+    gap: 3,
   },
   expandedItem: {
-    paddingVertical: 6,
+    paddingVertical: 5,
   },
   expandedItemBorder: {
     borderBottomWidth: 1,

@@ -47,7 +47,7 @@ export default EditProductButton;
 
 const styles = StyleSheet.create({
   actionBtn: {
-    padding: 8,
+    padding: 6,
     borderRadius: 3,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",

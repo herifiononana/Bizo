@@ -236,8 +236,8 @@ export default EditProductForm;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#141B33",
-    padding: 22,
-    paddingTop: 14,
+    padding: 17,
+    paddingTop: 11,
     borderTopLeftRadius: 9,
     borderTopRightRadius: 9,
     borderTopWidth: 1,
@@ -247,15 +247,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     color: "#F4F6FF",
-    marginBottom: 18,
+    marginBottom: 14,
     textAlign: "center",
     letterSpacing: -0.5,
   },
   form: {
-    gap: 14,
+    gap: 11,
   },
   formGroup: {
-    marginBottom: 6,
+    marginBottom: 5,
   },
   label: {
     fontWeight: "600",
@@ -263,16 +263,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: "uppercase",
     letterSpacing: 0.5,
-    marginBottom: 6,
+    marginBottom: 5,
   },
   input: {
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     borderRadius: 5,
-    padding: 14,
+    padding: 11,
     height: 50,
-    marginBottom: 10,
+    marginBottom: 8,
     color: "#F4F6FF",
     fontSize: 15,
   },
@@ -283,14 +283,14 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#F43F5E",
     fontSize: 13,
-    marginBottom: 6,
+    marginBottom: 5,
   },
   selectContainer: {
     backgroundColor: "#1B2342",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 8,
     overflow: "hidden",
   },
   pickerContainer: {
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 14,
-    gap: 10,
+    marginTop: 11,
+    gap: 8,
   },
 });

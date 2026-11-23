@@ -36,12 +36,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    marginBottom: 16,
+    gap: 9,
+    marginBottom: 12,
     paddingRight: 60,
   },
   closeButton: {
-    padding: 6,
+    padding: 5,
     borderRadius: 3,
     backgroundColor: "rgba(255,255,255,0.06)",
   },

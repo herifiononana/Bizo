@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "700",
-    marginTop: 24,
-    marginBottom: 10,
+    marginTop: 18,
+    marginBottom: 8,
     color: "#F4F6FF",
     letterSpacing: -0.3,
   },
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   miniBlock: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 14,
-    marginBottom: 6,
+    padding: 11,
+    marginBottom: 5,
     backgroundColor: "#141B33",
     borderRadius: 6,
     borderWidth: 1,
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 14,
+    marginRight: 11,
   },
   blockTitle: {
     fontSize: 15,

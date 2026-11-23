@@ -279,11 +279,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0C1224",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
   },
   headerRow: {
-    marginBottom: 16,
+    marginBottom: 12,
     paddingRight: 60,
   },
   title: {
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#7A83A2",
     fontWeight: "500",
-    marginTop: 3,
+    marginTop: 2,
   },
   searchRow: {
     flexDirection: "row",
@@ -305,12 +305,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingHorizontal: 14,
+    paddingHorizontal: 11,
     height: 50,
-    marginBottom: 10,
+    marginBottom: 8,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: 6,
   },
   searchInput: {
     flex: 1,
@@ -320,8 +320,8 @@ const styles = StyleSheet.create({
   dateRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
-    gap: 8,
+    marginBottom: 8,
+    gap: 6,
   },
   dateButton: {
     flex: 1,
@@ -332,8 +332,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     height: 44,
-    paddingHorizontal: 12,
-    gap: 6,
+    paddingHorizontal: 9,
+    gap: 5,
   },
   dateButtonText: {
     fontSize: 13,
@@ -342,8 +342,8 @@ const styles = StyleSheet.create({
   },
   chipsRow: {
     flexDirection: "row",
-    marginBottom: 14,
-    gap: 8,
+    marginBottom: 11,
+    gap: 6,
   },
   chip: {
     flex: 1,

@@ -49,7 +49,7 @@ export default function ActivationModal() {
             <Text style={styles.activateButtonText}>Valider</Text>
           </TouchableOpacity>
 
-          <View style={{ marginTop: 20, gap: 4 }}>
+          <View style={{ marginTop: 15, gap: 3 }}>
             <Text style={styles.assistanceLabel}>
               Assistance Bizo :
             </Text>
@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(5,8,18,0.92)",
-    padding: 20,
+    padding: 15,
   },
   container: {
     backgroundColor: "#141B33",
     borderRadius: 9,
-    padding: 24,
+    padding: 18,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     width: "100%",
@@ -89,33 +89,33 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "800",
     color: "#F4F6FF",
-    marginBottom: 6,
+    marginBottom: 5,
   },
   subtitle: {
     color: "#7A83A2",
     fontSize: 14,
-    marginBottom: 18,
+    marginBottom: 14,
   },
   input: {
     backgroundColor: "#1B2342",
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    padding: 14,
+    padding: 11,
     height: 50,
     color: "#F4F6FF",
     fontSize: 15,
-    marginTop: 12,
-    marginBottom: 4,
+    marginTop: 9,
+    marginBottom: 3,
   },
   activateButton: {
     backgroundColor: "#F97316",
     borderRadius: 5,
-    padding: 14,
+    padding: 11,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 16,
+    marginTop: 12,
   },
   activateButtonText: {
     color: "#fff",
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   assistanceLabel: {
     color: "#7A83A2",
-    marginBottom: 6,
+    marginBottom: 5,
     fontSize: 13,
     fontWeight: "600",
   },

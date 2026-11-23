@@ -16,7 +16,7 @@ export default StatCardSkeleton;
 const styles = StyleSheet.create({
   card: {
     width: "48%",
-    padding: 18,
+    padding: 14,
     borderRadius: 7,
     backgroundColor: "#141B33",
     borderWidth: 1,
@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 4,
     backgroundColor: "#1B2342",
-    marginBottom: 12,
+    marginBottom: 9,
   },
   lineShort: {
     width: "45%",
     height: 10,
     borderRadius: 3,
     backgroundColor: "#1B2342",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   lineLong: {
     width: "65%",

@@ -186,13 +186,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.06)",
   },
-  headerText: { flex: 1, paddingRight: 12 },
+  headerText: { flex: 1, paddingRight: 9 },
   headerTitle: {
     fontSize: 22,
     fontWeight: "800",
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     color: "#7A83A2",
-    marginTop: 4,
+    marginTop: 3,
   },
   closeButton: {
     width: 40,
@@ -215,12 +215,12 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    padding: 20,
-    paddingBottom: 20,
+    padding: 15,
+    paddingBottom: 15,
   },
 
   section: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 13,
@@ -228,16 +228,16 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.5,
     textTransform: "uppercase",
-    marginBottom: 12,
+    marginBottom: 9,
   },
 
   fieldRow: {
-    marginBottom: 14,
+    marginBottom: 11,
   },
   fieldLabel: {
     fontSize: 13,
     color: "#B7BFD8",
-    marginBottom: 6,
+    marginBottom: 5,
   },
   fieldInputRow: {
     flexDirection: "row",
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
-    paddingHorizontal: 14,
+    paddingHorizontal: 11,
   },
   fieldInput: {
     flex: 1,
@@ -259,16 +259,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#545C7A",
     fontWeight: "600",
-    marginLeft: 8,
+    marginLeft: 6,
   },
 
   resetButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    paddingVertical: 12,
-    marginTop: 4,
+    gap: 6,
+    paddingVertical: 9,
+    marginTop: 3,
   },
   resetText: {
     color: "#F5B544",
@@ -279,8 +279,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: "rgba(255,255,255,0.06)",
   },

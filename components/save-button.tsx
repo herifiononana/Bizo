@@ -15,12 +15,12 @@ export function SaveButton({ onPress }: { onPress: () => void }) {
 const styles = StyleSheet.create({
   saveBtn: {
     backgroundColor: "#F97316",
-    paddingVertical: 14,
-    paddingHorizontal: 22,
+    paddingVertical: 11,
+    paddingHorizontal: 17,
     borderRadius: 5,
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 6,
     shadowColor: "rgba(249,115,22,0.45)",
     shadowOpacity: 1,
     shadowRadius: 4,

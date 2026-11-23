@@ -10,13 +10,13 @@ export const SkeletonProductListItem = () => {
         <View
           style={[
             styles.skeletonBlock,
-            { width: "80%", height: 14, marginTop: 6 },
+            { width: "80%", height: 14, marginTop: 5 },
           ]}
         />
         <View
           style={[
             styles.skeletonBlock,
-            { width: "50%", height: 14, marginTop: 6 },
+            { width: "50%", height: 14, marginTop: 5 },
           ]}
         />
       </View>
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
-    marginBottom: 10,
+    marginBottom: 8,
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 16,
+    padding: 12,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
   },
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
 
   deleteBtnSkeleton: {
-    marginLeft: 8,
+    marginLeft: 6,
     width: 32,
     height: 32,
     backgroundColor: "#1B2342",

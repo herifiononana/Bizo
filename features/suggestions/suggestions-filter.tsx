@@ -149,14 +149,14 @@ export default SuggestionsFilter;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingTop: 14,
+    paddingHorizontal: 15,
+    paddingTop: 11,
   },
   dateRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    marginBottom: 10,
+    gap: 6,
+    marginBottom: 8,
   },
   dateButton: {
     flex: 1,
@@ -167,8 +167,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     height: 44,
-    paddingHorizontal: 12,
-    gap: 6,
+    paddingHorizontal: 9,
+    gap: 5,
   },
   dateButtonText: {
     fontSize: 13,
@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   chipsRow: {
-    paddingBottom: 10,
-    gap: 8,
+    paddingBottom: 8,
+    gap: 6,
   },
   chip: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
     backgroundColor: "#1B2342",
     borderWidth: 1,

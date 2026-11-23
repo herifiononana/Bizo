@@ -64,12 +64,12 @@ const styles = StyleSheet.create({
   },
   container: { flex: 1 },
   scrollContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
     paddingBottom: 120,
   },
   headerRow: {
-    marginBottom: 24,
+    marginBottom: 18,
     paddingRight: 120,
   },
   title: {
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#7A83A2",
     fontWeight: "500",
-    marginTop: 4,
+    marginTop: 3,
     textTransform: "capitalize",
   },
 });

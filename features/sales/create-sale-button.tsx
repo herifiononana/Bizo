@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
   modalBox: {
     backgroundColor: "#141B33",
     borderRadius: 9,
-    padding: 20,
+    padding: 15,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "800",
     textAlign: "center",
-    marginBottom: 14,
+    marginBottom: 11,
     color: "#F4F6FF",
   },
 });

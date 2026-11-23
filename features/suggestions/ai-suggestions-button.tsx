@@ -209,13 +209,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingTop: 60,
-    paddingBottom: 16,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.06)",
   },
-  headerText: { flex: 1, paddingRight: 12 },
+  headerText: { flex: 1, paddingRight: 9 },
   headerTitle: {
     fontSize: 22,
     fontWeight: "800",
@@ -224,11 +224,11 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 13,
     color: "#7A83A2",
-    marginTop: 4,
+    marginTop: 3,
   },
   headerActions: {
     flexDirection: "row",
-    gap: 10,
+    gap: 8,
   },
   closeButton: {
     width: 40,
@@ -242,18 +242,18 @@ const styles = StyleSheet.create({
   },
 
   body: {
-    padding: 20,
+    padding: 15,
     paddingBottom: 60,
   },
 
   section: {
-    marginBottom: 24,
+    marginBottom: 18,
   },
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
-    gap: 10,
+    marginBottom: 9,
+    gap: 8,
   },
   sectionIcon: {
     width: 28,
@@ -272,8 +272,8 @@ const styles = StyleSheet.create({
   },
   countChip: {
     minWidth: 24,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     borderRadius: 6,
     alignItems: "center",
   },
@@ -285,8 +285,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#141B33",
     borderRadius: 7,
-    padding: 16,
-    marginBottom: 12,
+    padding: 12,
+    marginBottom: 9,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     borderLeftWidth: 4,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     color: "#F4F6FF",
-    marginBottom: 4,
+    marginBottom: 3,
   },
   cardMessage: {
     fontSize: 13,
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   emptyState: {
     alignItems: "center",
     paddingTop: 80,
-    gap: 12,
+    gap: 9,
   },
   emptyText: {
     color: "#7A83A2",

@@ -25,20 +25,20 @@ export default function ShowAlertActivation() {
         <View
           style={{
             backgroundColor: "#1F2937",
-            padding: 18,
+            padding: 14,
             borderRadius: 3,
             width: "80%",
           }}
         >
-          <Text style={{ color: "white", fontSize: 18, marginBottom: 12 }}>
+          <Text style={{ color: "white", fontSize: 18, marginBottom: 9 }}>
             ACTIVATION EXPIRÉE
           </Text>
 
-          <Text style={{ color: Colors.dark.info, marginBottom: 8 }}>
+          <Text style={{ color: Colors.dark.info, marginBottom: 6 }}>
             {`L'activation expire bientôt.`}
           </Text>
 
-          <Text style={{ color: "white", marginBottom: 4 }}>
+          <Text style={{ color: "white", marginBottom: 3 }}>
             Veuillez contacter l’admin :
           </Text>
 
@@ -48,7 +48,7 @@ export default function ShowAlertActivation() {
           <Text style={{ color: "white" }}>
             💬 WhatsApp : {CONTACT_INFO.whatsapp}
           </Text>
-          <Text style={{ color: "white", marginBottom: 12 }}>
+          <Text style={{ color: "white", marginBottom: 9 }}>
             📧 Mail : {CONTACT_INFO.email}
           </Text>
 
@@ -57,9 +57,9 @@ export default function ShowAlertActivation() {
               setOpen(false);
             }}
             style={{
-              marginTop: 10,
+              marginTop: 8,
               backgroundColor: Colors.dark.accent,
-              padding: 10,
+              padding: 8,
               borderRadius: 3,
             }}
           >
