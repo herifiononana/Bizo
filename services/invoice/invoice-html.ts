@@ -74,7 +74,7 @@ const renderA4 = (invoice: Invoice) => `
 const renderTicket = (invoice: Invoice) => `
 <html><head><meta charset="utf-8" /><style>
   @page { margin: 0; }
-  body { margin: 0; padding: 6px 8px; width: 64mm; font-family: "Courier New", monospace; font-size: 11px; color: #000; }
+  body { margin: 0; padding: 6px 8px; width: 64mm; font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #000; }
   .c { text-align: center; }
   h1 { margin: 0 0 2px; font-size: 14px; }
   p { margin: 1px 0; }
@@ -104,8 +104,23 @@ const renderTicket = (invoice: Invoice) => `
   <p class="c">Merci pour votre confiance.</p>
 </body></html>`;
 
-export const renderInvoiceHtml = (invoice: Invoice, format: InvoiceFormat) =>
-  format === "a4" ? renderA4(invoice) : renderTicket(invoice);
+// `preview` : rendu pour l'aperçu à l'écran (WebView) — largeur de page fixe réduite à l'écran,
+// et marge A4 simulée (les @page du PDF y sont ignorés).
+export const renderInvoiceHtml = (
+  invoice: Invoice,
+  format: InvoiceFormat,
+  preview = false
+) => {
+  const html = format === "a4" ? renderA4(invoice) : renderTicket(invoice);
+  if (!preview) return html;
+
+  const { width } = getPageSize(invoice, format);
+  const padding = format === "a4" ? "body { padding: 51px; box-sizing: border-box; }" : "";
+  return html.replace(
+    '<meta charset="utf-8" />',
+    `<meta charset="utf-8" /><meta name="viewport" content="width=${width}, user-scalable=no" /><style>html { background: #fff; } ${padding}</style>`
+  );
+};
 
 // Dimensions de page en points (1 pt = 1/72 in). A4 = 595×842 ; ticket 80 mm = 227 pt de large,
 // hauteur estimée selon le nombre de lignes (rouleau : pas de hauteur fixe).
